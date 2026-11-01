@@ -4,7 +4,7 @@
 session_start();
 
 $baseUrl = '/Proyek-SAS';
-
+//index.php
 
 $products = [
     ['id' => 1, 'name' => 'POWER SUPPLY MSI MAG A650BN', 'category' => 'Power Supplies', 'price' => 880000, 'stock' => 12],
