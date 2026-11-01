@@ -1,49 +1,37 @@
 <?php
 require_once __DIR__ . "/../../../repositories/product-repository.php";
-
 $products = getProducts();
 ?>
 
 
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TechHub Admin - Manage Products</title>
 
-  <!-- Font & Icons -->
+  <!-- Font & icons -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-  <!-- Custom CSS -->
+  <!-- CSS -->
   <link rel="stylesheet" href="../../../styles/base.css">
   <link rel="stylesheet" href="../../../styles/admin/sidebar.css">
   <link rel="stylesheet" href="../../../styles/admin/products.css">
 </head>
 
 <body>
-
-  <!-- Topbar Modular -->
+  <!-- Topbar -->
   <?php require_once __DIR__ . "/../../../components/admin/topbar.php" ?>
-
-  <!-- Main Container -->
   <div class="admin-container">
-
-    <!-- Sidebar Modular -->
+    <!-- Sidebar -->
     <?php require_once __DIR__ . "/../../../components/admin/sidebar.php" ?>
-
-    <!-- Main Content Area -->
     <main class="main-content">
-
-      <!-- Page Header -->
       <div class="page-header">
         <h1>Manage Products</h1>
         <p>Add, edit, delete, and manage laptop products.</p>
       </div>
-
-      <!-- Action Bar (Search & Add Product) -->
       <div class="action-bar">
         <div class="search-box">
           <i class="bi bi-search"></i>
@@ -54,8 +42,6 @@ $products = getProducts();
           <i class="bi bi-plus-lg"></i> Add Product
         </a>
       </div>
-
-      <!-- Products Table Card Container -->
       <div class="table-card">
         <table class="product-table">
           <thead>
@@ -72,7 +58,6 @@ $products = getProducts();
             <?php foreach ($products as $product): ?>
               <tr>
                 <td>
-
                   <div class="product-img-box">
                     <img src="<?= $product['picture'];?>" alt="Intel Core i9-9900K">
                   </div>
@@ -89,14 +74,10 @@ $products = getProducts();
                 </td>
               </tr>
             <?php endforeach; ?>
-
           </tbody>
         </table>
       </div>
-
     </main>
   </div>
-
 </body>
-
 </html>

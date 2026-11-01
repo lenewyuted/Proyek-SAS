@@ -1,3 +1,14 @@
+<?php
+require_once __DIR__ . "/../../../middleware/auth.php";
+require_once __DIR__ . "/../../../repositories/category-repository.php";
+
+$categories = getCategories();
+
+$errors = $_SESSION['errors'] ?? [];
+$old = $_SESSION['old'] ?? [];
+unset($_SESSION['errors'], $_SESSION['old']);
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -17,20 +28,12 @@
 </head>
 
 <body>
-
-    <!-- Topbar Modular -->
+    <!-- Topbar -->
     <?php require_once __DIR__ . "/../../../components/admin/topbar.php" ?>
-
-    <!-- Main Container -->
     <div class="admin-container">
-
-        <!-- Sidebar Modular -->
+        <!-- Sidebar -->
         <?php require_once __DIR__ . "/../../../components/admin/sidebar.php" ?>
-
-        <!-- Main Content Area -->
         <main class="main-content">
-
-            <!-- Page Header & Back Link -->
             <div class="page-header-flex" style="margin-bottom: 20px;">
                 <div class="header-col">
                     <h1>Add New Product</h1>
@@ -41,60 +44,81 @@
                         Back <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
-
             </div>
-
-            <!-- Form Container -->
             <form action="../../../actions/products/store.php" method="POST" enctype="multipart/form-data" class="product-form-create">
-
                 <div class="form-row">
                     <div class="form-group">
                         <label for="name">Product Name</label>
-                        <input type="text" id="name" name="name" placeholder="Enter product name" required>
+                        <input value="<?= $old['title'] ?? '' ?>" type="text" id="name" name="name" placeholder="Enter product name" required>
+                        <?php if (isset($errors['title'])) : ?>
+                            <p style="font-size: 12px; margin-top: 4px; color: red;">
+                                <?= $errors['title'] ?>
+                            </p>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label for="category">Category</label>
-                        <input type="text" id="category_id" name="category_id" placeholder="Select category" required>
+                        <select id="category_id" name="category_id">
+                            <?php foreach ($categories as $category): ?>
+                                <option <?= $old['category_id'] ?? '' === $category['id'] ? 'selected' : '' ?> value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <?php if (isset($errors['category_id'])) : ?>
+                            <p style="font-size: 12px; margin-top: 4px; color: red;">
+                                <?= $errors['category_id'] ?>
+                            </p>
+                        <?php endif; ?>
                     </div>
                 </div>
-
                 <div class="form-row">
                     <div class="form-group">
                         <label for="price">Price (Rp)</label>
-                        <input type="text" id="price" name="price" placeholder="Enter price" required>
+                        <input value="<?= $old['price'] ?? '' ?>" type="text" id="price" name="price" placeholder="Enter price" required>
+                        <?php if (isset($errors['price'])) : ?>
+                            <p style="font-size: 12px; margin-top: 4px; color: red;">
+                                <?= $errors['price'] ?>
+                            </p>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label for="stock">Stock</label>
-                        <input type="number" id="stock" name="stock" placeholder="Enter quantity" required>
+                        <input value="<?= $old['stock'] ?? '' ?>" type="number" id="stock" name="stock" placeholder="Enter quantity" required>
+                        <?php if (isset($errors['stock'])) : ?>
+                            <p style="font-size: 12px; margin-top: 4px; color: red;">
+                                <?= $errors['stock'] ?>
+                            </p>
+                        <?php endif; ?>
                     </div>
                 </div>
-
                 <div class="form-group full-width">
                     <label for="description">Product Description</label>
                     <textarea id="description" name="description" rows="5" placeholder="Write product description..."></textarea>
+                    <?php if (isset($errors['description'])) : ?>
+                        <p style="font-size: 12px; margin-top: 4px; color: red;">
+                            <?= $errors['description'] ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
-
-                <!-- Upload Image Drag & Drop Area -->
                 <div class="upload-drop-zone">
-                    <input type="file" id="picture" name="picture" class="file-input-hidden" accept="image/*">
+                    <input value="<?= $old['picture'] ?? '' ?>" type="file" id="picture" name="picture" class="file-input-hidden" accept="image/*">
+                    <?php if (isset($errors['picture'])) : ?>
+                        <p style="font-size: 12px; margin-top: 4px; color: red;">
+                            <?= $errors['picture'] ?>
+                        </p>
+                    <?php endif; ?>
                     <div class="upload-icon-box">
                         <i class="bi bi-image"></i>
                     </div>
                     <h4>Drag & Drop Product Photo Here</h4>
                     <p>or <label for="picture" class="browse-link">Browse Photo from Computer</label></p>
                 </div>
-
-                <!-- Form Action Buttons -->
                 <div class="form-actions-center">
                     <button name="store" type="submit" class="btn-submit-add">+ Add Product</button>
                     <a href="index.php" class="btn-cancel">Cancel</a>
                 </div>
-
             </form>
-
         </main>
     </div>
-
 </body>
 
 </html>

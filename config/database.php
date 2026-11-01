@@ -12,7 +12,6 @@ $options = [
     PDO::ATTR_EMULATE_PREPARES => false, 
 ];
 
-
 try {
     $pdo = new PDO($dsn, $username, $password, $options); //ini namanya constructor. variabel ini akan kita pakai untuk jika kita ingin berinteraksi dengan database kita
 } catch (PDOException $error) { 

@@ -22,7 +22,6 @@ function validateRegister($request)
         $errors['name'] = "Nama lengkap tidak boleh melebihi dari 150 karakter";
     }
 
-
     //Validate email
     if($request['email'] === '') {
         $errors['email'] = "Email wajib diisi";
@@ -37,7 +36,6 @@ function validateRegister($request)
         $errors['email'] = "Email sudah didaftarkan sebelumnya";
     }
 
-
     //Validate password
     if($request['password'] === '') {
         $errors['password'] = "Kata sandi wajib diisi";
@@ -46,7 +44,6 @@ function validateRegister($request)
         $errors['password'] = "Kata sandi tidak boleh kurang dari 8 karakter";
     }
     
-
     //Validate password confirmation
     if($request['password_confirmation'] === '') {
         $errors['password_confirmation'] = "Kata sandi wajib diisi";
@@ -57,7 +54,6 @@ function validateRegister($request)
     elseif($request['password'] != $request['password_confirmation']) {
         $errors['password_confirmation'] = "Kata sandi yang dimasukkan tidak cocok";
     }
-
 
     return $errors;
 }

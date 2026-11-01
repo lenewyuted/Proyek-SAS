@@ -20,9 +20,5 @@ if (isset($_GET['id']) && $_SERVER['REQUEST_METHOD'] === "GET") {
         $pdo->rollBack();
         throw $e;
     }
-    
-
-
 }
-
 ?>

@@ -23,7 +23,6 @@ if(isset($_POST['register']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $query = "insert into users(name, email, password, role) 
                     values (:name, :email, :password, :role)";
 
-
         $stmt= $pdo->prepare($query);
         $stmt->execute([
             'name' => $request['name'],
@@ -38,11 +37,9 @@ if(isset($_POST['register']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
         header('location: ../../pages/auth/login.php');
         exit;
 
-
     } catch (PDOException $e) {
         $pdo->rollBack();
         throw $e;
     }
 }
-
 ?>

@@ -61,7 +61,6 @@ function requireAuth()
     }
 }
 
-
 //Menghandle pengguna yg tidak memiliki role yg sesuai atau tidak terautorisasi
 function requireRole(array $roles) 
 {
@@ -73,7 +72,6 @@ function requireRole(array $roles)
     }
 }
 
-
 //Menghandle pengguna yg sudah login sebelumnya
 function requireGuest()
 {
@@ -82,5 +80,4 @@ function requireGuest()
         exit; //menonaktifkan kode setelahnya 
     }
 }
-
 ?>

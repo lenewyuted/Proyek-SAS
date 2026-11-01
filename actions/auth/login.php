@@ -5,17 +5,11 @@ require_once __DIR__ . "/../../validations/auth-validation.php";
 require_once __DIR__ . "/../../repositories/user-repository.php";
 sessionStart();
 
-
 if(isset($_POST['login']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $request = getLoginRequest($_POST);
-        
         $errors = validateLogin($request);
-        
-        
         $user = getUserByEmail($request['email']);
-        
-
 
         if(count($errors) === 0) {
             if(!$user && !password_verify($request['password'], $user['password'])) {
@@ -31,8 +25,6 @@ if(isset($_POST['login']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
             header('location: ' . LOGIN_URL);
             exit;
         }
-
-
 
         session_regenerate_id(true); //mengganti id session yg lama, yg dmn jika kt login, kt akan login dgn id session nya 1. ketika kt log out lalu login lagi, maka dia akan regenerate id session yg baru untuk kita, jdi id 1 udh ga bs dipakai 
         $_SESSION['user'] = [

@@ -38,7 +38,6 @@ function validateProduct($request, $ignoreBookId = 0) //sebuah validasi akan dil
         $errors['price'] = "Tahun terbit wajib diisi dengan angka";
     }
 
-
     //Validate stock : required, isNumber
     if($request['stock'] === '') {
         $errors['stock'] = "Stok wajib diisi";
@@ -46,8 +45,6 @@ function validateProduct($request, $ignoreBookId = 0) //sebuah validasi akan dil
     elseif(!is_int(intval($request['stock']))) {
         $errors['stock'] = "Stok wajib diisi dengan angka";
     }
-
-
 
     //Validate description : required and max 200 character
     if ($request['description'] === '') {
