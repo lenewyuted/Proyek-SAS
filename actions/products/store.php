@@ -15,6 +15,7 @@ if(isset($_POST['store']) && $_SERVER['REQUEST_METHOD'] === "POST") {
             
             header('location: ../../pages/admin/products/create.php');
             exit;
+            
         }
 
         $query = "insert into products (name, description, price, stock, picture, category_id) 
@@ -28,7 +29,7 @@ if(isset($_POST['store']) && $_SERVER['REQUEST_METHOD'] === "POST") {
             // 2. Normalisasi: Ganti semua spasi dengan underscore (_)
             $safeName = str_replace(' ', '_', $originalName);
             // 3. Tentukan lokasi folder dan gabungkan dengan nama yang sudah aman
-            $picturePath = "../../../assets/img/" . $safeName;
+            $picturePath = "../../assets/img/" . $safeName;
             move_uploaded_file($_FILES['picture']['tmp_name'], $picturePath);
         }
 
@@ -41,7 +42,7 @@ if(isset($_POST['store']) && $_SERVER['REQUEST_METHOD'] === "POST") {
             'picture' => $picturePath,
             'category_id' => $request['category_id'],
         ]);
-
+        
         $pdo->commit(); //ketika sudah slesai, kt akan memastikan bahwa data ini udah bnr jdi ini akan dieksekusi dan dikirim ke databasenya
 
         header('location: ../../pages/admin/products/index.php');
@@ -51,5 +52,6 @@ if(isset($_POST['store']) && $_SERVER['REQUEST_METHOD'] === "POST") {
         $pdo->rollBack();
         throw $err;
     }
+    
 }
 ?>

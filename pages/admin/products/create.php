@@ -100,7 +100,7 @@ unset($_SESSION['errors'], $_SESSION['old']);
                     <?php endif; ?>
                 </div>
                 <div class="upload-drop-zone">
-                    <input value="<?= $old['picture'] ?? '' ?>" type="file" id="picture" name="picture" class="file-input-hidden" accept="image/*">
+                    <input type="file" id="picture" name="picture" class="file-input-hidden" accept="image/*">
                     <?php if (isset($errors['picture'])) : ?>
                         <p style="font-size: 12px; margin-top: 4px; color: red;">
                             <?= $errors['picture'] ?>

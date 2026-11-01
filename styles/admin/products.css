@@ -116,10 +116,8 @@ body {
   padding: 30px 40px;
 }
 
-/* Main Content Area */
-.main-content {
-  flex: 1;
-  padding: 30px 40px;
+.main-content form {
+  margin-top: -9px;
 }
 
 .page-header h1 {
@@ -381,6 +379,13 @@ body {
   cursor: pointer;
 }
 
+
+.header-col p {
+    color: var(--text-muted);
+    margin-top: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
 /* Tombol Aksi di Bagian Bawah Form */
 .form-actions-center {
   display: flex;
