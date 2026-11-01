@@ -1,6 +1,6 @@
 <?php
 $host = "localhost"; 
-$dbname = "Proyek-SAS";
+$dbname = "Proyek_SAS";
 $username = "root";
 $password = "";
 
