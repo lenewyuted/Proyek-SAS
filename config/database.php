@@ -1,6 +1,6 @@
 <?php
 $host = "localhost"; 
-$dbname = "Proyek-SAS";
+$dbname = "Proyek_SAS";
 $username = "root";
 $password = "";
 
@@ -11,7 +11,6 @@ $options = [
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, 
     PDO::ATTR_EMULATE_PREPARES => false, 
 ];
-
 
 try {
     $pdo = new PDO($dsn, $username, $password, $options); //ini namanya constructor. variabel ini akan kita pakai untuk jika kita ingin berinteraksi dengan database kita
