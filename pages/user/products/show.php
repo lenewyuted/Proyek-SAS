@@ -62,7 +62,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
 </head>
 <body>
 
-  <?php require_once __DIR__ . '/../../../components/header.php'; ?>
+<?php require_once __DIR__ . '/../../../components/landing.php/header.php'; ?>
 
   <main class="container">
 
