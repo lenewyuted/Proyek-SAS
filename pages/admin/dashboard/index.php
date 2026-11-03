@@ -14,8 +14,10 @@
   <link rel="stylesheet" href="../../../styles/admin/dashboard.css">  
 </head>
 <body>
+  <!-- Topbar -->
   <?php require_once __DIR__ . "/../../../components/admin/topbar.php"?>
   <div class="admin-container">
+    <!-- Sidebar -->
     <?php require_once __DIR__ . "/../../../components/admin/sidebar.php" ?>
     <main class="main-content">
       <div class="page-header">

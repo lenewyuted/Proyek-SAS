@@ -59,7 +59,7 @@ $products = getProducts();
               <tr>
                 <td>
                   <div class="product-img-box">
-                    <img src="<?= $product['picture'];?>" alt="Intel Core i9-9900K">
+                    <img src = "/assets/img/<?= $product['picture'] ?>" alt="Intel Core i9-9900K">
                   </div>
                 </td>
                 <td class="product-name"><?= $product['name'];?></td>
@@ -68,7 +68,7 @@ $products = getProducts();
                 <td class="product-stock"><?= $product['stock'];?></td>
                 <td>
                   <div class="action-buttons">
-                    <a href="edit.php?id=1" class="btn-edit">Edit</a>
+                    <a href="edit.php?id=<?= $product['id'] ?>" class="btn-edit">Edit</a>
                     <a href="../../../actions/products/destroy.php?id=<?= $product['id'];?>" class="btn-delete" onclick="return confirm('Yakin ingin menghapus produk ini?')">Delete</a>
                   </div>
                 </td>

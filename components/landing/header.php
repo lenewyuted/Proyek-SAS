@@ -7,6 +7,7 @@ $baseUrl = $baseUrl ?? '/Proyek-SAS';
 </div>
 
 <header class="header">
+  <link rel="stylesheet" href="../../styles/components/header.css">
   <a href="<?= $baseUrl ?>/index.php" class="logo">
     <span class="logo-text">TECH<span>HUB</span></span>
     <small>Your Pro Build</small>

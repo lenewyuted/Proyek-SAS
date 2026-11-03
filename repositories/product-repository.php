@@ -1,5 +1,5 @@
 <?php 
-require_once __DIR__ . "../../config/database.php";
+require_once __DIR__ . "/../config/database.php";
 
 function getProducts()
 {
@@ -19,4 +19,27 @@ function getProducts()
 function formatRupiah($angka) {
     return 'Rp ' . number_format($angka, 0, ',', '.');
 }
+
+
+function getProduct($id)
+{
+    global $pdo;
+
+    $query = "SELECT * FROM products WHERE id = :id";
+
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
+        'id' => $id
+    ]);
+
+    $product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$product) {
+        header('location: ../pages/admin/products/index.php');
+        exit;
+    }
+
+    return $product;
+}
 ?>
+
