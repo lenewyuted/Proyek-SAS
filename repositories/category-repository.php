@@ -52,4 +52,6 @@ function countCategories() {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['total'] ?? 0;
 }
+
+
 ?>

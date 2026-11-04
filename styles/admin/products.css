@@ -146,6 +146,62 @@ body {
   cursor: pointer;
 }
 
+
+/* Mengatur agar tabel menggunakan lebar penuh dan jarak kolom dibagi merata */
+.product-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* Kolom Picture (Kiri) - Diberi padding-left agar jaraknya seimbang dengan sebelah kanan */
+.product-table th:first-child,
+.product-table td:first-child {
+  width: 12%;
+  padding-left: 30px; /* Menyamakan jarak dari garis tepi kiri */
+}
+
+/* Mengatur lebar kolom tengah lainnya secara proporsional */
+.product-table th:nth-child(2), 
+.product-table td:nth-child(2) {
+  width: 33%;
+}
+
+.product-table th:nth-child(3), 
+.product-table td:nth-child(3) {
+  width: 15%;
+}
+
+.product-table th:nth-child(4), 
+.product-table td:nth-child(4) {
+  width: 18%;
+}
+
+.product-table th:nth-child(5), 
+.product-table td:nth-child(5) {
+  width: 10%;
+}
+
+/* Header kolom Action */
+.product-table th:last-child {
+  width: 12%;
+  text-align: right !important;
+  padding-right: 128px;
+}
+
+/* Isi baris kolom Action */
+.product-table td:last-child {
+  width: 12%;
+  text-align: right;
+  padding-right: 35px;
+}
+
+/* Tombol Edit & Delete */
+.product-table td:last-child .action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 /* Table Card Container */
 .table-card {
   background: var(--white);
