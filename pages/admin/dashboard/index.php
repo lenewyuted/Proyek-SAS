@@ -1,3 +1,14 @@
+<?php
+require_once __DIR__ . "/../../../config/database.php";
+require_once __DIR__ . "/../../../repositories/product-repository.php";
+require_once __DIR__ . "/../../../repositories/category-repository.php";
+require_once __DIR__ . "/../../../repositories/user-repository.php";
+
+$totalProducts = countProducts();
+$totalCategories = countCategories();
+$totalUsers = countUsers();
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -25,37 +36,44 @@
         <h1>Dashboard</h1>
         <p>Welcome to the TechHub admin panel!</p>
       </div>
-      <div class="stats-grid">
+      <a href="../products/index.php">
+        <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon-wrapper">
             <i class="bi bi-box-seam"></i>
           </div>
           <div class="stat-info">
             <span class="stat-label">Total Products</span>
-            <h2 class="stat-value">80</h2>
+            <h2 class="stat-value"><?= $totalProducts?></h2>
             <span class="stat-sub">Items in store</span>
           </div>
         </div>
+      </a>
+      <a href="../categories/index.php">
         <div class="stat-card">
           <div class="stat-icon-wrapper">
             <i class="bi bi-receipt"></i>
           </div>
           <div class="stat-info">
-            <span class="stat-label">Total Orders</span>
-            <h2 class="stat-value">5</h2>
-            <span class="stat-sub">Incoming orders</span>
+            <span class="stat-label">Categories</span>
+            <h2 class="stat-value"><?= $totalCategories?></h2>
+            <span class="stat-sub">Organized products</span>
           </div>
         </div>
+      </a>
+      <a href="../users/index.php">
         <div class="stat-card">
           <div class="stat-icon-wrapper">
             <i class="bi bi-grid"></i>
           </div>
           <div class="stat-info">
-            <span class="stat-label">Categories</span>
-            <h2 class="stat-value">8</h2>
-            <span class="stat-sub">Organized products</span>
+            <span class="stat-label">Total Users</span>
+            <h2 class="stat-value"><?= $totalUsers?></h2>
+            <span class="stat-sub">Managed users</span>
           </div>
         </div>
+      </a>
+      <a href="../profile/edit.php">
         <div class="stat-card">
           <div class="stat-icon-wrapper">
             <i class="bi bi-person-vcard"></i>
@@ -66,6 +84,7 @@
             <span class="stat-sub">Your account</span>
           </div>
         </div>
+      </a>
       </div>
       <div class="middle-grid">
         <div class="welcome-banner">

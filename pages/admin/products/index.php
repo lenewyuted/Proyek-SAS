@@ -1,6 +1,22 @@
 <?php
 require_once __DIR__ . "/../../../repositories/product-repository.php";
-$products = getProducts();
+require_once __DIR__ . "/../../../repositories/category-repository.php";
+
+$perPage = 4;
+$currentPage = max(1, intval($_GET['page'] ?? 1));
+
+
+$search = trim($_GET['search'] ?? "");
+$categoryId = trim($_GET['category_id'] ?? "");
+if (!ctype_digit($categoryId)) { //menegecek apakah sebuah variabelnya nilainya angka atau bukan 
+  $categoryId = "";
+}
+
+$categories = getCategories();
+$products = getProducts($search, $categoryId, $currentPage, $perPage);
+
+$totalProducts = countOfProducts($search, $categoryId);
+$totalPages = ceil($totalProducts / $perPage);
 ?>
 
 
@@ -21,6 +37,7 @@ $products = getProducts();
   <link rel="stylesheet" href="../../../styles/admin/sidebar.css">
   <link rel="stylesheet" href="../../../styles/admin/topbar.css">
   <link rel="stylesheet" href="../../../styles/admin/products.css">
+  <link rel="stylesheet" href="../../../styles/admin/pagination.css">
 </head>
 
 <body>
@@ -34,16 +51,16 @@ $products = getProducts();
         <h1>Manage Products</h1>
         <p>Add, edit, delete, and manage laptop products</p>
       </div>
-      <div class="action-bar">
+      <form method="GET" action="" class="action-bar">
         <div class="search-box">
           <i class="bi bi-search"></i>
-          <input type="text" placeholder="Search for parts to build your dream PC...">
+          <input name="search" value="<?= $search ?>" type="text" placeholder="Search for product name...">
         </div>
         <button class="btn-search">Search</button>
         <a href="create.php" class="btn-add-product">
           <i class="bi bi-plus-lg"></i> Add Product
         </a>
-      </div>
+      </form>
       <div class="table-card">
         <table class="product-table">
           <thead>
@@ -80,6 +97,25 @@ $products = getProducts();
             <?php endforeach; ?>
           </tbody>
         </table>
+      </div>
+      <div class="pagination">
+        <!-- Tombol Previous -->
+        <?php if ($currentPage > 1): ?>
+          <a href="?<?= http_build_query(['search' => $search, 'category_id' => $categoryId, 'page' => $currentPage - 1]) ?>">
+            <span class="pagination-btn"><i class="bi bi-chevron-left"></i></span>
+          </a>
+        <?php else: ?>
+          <span class="pagination-btn is-disabled"><i class="bi bi-chevron-left"></i></span>
+        <?php endif; ?>
+
+        <!-- Tombol Next -->
+        <?php if ($currentPage < $totalPages): ?>
+          <a href="?<?= http_build_query(['search' => $search, 'category_id' => $categoryId, 'page' => $currentPage + 1]) ?>">
+            <span class="pagination-btn"><i class="bi bi-chevron-right"></i></span>
+          </a>
+        <?php else: ?>
+          <span class="pagination-btn is-disabled"><i class="bi bi-chevron-right"></i></span>
+        <?php endif; ?>
       </div>
     </main>
   </div>

@@ -10,3 +10,35 @@
     -webkit-text-stroke: 0.6px currentColor;
 }
 
+/* Layout Container */
+.admin-container {
+  display: flex;
+  min-height: calc(100vh - 110px);
+}
+
+/* Layout Grid System */
+.admin-container {
+  display: flex;
+  min-height: calc(100vh - 110px);
+}
+
+
+.main-content a{
+    text-decoration: none;
+}
+
+/* Atur transisi pada elemen utama agar pergerakannya halus */
+.main-content a, 
+.main-content .stat-card {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Efek saat kursor diarahkan ke atasnya */
+.main-content a:hover, 
+.main-content .stat-card:hover {
+  border-color: #2563eb;
+  background-color: #eff6ff;
+  color: #2563eb;
+  transform: translateY(-2px); /* Membuat kartu terangkat sedikit ke atas */
+  box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.15); /* Bayangan menjadi lebih lembut dan luas */
+}

@@ -32,3 +32,11 @@ function getUserByEmail($email)
 
   return $user;
 }
+
+function countUsers() {
+    global $pdo; 
+    $stmt = $pdo->query("select count(*) as total from users");
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['total'] ?? 0;
+}
+?>

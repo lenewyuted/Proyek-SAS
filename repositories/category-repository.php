@@ -45,4 +45,11 @@ function isCategoryExists($categoryId)
 
   return $isCategoryExists;
 }
+
+function countCategories() {
+    global $pdo; 
+    $stmt = $pdo->query("select count(*) as total from categories");
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['total'] ?? 0;
+}
 ?>

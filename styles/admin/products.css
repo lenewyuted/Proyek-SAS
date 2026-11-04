@@ -19,19 +19,6 @@ body {
 }
 
 
-
-/* Layout Container */
-.admin-container {
-  display: flex;
-  min-height: calc(100vh - 110px);
-}
-
-/* Layout Grid System */
-.admin-container {
-  display: flex;
-  min-height: calc(100vh - 110px);
-}
-
 /* Sidebar */
 .sidebar {
   margin-left: 40px;

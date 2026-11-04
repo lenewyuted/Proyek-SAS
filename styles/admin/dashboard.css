@@ -19,14 +19,6 @@ body {
   color: var(--text-dark);
 }
 
-
-/* Layout Grid System */
-.admin-container {
-  display: flex;
-  min-height: calc(100vh - 110px);
-}
-
-/* Sidebar */
 .sidebar {
   margin-left: 40px;
   border-radius: 10px;
