@@ -1,0 +1,130 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+
+/* bar pengumuman bagian atas */
+.top-bar {
+    background-color: #0d5cab;
+    color: #ffffff;
+    text-align: center;
+    padding: 6px 15px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 12px 5%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 8px;
+}
+
+
+
+.logo-icon {
+    /* background-color: #0d5cab; */
+    color: white;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 20px;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-name {
+    color: #0d5cab;
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: 0.5px;
+}
+
+.brand-tagline {
+    color: #777;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+
+
+/* search bar */
+.search-form {
+   flex: 1;
+    max-width: 450px; 
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-form input {
+    width: 100%;
+    padding: 10px 45px 10px 15px;
+    border: 1px solid #0d5cab;
+    border-radius: 20px;
+    outline: none;
+    font-size: 13px;
+    color: #333;
+}
+
+.search-form input::placeholder{
+    color: #999;
+}
+
+.search-btn {
+    position: absolute;
+    right: 12px;
+    background: transparent;
+    border: none;
+    color: #E5EFFF;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+
+
+/* icons nav kanan */
+.nav-icons{
+    display: flex;
+    align-items: center;
+    gap:18px;
+}
+
+.icon-link{
+    color: #0d5cab;
+    font-size: 20px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.icon-link:hover{
+    color: #003b75
+}

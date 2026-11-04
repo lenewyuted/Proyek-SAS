@@ -1,36 +1,48 @@
-<?php
+<link rel="stylesheet" href="/styles/components/header.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-$baseUrl = $baseUrl ?? '/Proyek-SAS';
-?>
-<div class="top-banner">
-  Discover Premium PC Components Built for Performance, Speed, and Reliability
-</div>
+<!-- bar bagian atas -->
+    <div class="top-bar">
+       <span>Discover Premium PC Components Built for Performance, Speed, and Reliability</span>
+    </div>
 
-<header class="header">
-  <a href="<?= $baseUrl ?>/index.php" class="logo">
-    <span class="logo-text">TECH<span>HUB</span></span>
-    <small>Your Pro Build</small>
-  </a>
+<!-- main navbar -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <!-- logo -->
+        <a href="index.php" class="logo">
+            <div class="logo-icon">
+                <img src="/assets/img/Logo.png" alt="">
+            </div>
+        </a>
 
-  <form class="search-box" action="<?= $baseUrl ?>/pages/user/products/search.php" method="get">
-    <input type="text" name="q" placeholder="Search for parts to build your dream PC...">
-    <button type="submit" aria-label="Cari">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-    </button>
-  </form>
+<!-- search bar -->
+        <form action="search.php" method="GET" class="search-form">
+            <input type="text" name="q" placeholder="Search for parts to build your dream PC..." required>
+            <button type="submit" class="search-btn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
 
-  <nav class="header-icons">
-    <a href="<?= $baseUrl ?>/pages/user/products/recommendation.php" aria-label="Rekomendasi">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 11v9H3v-9h4zm0 0l4-8c1.5 0 2.5 1 2.2 2.5L12.5 9H19a2 2 0 012 2.3l-1.2 6.5A2 2 0 0117.8 19H7"/></svg>
-    </a>
-    <a href="<?= $baseUrl ?>/pages/user/compare/index.php" aria-label="Bandingkan">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16M7 9l-2 3 2 3M17 9l2 3-2 3"/></svg>
-    </a>
-    <a href="<?= $baseUrl ?>/pages/user/cart/index.php" aria-label="Keranjang">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4h2l2.4 11h10.3L20 7H6"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg>
-    </a>
-    <a href="<?= $baseUrl ?>/pages/user/profile/index.php" aria-label="Akun">
-      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3.5"/><path d="M5.5 18.5c1.5-3 4-4 6.5-4s5 1 6.5 4"/></svg>
-    </a>
-  </nav>
-</header>
+        <!-- tombol aksi kanan -->
+        <div class="nav-icons">
+            <a href="thumbs-up.php" class="icon-link" title="Likes">
+                <i class="fa-solid fa-thumbs-up"></i>
+            </a>
+
+            <a href="compare.php" class="icon-link" title="Compare">
+                <i class="fa-solid fa-arrows-rotate"></i>
+            </a>
+
+            <a href="cart.php" class="icon-link" title="Cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </a>
+
+            <a href="account.php" class="icon-link" title="User Account">
+                <i class="fa-regular fa-user"></i>
+            </a>
+        </div>
+        
+    </div>
+</nav>
+</body>
