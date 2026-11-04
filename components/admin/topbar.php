@@ -1,5 +1,6 @@
 <?php const BASE_URL = "http://localhost:3000"; ?>
 
+<link rel="stylesheet" href="../../styles/base.css">
 <div class="announcement-bar">
   Discover Premium PC Components Built for Performance, Speed, and Reliability
 </div>

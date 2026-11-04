@@ -24,6 +24,7 @@ unset($_SESSION['errors'], $_SESSION['old']);
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../../../styles/base.css">
     <link rel="stylesheet" href="../../../styles/admin/sidebar.css">
+    <link rel="stylesheet" href="../../../styles/admin/topbar.css">
     <link rel="stylesheet" href="../../../styles/admin/products.css">
 </head>
 
@@ -37,7 +38,7 @@ unset($_SESSION['errors'], $_SESSION['old']);
             <div class="page-header-flex" style="margin-bottom: 20px;">
                 <div class="header-col">
                     <h1>Add New Product</h1>
-                    <p>Add a new product to your inventory.</p>
+                    <p>Add a new product to your inventory</p>
                 </div>
                 <div>
                     <a href="index.php" class="back-link" style="padding: 10px 10px;">
@@ -115,7 +116,7 @@ unset($_SESSION['errors'], $_SESSION['old']);
                     <?php endif; ?>
                 </div>
                 <div class="form-actions-center">
-                    <button name="store" type="submit" class="btn-submit-add">+ Add Product</button>
+                    <button name="store" type="submit" class="btn-submit-add">Add Product</button>
                     <a href="index.php" class="btn-cancel">Cancel</a>
                 </div>
             </form>

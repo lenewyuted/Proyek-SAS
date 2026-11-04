@@ -36,6 +36,7 @@ $product = array_merge($product, $old);
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../../../styles/base.css">
     <link rel="stylesheet" href="../../../styles/admin/sidebar.css">
+    <link rel="stylesheet" href="../../../styles/admin/topbar.css">
     <link rel="stylesheet" href="../../../styles/admin/products.css">
 </head>
 
@@ -49,7 +50,7 @@ $product = array_merge($product, $old);
             <div class="page-header-flex" style="margin-bottom: 20px;">
                 <div class="header-col">
                     <h1>Edit Product</h1>
-                    <p>Update product information, category, and stock.</p>
+                    <p>Update product information, category, and stock</p>
                 </div>
                 <div>
                     <a href="index.php" class="back-link" style="padding: 10px 10px;">
@@ -58,7 +59,7 @@ $product = array_merge($product, $old);
                 </div>
             </div>
             <form action="../../../actions/products/update.php" method="POST" enctype="multipart/form-data" class="product-form-create">
-                <input type="hidden" name="id" value="<?= $product['id'] ?>">
+                <input type="hidden" name="id" value="<?= $old['id'] ?? $_GET['id'] ?? '' ?>">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="name">Product Name</label>
@@ -138,7 +139,7 @@ $product = array_merge($product, $old);
                     <?php endif; ?>
                 </div>
                 <div class="form-actions-center">
-                    <button name="update" type="submit" class="btn-submit-add">+ Add Product</button>
+                    <button name="update" type="submit" class="btn-submit-add">Save Changes</button>
                     <a href="index.php" class="btn-cancel">Cancel</a>
                 </div>
             </form>

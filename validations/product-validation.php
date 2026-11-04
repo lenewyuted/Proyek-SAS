@@ -5,6 +5,7 @@ require_once __DIR__ . "/../repositories/category-repository.php";
 function getProductRequest($request)
 {
     return [
+        'id' => $request['id'] ?? null,
         'name' => trim(htmlspecialchars($request['name'])),
         'category_id' => trim(htmlspecialchars($request['category_id'])),
         'price' => trim(htmlspecialchars($request['price'])),

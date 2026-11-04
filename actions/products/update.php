@@ -11,7 +11,7 @@ if (isset($_POST['update']) && $_SERVER['REQUEST_METHOD'] === "POST") {
         $request = getProductRequest($_POST); // berisi inputan dari pengguna
 
         $errors = validateProduct($request, $request['id']); // untuk menampung pesan terkait dengan inputan yang mau kita validasi
-
+    
         if (count($errors) > 0) {
             $_SESSION['errors'] = $errors;
             $_SESSION['old'] = $request;

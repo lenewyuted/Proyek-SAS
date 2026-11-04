@@ -6,6 +6,7 @@ $products = getProducts();
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +19,7 @@ $products = getProducts();
   <!-- CSS -->
   <link rel="stylesheet" href="../../../styles/base.css">
   <link rel="stylesheet" href="../../../styles/admin/sidebar.css">
+  <link rel="stylesheet" href="../../../styles/admin/topbar.css">
   <link rel="stylesheet" href="../../../styles/admin/products.css">
 </head>
 
@@ -30,7 +32,7 @@ $products = getProducts();
     <main class="main-content">
       <div class="page-header">
         <h1>Manage Products</h1>
-        <p>Add, edit, delete, and manage laptop products.</p>
+        <p>Add, edit, delete, and manage laptop products</p>
       </div>
       <div class="action-bar">
         <div class="search-box">
@@ -56,20 +58,22 @@ $products = getProducts();
           </thead>
           <tbody>
             <?php foreach ($products as $product): ?>
-              <tr>
+              <!-- Tambahkan atribut onclick dan cursor pointer pada style tr -->
+              <tr onclick="window.location.href='show.php?id=<?= $product['id'] ?>'" style="cursor: pointer;">
                 <td>
                   <div class="product-img-box">
-                    <img src = "/assets/img/<?= $product['picture'] ?>" alt="Intel Core i9-9900K">
+                    <img src="/assets/img/<?= $product['picture'] ?>" alt="<?= htmlspecialchars($product['name']) ?>">
                   </div>
                 </td>
-                <td class="product-name"><?= $product['name'];?></td>
-                <td><span class="badge-category"><?= $product['category_name'];?></span></td>
-                <td class="product-price"><?= formatRupiah($product['price']);?></td>
-                <td class="product-stock"><?= $product['stock'];?></td>
+                <td class="product-name"><?= $product['name']; ?></td>
+                <td><span class="badge-category"><?= $product['category_name']; ?></span></td>
+                <td class="product-price"><?= formatRupiah($product['price']); ?></td>
+                <td class="product-stock"><?= $product['stock']; ?></td>
                 <td>
                   <div class="action-buttons">
-                    <a href="edit.php?id=<?= $product['id'] ?>" class="btn-edit">Edit</a>
-                    <a href="../../../actions/products/destroy.php?id=<?= $product['id'];?>" class="btn-delete" onclick="return confirm('Yakin ingin menghapus produk ini?')">Delete</a>
+                    <!-- Tambahkan event onclick.stopPropagation() agar tombol Edit & Delete tidak ikut membuka show.php -->
+                    <a href="edit.php?id=<?= $product['id'] ?>" class="btn-edit" onclick="event.stopPropagation();">Edit</a>
+                    <a href="../../../actions/products/destroy.php?id=<?= $product['id']; ?>" class="btn-delete" onclick="event.stopPropagation(); return confirm('Yakin ingin menghapus produk ini?')">Delete</a>
                   </div>
                 </td>
               </tr>
@@ -80,4 +84,5 @@ $products = getProducts();
     </main>
   </div>
 </body>
+
 </html>

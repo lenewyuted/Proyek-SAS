@@ -19,55 +19,6 @@ body {
   color: var(--text-dark);
 }
 
-.announcement-bar {
-  background-color: var(--primary-blue);
-  color: var(--white);
-  text-align: center;
-  padding: 10px 15px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.top-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 40px;
-  background-color: var(--white);
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.logo-img {
-  height: 40px;
-}
-
-.header-actions {
-  display: flex;
-  gap: 15px;
-}
-
-.btn-profile,
-.btn-logout {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  background: transparent;
-}
-
-.btn-profile {
-  border: 1.5px solid var(--primary-blue);
-  color: var(--primary-blue);
-}
-
-.btn-logout {
-  border: 1.5px solid var(--primary-blue);
-  color: var(--primary-blue);
-}
 
 /* Layout Grid System */
 .admin-container {
@@ -108,6 +59,10 @@ body {
 .menu-item:hover {
   background-color: var(--light-blue-bg);
   color: var(--primary-blue);
+}
+
+.menu-item i {
+    -webkit-text-stroke: 0.4px currentColor; /* Sesuaikan ukuran ketebalannya (misal 0.5px - 1px) */
 }
 
 /* Main Content Area */
