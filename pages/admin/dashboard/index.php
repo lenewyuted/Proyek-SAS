@@ -1,3 +1,14 @@
+<?php
+require_once __DIR__ . "/../../../config/database.php";
+require_once __DIR__ . "/../../../repositories/product-repository.php";
+require_once __DIR__ . "/../../../repositories/category-repository.php";
+require_once __DIR__ . "/../../../repositories/user-repository.php";
+
+$totalProducts = countProducts();
+$totalCategories = countCategories();
+$totalUsers = countUsers();
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -11,48 +22,58 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="../../../styles/base.css">
   <link rel="stylesheet" href="../../../styles/admin/sidebar.css">
+  <link rel="stylesheet" href="../../../styles/admin/topbar.css">
   <link rel="stylesheet" href="../../../styles/admin/dashboard.css">  
 </head>
 <body>
+  <!-- Topbar -->
   <?php require_once __DIR__ . "/../../../components/admin/topbar.php"?>
   <div class="admin-container">
+    <!-- Sidebar -->
     <?php require_once __DIR__ . "/../../../components/admin/sidebar.php" ?>
     <main class="main-content">
       <div class="page-header">
         <h1>Dashboard</h1>
         <p>Welcome to the TechHub admin panel!</p>
       </div>
-      <div class="stats-grid">
+      <a href="../products/index.php">
+        <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon-wrapper">
             <i class="bi bi-box-seam"></i>
           </div>
           <div class="stat-info">
             <span class="stat-label">Total Products</span>
-            <h2 class="stat-value">80</h2>
+            <h2 class="stat-value"><?= $totalProducts?></h2>
             <span class="stat-sub">Items in store</span>
           </div>
         </div>
+      </a>
+      <a href="../categories/index.php">
         <div class="stat-card">
           <div class="stat-icon-wrapper">
             <i class="bi bi-receipt"></i>
           </div>
           <div class="stat-info">
-            <span class="stat-label">Total Orders</span>
-            <h2 class="stat-value">5</h2>
-            <span class="stat-sub">Incoming orders</span>
+            <span class="stat-label">Categories</span>
+            <h2 class="stat-value"><?= $totalCategories?></h2>
+            <span class="stat-sub">Organized products</span>
           </div>
         </div>
+      </a>
+      <a href="../users/index.php">
         <div class="stat-card">
           <div class="stat-icon-wrapper">
             <i class="bi bi-grid"></i>
           </div>
           <div class="stat-info">
-            <span class="stat-label">Categories</span>
-            <h2 class="stat-value">8</h2>
-            <span class="stat-sub">Organized products</span>
+            <span class="stat-label">Total Users</span>
+            <h2 class="stat-value"><?= $totalUsers?></h2>
+            <span class="stat-sub">Managed users</span>
           </div>
         </div>
+      </a>
+      <a href="../profile/edit.php">
         <div class="stat-card">
           <div class="stat-icon-wrapper">
             <i class="bi bi-person-vcard"></i>
@@ -63,6 +84,7 @@
             <span class="stat-sub">Your account</span>
           </div>
         </div>
+      </a>
       </div>
       <div class="middle-grid">
         <div class="welcome-banner">

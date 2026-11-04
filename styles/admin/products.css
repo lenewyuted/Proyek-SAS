@@ -18,60 +18,6 @@ body {
   color: var(--text-dark);
 }
 
-/* Announcement Top Bar */
-.announcement-bar {
-  background-color: var(--primary-blue);
-  color: var(--white);
-  text-align: center;
-  padding: 10px 15px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-/* Header Navbar */
-.top-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 40px;
-  background-color: var(--white);
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.logo-img {
-  height: 40px;
-}
-
-.header-actions {
-  display: flex;
-  gap: 15px;
-}
-
-.btn-profile, .btn-logout {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  background: transparent;
-  border: 1.5px solid var(--primary-blue);
-  color: var(--primary-blue);
-}
-
-/* Layout Container */
-.admin-container {
-  display: flex;
-  min-height: calc(100vh - 110px);
-}
-
-/* Layout Grid System */
-.admin-container {
-  display: flex;
-  min-height: calc(100vh - 110px);
-}
 
 /* Sidebar */
 .sidebar {
@@ -107,6 +53,12 @@ body {
   background-color: var(--light-blue-bg);
   color: var(--primary-blue);
 }
+
+
+.menu-item i {
+    -webkit-text-stroke: 0.4px currentColor; /* Sesuaikan ukuran ketebalannya (misal 0.5px - 1px) */
+}
+
 
 /* Main Content Area */
 .main-content {
@@ -192,6 +144,62 @@ body {
   gap: 8px;
   text-decoration: none;
   cursor: pointer;
+}
+
+
+/* Mengatur agar tabel menggunakan lebar penuh dan jarak kolom dibagi merata */
+.product-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* Kolom Picture (Kiri) - Diberi padding-left agar jaraknya seimbang dengan sebelah kanan */
+.product-table th:first-child,
+.product-table td:first-child {
+  width: 12%;
+  padding-left: 30px; /* Menyamakan jarak dari garis tepi kiri */
+}
+
+/* Mengatur lebar kolom tengah lainnya secara proporsional */
+.product-table th:nth-child(2), 
+.product-table td:nth-child(2) {
+  width: 33%;
+}
+
+.product-table th:nth-child(3), 
+.product-table td:nth-child(3) {
+  width: 15%;
+}
+
+.product-table th:nth-child(4), 
+.product-table td:nth-child(4) {
+  width: 18%;
+}
+
+.product-table th:nth-child(5), 
+.product-table td:nth-child(5) {
+  width: 10%;
+}
+
+/* Header kolom Action */
+.product-table th:last-child {
+  width: 12%;
+  text-align: right !important;
+  padding-right: 128px;
+}
+
+/* Isi baris kolom Action */
+.product-table td:last-child {
+  width: 12%;
+  text-align: right;
+  padding-right: 35px;
+}
+
+/* Tombol Edit & Delete */
+.product-table td:last-child .action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 /* Table Card Container */
@@ -623,4 +631,108 @@ body {
 
 .header-col p {
   margin-top: 5px;
+}
+
+.form-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%23333' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 15px center; 
+    padding-right: 40px;
+}
+
+
+
+/* =============================================
+   PRODUCT DETAIL LAYOUT (SHOW.PHP)
+   ============================================= */
+.product-show-container {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 30px;
+  align-items: stretch; /* Membuat kedua kolom memiliki tinggi yang sama persis */
+}
+
+.product-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.show-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.show-field-group label {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+/* Input read-only bergaya box */
+.show-field-value {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1.5px solid var(--primary-blue);
+  border-radius: 10px;
+  font-size: 14px;
+  color: #33303B;
+  background-color: var(--white);
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+}
+
+.show-field-value.textarea-value {
+  min-height: 220px;
+  align-items: flex-start;
+  line-height: 1.6;
+}
+
+/* Kartu gambar sebelah kanan menyesuaikan tinggi penuh */
+.product-image-card {
+  background: var(--white);
+  border: 1.5px solid var(--primary-blue);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: 100%; /* Memenuhi tinggi kontainer induk */
+}
+
+.product-image-card h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+/* Wadah preview gambar ikut merenggang mengisi sisa tinggi kartu */
+.image-preview-box {
+  background-color: var(--light-blue-bg);
+  border: 1.5px solid var(--primary-blue);
+  border-radius: 12px;
+  padding: 10px;
+  flex: 1; /* Otomatis mengisi sisa ruang vertikal di dalam kartu */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 250px;
+}
+
+.image-preview-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Mengubah dari cover ke contain agar gambar tampil utuh tanpa terpotong */
+  border-radius: 8px;
+}
+
+.image-preview-box .no-image-icon {
+  font-size: 60px;
+  color: var(--primary-blue);
 }
