@@ -12,7 +12,7 @@ if (!ctype_digit($categoryId)) { //menegecek apakah sebuah variabelnya nilainya 
   $categoryId = "";
 }
 
-$categories = getCategories();
+$categories = getCategories($search, $categoryId, $currentPage, $perPage);
 $products = getProducts($search, $categoryId, $currentPage, $perPage);
 
 $totalProducts = countOfProducts($search, $categoryId);

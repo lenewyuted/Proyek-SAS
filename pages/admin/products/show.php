@@ -15,7 +15,7 @@ $product = getProduct($id);
 
 // cari nama kategori dari category_id
 $categoryName = '';
-foreach (getCategories() as $category) {
+foreach (getCategories("", "", 1, 100) as $category) {
     if ($category['id'] == $product['category_id']) {
         $categoryName = $category['name'];
         break;

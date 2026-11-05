@@ -11,7 +11,7 @@ if (!$id) {
 }
 
 $product = getProduct($id);
-$categories = getCategories();
+$categories = getCategories("", "", 1, 100);
 
 $errors = $_SESSION['errors'] ?? [];
 $old = $_SESSION['old'] ?? [];

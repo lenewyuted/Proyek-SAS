@@ -2,7 +2,7 @@
 require_once __DIR__ . "/../../../middleware/auth.php";
 require_once __DIR__ . "/../../../repositories/category-repository.php";
 
-$categories = getCategories();
+$categories = getCategories("", "", 1, 100);
 
 $errors = $_SESSION['errors'] ?? [];
 $old = $_SESSION['old'] ?? [];
