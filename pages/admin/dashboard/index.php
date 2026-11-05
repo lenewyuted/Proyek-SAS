@@ -3,6 +3,8 @@ require_once __DIR__ . "/../../../config/database.php";
 require_once __DIR__ . "/../../../repositories/product-repository.php";
 require_once __DIR__ . "/../../../repositories/category-repository.php";
 require_once __DIR__ . "/../../../repositories/user-repository.php";
+require_once __DIR__ . "/../../../middleware/auth.php";
+requireRole(["admin"]);
 
 $totalProducts = countProducts();
 $totalCategories = countCategories();
