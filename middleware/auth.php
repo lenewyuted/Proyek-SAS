@@ -3,9 +3,9 @@
 //mekanisme untuk menghandle sesuatu kepada pengguna yg dmn sebelum dia akan mengakses sebuah halaman atau action.
 //sebelum masuk ke halaman daftar buku, kt bs cek dlu status user dan tangkap aksi yg dilakukan
 
-const LOGIN_URL = "../pages/auth/login.php";//simpan lokasi halaman login
-const LANDING_PAGE = "../../pages/landing-page/index.php";//menyimpan lokasi halaman daftar buku
-const ADMIN_DASHBOARD = "../pages/admin/dashboard/index.php";
+const LOGIN_URL = "/pages/auth/login.php";//simpan lokasi halaman login
+const LANDING_PAGE =  "/pages/landing-page/index.php";//menyimpan lokasi halaman daftar buku
+const ADMIN_DASHBOARD = "/pages/admin/dashboard/index.php";
 const FORBIDDEN_URL = "/pages/errors/403.php"; //memberitahu tindakan yg dilarang
 
 //Mengecek apakah sebuah session itu sudah dimulai atau belum, jika belum maka session akan dimulai
