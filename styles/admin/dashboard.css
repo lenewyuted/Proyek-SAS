@@ -73,6 +73,7 @@ body {
 .page-header p {
   color: var(--text-muted);
   margin-top: 4px;
+  padding-top: 8px;
   margin-bottom: 25px;
   font-size: 14px;
 }

@@ -79,6 +79,8 @@ body {
 
 .page-header p {
   color: var(--text-muted);
+  padding-top: 8px;
+  padding-bottom: 10px;
   margin-top: 4px;
   margin-bottom: 25px;
   font-size: 14px;
@@ -312,8 +314,10 @@ body {
   background: var(--white);
 }
 
-.btn-delete:hover {
-  background: #fef2f2;
+.action-buttons .btn-delete:hover {
+  background-color: #f6e8e8; 
+  color: #ef4444;            
+  border-color: #ef4444;
 }
 
 /* Add new product */

@@ -65,6 +65,7 @@ $totalPages = ceil($totalProducts / $perPage);
         <table class="product-table">
           <thead>
             <tr>
+              <th>Picture</th>
               <th>Name</th>
               <th>Description</th>
               <th>Number of products</th>
@@ -75,12 +76,17 @@ $totalPages = ceil($totalProducts / $perPage);
             <?php foreach ($categories as $category): ?>
               <!-- Tambahkan atribut onclick dan cursor pointer pada style tr -->
               <tr onclick="window.location.href='show.php?id=<?= $category['id'] ?>'" style="cursor: pointer;">
+                <td>
+                  <div class="product-img-box">
+                    <img src="/assets/img/<?= $category['picture'] ?>" alt="<?= htmlspecialchars($category['name']) ?>">
+                  </div>
+                </td>
                 <td class="category-name"><?= $category['name']; ?></td>
                 <td class="category-description"><?= $category['description']; ?></td>
                 <td>
                   <span class="badge-category">
                     <span style="margin-left: 2px;">
-                      <?= $category['total_products']; ?>  products
+                      <?= $category['total_products']; ?>&nbsp;&nbsp;products
                     </span>
                   </span>
                 </td>

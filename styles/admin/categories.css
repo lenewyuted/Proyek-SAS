@@ -79,7 +79,9 @@ body {
 
 .page-header p {
   color: var(--text-muted);
+  padding-top: 8px;
   margin-top: 4px;
+  padding-bottom: 10px;
   margin-bottom: 25px;
   font-size: 14px;
 }
@@ -156,19 +158,24 @@ body {
 /* Kolom Picture (Kiri) - Diberi padding-left agar jaraknya seimbang dengan sebelah kanan */
 .product-table th:first-child,
 .product-table td:first-child {
-  width: 12%;
+  width: 9%;
   padding-left: 30px; /* Menyamakan jarak dari garis tepi kiri */
 }
 
 /* Mengatur lebar kolom tengah lainnya secara proporsional */
 .product-table th:nth-child(2), 
 .product-table td:nth-child(2) {
-  width: 50%;
+  width: 12%;
 }
 
 .product-table th:nth-child(3), 
 .product-table td:nth-child(3) {
-  width: 12%;
+  width: 51%;
+}
+
+.product-table th:nth-child(4), 
+.product-table td:nth-child(4) {
+  width: 14%;
 }
 
 /* Header kolom Action */
@@ -237,6 +244,11 @@ body {
   overflow: hidden;
 }
 
+.product-img-box img {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+}
 
 .category-name {
   font-weight: 600;
@@ -300,6 +312,13 @@ body {
 .btn-delete:hover {
   background: #fef2f2;
 }
+
+.action-buttons .btn-delete:hover {
+  background-color: #f6e8e8; 
+  color: #ef4444;            
+  border-color: #ef4444;
+}
+
 
 /* Add new product */
 
@@ -376,6 +395,7 @@ body {
 .header-col p {
     color: var(--text-muted);
     margin-top: 4px;
+    padding-top: 8px;
     margin-bottom: 10px;
     font-size: 14px;
 }
@@ -614,9 +634,6 @@ body {
   flex: 1; /* Kedua kolom otomatis membagi lebar sama besar (50%-50%) */
 }
 
-.header-col p {
-  margin-top: 5px;
-}
 
 .form-group select {
     appearance: none;
@@ -628,7 +645,10 @@ body {
     padding-right: 40px;
 }
 
-
+.badge-category {
+  padding-right: 17px;
+  display: inline-block;
+}
 
 
 
