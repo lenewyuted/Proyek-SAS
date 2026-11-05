@@ -1,47 +1,75 @@
-<?php
+<?php 
 require_once __DIR__ . "/../config/database.php";
 
-// Mengambil produk (beserta nama dan icon kategorinya), bisa dicari berdasarkan judul
-function getProducts($search = '', $limit = 5)
+function getProducts($search, $categoryId, $currentPage, $perPage)
 {
     global $pdo;
 
-    $query = "select p.*, c.name as category_name, c.icon as category_icon
-    from products p
+    $query = "select p.*, c.name as category_name from products p 
     left join categories c on p.category_id = c.id
-    where p.title like :search
-    order by p.id asc
-    limit :limit";
+    where p.name like :search
+    limit :limit offset :offset" ;
 
-    $stmt = $pdo->prepare($query);
-    $stmt->bindValue(':search', "%$search%");
-    $stmt->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
-    $stmt->execute();
+    $stmt = $pdo -> prepare($query);
+    $stmt -> execute([
+        'search' => "%$search%",
+        'limit' => $perPage,
+        'offset' => ($currentPage -1) * $perPage,
+    ]);
 
-    $products = $stmt->fetchAll();
+    $products = $stmt -> fetchAll();
 
     return $products;
 }
 
-// Mengambil semua produk tanpa batas, dipakai untuk halaman rekomendasi
-function getAllProducts()
+function formatRupiah($angka) {
+    return 'Rp ' . number_format($angka, 0, ',', '.');
+}
+
+
+function getProduct($id)
 {
     global $pdo;
 
-    $query = "select p.*, c.name as category_name, c.icon as category_icon
-    from products p
-    left join categories c on p.category_id = c.id";
+    $query = "select * from products where id = :id";
 
     $stmt = $pdo->prepare($query);
-    $stmt->execute();
+    $stmt->execute([
+        'id' => $id
+    ]);
 
-    $products = $stmt->fetchAll();
+    $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    return $products;
+    if (!$product) {
+        header('location: ../pages/admin/products/index.php');
+        exit;
+    }
+
+    return $product;
 }
 
-function formatRupiah($angka)
+function countProducts() {
+    global $pdo; 
+    $stmt = $pdo->query("select count(*) as total from products");
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['total'] ?? 0;
+}
+
+
+function countOfProducts($search, $categoryId) 
 {
-    return 'Rp.' . number_format($angka, 0, ',', '.');
+    global $pdo;
+
+    $query = "select count(id) from products where name like :name";
+
+    $stmt = $pdo -> prepare($query);
+    $stmt->execute([
+        'name' => "%$search%",
+    ]);
+
+    $totalProducts = $stmt -> fetchColumn();
+
+    return $totalProducts;
 }
 ?>
+

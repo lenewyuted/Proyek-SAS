@@ -56,37 +56,42 @@ function getProfile($id)
 
 function isEmailTaken($email)
 {
-    global $pdo;
+  global $pdo;
 
-    $query = "select * from users where email = :email";
+  $query = "select count(id) from users where email = :email";
 
-    $stmt = $pdo->prepare($query);
-    $stmt->execute([
-        'email' => $email
-    ]);
+  $stmt = $pdo->prepare($query);
+  $stmt->execute([
+    'email' => $email
+  ]);
 
-    $user = $stmt->fetch();
+  $isEmailTaken = $stmt->fetchColumn() > 0;
 
-    return $user;
+  return $isEmailTaken;
 }
 
-// Mengecek apakah username sudah dipakai pengguna lain (id $ignoreId dikecualikan)
-function isUsernameTaken($username, $ignoreId = 0)
+function getUserByEmail($email) 
 {
-    global $pdo;
+  global $pdo;
 
-    $query = "select count(id) from users where username = :username and id != :id";
+  $query = "select * from users where email = :email";
 
-    $stmt = $pdo->prepare($query);
-    $stmt->execute([
-        'username' => $username,
-        'id' => $ignoreId,
-    ]);
+  $stmt = $pdo->prepare($query);
+  $stmt->execute([
+    'email' => $email
+  ]);
 
-    return $stmt->fetchColumn() > 0;
+  $user = $stmt->fetch();
+
+  return $user;
 }
 
-
+function countUsers() {
+    global $pdo; 
+    $stmt = $pdo->query("select count(*) as total from users");
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['total'] ?? 0;
+}
 
 
 function countOfUsers($search) 
