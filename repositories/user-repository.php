@@ -1,6 +1,59 @@
 <?php
 require_once __DIR__ . "/../config/database.php";
 
+
+function getUsers()
+{
+  global $pdo;
+
+  $query = "select * from users";
+
+  $stmt = $pdo -> prepare($query);
+  $stmt -> execute();
+
+  $users = $stmt -> fetchAll();
+
+  return $users;
+}
+
+function getUser($id)
+{
+  global $pdo;
+
+  $query = "select * from users where id = :id";
+
+  $stmt = $pdo->prepare($query);
+  $stmt -> execute([
+    'id' => $id
+  ]);
+
+  $user = $stmt -> fetch(PDO::FETCH_ASSOC);
+
+  if(!$user) {
+    header('location: ../pages/admin/users/index.php');
+    exit;
+  }
+
+  return $user;
+}
+
+function getProfile($id)
+{
+    global $pdo;
+
+    $query = "SELECT * FROM users WHERE id = :id";
+
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
+        'id' => $id
+    ]);
+
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $user;
+}
+
+
 function isEmailTaken($email)
 {
   global $pdo;
@@ -38,5 +91,22 @@ function countUsers() {
     $stmt = $pdo->query("select count(*) as total from users");
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['total'] ?? 0;
+}
+
+
+function countOfUsers($search) 
+{
+    global $pdo;
+
+    $query = "select count(id) from users where name like :name";
+
+    $stmt = $pdo -> prepare($query);
+    $stmt->execute([
+        'name' => "%$search%",
+    ]);
+
+    $totalUsers = $stmt -> fetchColumn();
+    
+    return $totalUsers;
 }
 ?>
