@@ -1,0 +1,58 @@
+/* TECHHUB - admin.css (Halaman Edit Profile & halaman admin lain) */
+:root { --blue-dark:#0d4b8e; --blue:#1a5ca3; --blue-soft:#e6eeff; }
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Kumbh Sans',Arial,sans-serif; }
+body { background:#fff; color:#111; }
+a { text-decoration:none; color:inherit; }
+
+.top-announcement { background:var(--blue-dark); color:#fff; text-align:center; padding:8px 15px; font-size:13px; font-weight:600; }
+
+.admin-header { max-width:1200px; margin:0 auto; padding:14px 5%; display:flex; align-items:center; justify-content:space-between; }
+.admin-header .logo img { height:38px; width:auto; }
+.admin-actions { display:flex; gap:10px; }
+.pill-btn { display:inline-flex; align-items:center; gap:6px; border:1.5px solid var(--blue); color:var(--blue-dark); border-radius:14px; padding:4px 12px; font-size:12px; font-weight:700; background:#fff; cursor:pointer; }
+.pill-btn:hover { background:var(--blue-soft); }
+
+.admin-layout { max-width:1200px; margin:0 auto; padding:0 5% 40px; display:grid; grid-template-columns:200px 1fr; gap:18px; align-items:start; }
+
+/* Sidebar */
+.sidebar { border:1.5px solid var(--blue); border-radius:6px; padding:14px 10px; min-height:520px; }
+.sidebar a { display:flex; align-items:center; gap:10px; padding:8px 12px; border-radius:5px; font-size:12px; font-weight:600; color:var(--blue-dark); margin-bottom:8px; }
+.sidebar a i { width:16px; text-align:center; }
+.sidebar a:hover, .sidebar a.active { background:var(--blue-soft); }
+
+/* Content */
+.page-title { font-size:28px; font-weight:800; }
+.page-sub { font-size:11px; color:#555; margin:4px 0 20px; }
+.profile-grid { display:grid; grid-template-columns:1fr 290px; gap:18px; align-items:start; }
+
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:12px; font-weight:700; margin-bottom:5px; }
+.field input, .field textarea { width:100%; border:1.5px solid var(--blue); border-radius:4px; padding:6px 8px; font-size:11px; outline:none; background:#fff; }
+.field input:focus, .field textarea:focus { box-shadow:0 0 0 2px rgba(26,92,163,.2); }
+.field textarea { height:105px; resize:vertical; }
+.row-2 { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+
+.btn-save { background:var(--blue-dark); color:#fff; border:none; border-radius:4px; padding:9px 26px; font-size:12px; font-weight:700; cursor:pointer; }
+.btn-save:hover { background:#09396e; }
+
+/* Profile picture */
+.photo-card { border:1.5px solid var(--blue); border-radius:6px; padding:12px 10px 16px; }
+.photo-card h3 { font-size:12px; font-weight:700; margin-bottom:12px; }
+.avatar { width:100%; max-width:240px; aspect-ratio:1; margin:0 auto 18px; border-radius:6px; background:#ddeeff; overflow:hidden; display:block; }
+.avatar img { width:100%; height:100%; object-fit:cover; }
+.btn-photo { display:block; width:100%; max-width:240px; margin:0 auto 12px; padding:9px; border-radius:4px; border:1.5px solid var(--blue-dark); font-size:13px; font-weight:700; text-align:center; cursor:pointer; }
+.btn-photo.primary { background:var(--blue-dark); color:#fff; }
+.btn-photo.outline { background:#fff; color:var(--blue-dark); }
+.btn-photo:hover { opacity:.9; }
+#photoInput { display:none; }
+
+.alert { padding:9px 12px; border-radius:4px; font-size:12px; margin-bottom:14px; }
+.alert.ok { background:#e5f6ea; border:1px solid #2e9e4f; color:#1e6b36; }
+.alert.err { background:#fdeaea; border:1px solid #d33; color:#9b1c1c; }
+
+@media (max-width:860px) {
+  .admin-layout { grid-template-columns:1fr; }
+  .sidebar { min-height:0; display:flex; flex-wrap:wrap; gap:6px; }
+  .sidebar a { margin:0; }
+  .profile-grid { grid-template-columns:1fr; }
+}
