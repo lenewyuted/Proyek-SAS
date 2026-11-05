@@ -19,7 +19,7 @@ function getCategories($search, $categoryId, $currentPage, $perPage)
         'offset' => ($currentPage -1) * $perPage,
     ]);
 
-    $categories = $stmt -> fetchAll();
+    $categories = $stmt->fetchAll();
 
     return $categories;
 }
