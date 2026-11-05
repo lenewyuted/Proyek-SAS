@@ -94,7 +94,7 @@ $totalPages = ceil($totalProducts / $perPage);
                   <div class="action-buttons">
                     <!-- Tambahkan event onclick.stopPropagation() agar tombol Edit & Delete tidak ikut membuka show.php -->
                     <a href="edit.php?id=<?= $category['id'] ?>" class="btn-edit" onclick="event.stopPropagation();">Edit</a>
-                    <a href="../../../actions/categorys/destroy.php?id=<?= $category['id']; ?>" class="btn-delete" onclick="event.stopPropagation(); return confirm('Yakin ingin menghapus produk ini?')">Delete</a>
+                    <a href="../../../actions/categories/destroy.php?id=<?= $category['id']; ?>" class="btn-delete" onclick="event.stopPropagation(); return confirm('Yakin ingin menghapus produk ini?')">Delete</a>
                   </div>
                 </td>
               </tr>

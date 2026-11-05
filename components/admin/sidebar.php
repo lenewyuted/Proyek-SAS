@@ -10,6 +10,9 @@
         <a href="../categories/index.php" class="menu-item" id="sidebar-categories">
             <i class="bi bi-grid"></i> Categories
         </a>
+        <a href="../users/index.php" class="menu-item" id="sidebar-profile">
+            <i class="bi bi-person"></i> User
+        </a>
         <a href="../profile/edit.php" class="menu-item" id="sidebar-profile">
             <i class="bi bi-person-vcard"></i> Profile
         </a>

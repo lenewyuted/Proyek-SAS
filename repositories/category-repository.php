@@ -19,13 +19,23 @@ function getCategories()
 }
 
 
-function getCategory()
+function getCategory($id)
 {
-    $category = [
-        "id" => 1,
-        "name" => "CPU",
-        "description" => "The core brain of the computer that processes data and executes instructions",
-    ];
+    global $pdo;
+
+    $query = "select * from categories where id = :id";
+
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
+        'id' => $id
+    ]);
+
+    $category = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$category) {
+        header('location: ../pages/admin/categories/index.php');
+        exit;
+    }
 
     return $category;
 }

@@ -31,7 +31,7 @@ function getProduct($id)
 {
     global $pdo;
 
-    $query = "SELECT * FROM products WHERE id = :id";
+    $query = "select * from products where id = :id";
 
     $stmt = $pdo->prepare($query);
     $stmt->execute([

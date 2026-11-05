@@ -86,6 +86,10 @@ body {
   font-size: 14px;
 }
 
+.category-description {
+  line-height: 28px;
+}
+
 /* Action Bar (Search & Add) */
 .action-bar {
   display: flex;
