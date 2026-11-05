@@ -11,7 +11,6 @@ if (!$id) {
 }
 
 $category = getCategory($id);
-$categories = getCategories();
 
 $errors = $_SESSION['errors'] ?? [];
 $old = $_SESSION['old'] ?? [];
