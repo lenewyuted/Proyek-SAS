@@ -17,7 +17,7 @@ if (!ctype_digit($categoryId)) { //menegecek apakah sebuah variabelnya nilainya 
 $categories = getCategories($search, $categoryId, $currentPage, $perPage);
 $products = getProducts($search, $categoryId, $currentPage, $perPage);
 
-$totalCategories = countOfCategories($search, $categoryId);
+$totalCategories = countOfCategories($search);
 $totalPages = ceil($totalCategories / $perPage);
 ?>
 
