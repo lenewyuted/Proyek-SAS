@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . "/../../../repositories/product-repository.php";
 require_once __DIR__ . "/../../../repositories/category-repository.php";
+require_once __DIR__ . "/../../../middleware/auth.php";
+requireRole(["admin"]);
 
 $perPage = 4;
 $currentPage = max(1, intval($_GET['page'] ?? 1));
