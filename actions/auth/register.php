@@ -28,7 +28,7 @@ if(isset($_POST['register']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
             'name' => $request['name'],
             'email' => $request['email'],
             'password' => password_hash($request['password'], PASSWORD_BCRYPT),
-            'role' => 'buyer', //yg register otomatis jdi mebmber, karena kalau admin udh langsung ditambahkan lewat database 
+            'role' => 'Customer', //yg register otomatis jdi mebmber, karena kalau admin udh langsung ditambahkan lewat database 
         ]);
 
         $pdo->commit();
