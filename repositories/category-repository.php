@@ -1,17 +1,23 @@
 <?php
 require_once __DIR__ . "/../config/database.php";
 
-function getCategories() 
+function getCategories($search, $categoryId, $currentPage, $perPage) 
 {
     global $pdo;
 
     $query = "select c.*, count(p.id) as total_products
     from categories c
     left join products p on p.category_id = c.id
-    group by c.id";
+    where c.name like :search
+    group by c.id
+    limit :limit offset :offset";
 
     $stmt = $pdo ->prepare($query);
-    $stmt -> execute();
+    $stmt -> execute([
+        'search' => "%$search%",
+        'limit' => $perPage,
+        'offset' => ($currentPage -1) * $perPage,
+    ]);
 
     $categories = $stmt -> fetchAll();
 
@@ -63,5 +69,19 @@ function countCategories() {
     return $result['total'] ?? 0;
 }
 
+function countOfCategories($search) 
+{
+    global $pdo;
 
+    $query = "select count(id) from categories where name like :name";
+
+    $stmt = $pdo -> prepare($query);
+    $stmt->execute([
+        'name' => "%$search%",
+    ]);
+
+    $totalCategories = $stmt -> fetchColumn();
+    
+    return $totalCategories;
+}
 ?>
