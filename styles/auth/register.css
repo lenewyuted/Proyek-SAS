@@ -59,7 +59,7 @@ body {
 .register-header h2 {
   font-size: 30px;
   font-weight: 700;
-  color: var(--primary-blue);
+  color: #000000;
   margin-bottom: 6px;
 }
 
