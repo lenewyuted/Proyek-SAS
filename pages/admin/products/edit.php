@@ -2,7 +2,6 @@
 require_once __DIR__ . "/../../../middleware/auth.php";
 require_once __DIR__ . "/../../../repositories/product-repository.php";
 require_once __DIR__ . "/../../../repositories/category-repository.php";
-require_once __DIR__ . "/../../../middleware/auth.php";
 requireRole(["admin"]);
 
 $id = $_GET['id'] ?? null;

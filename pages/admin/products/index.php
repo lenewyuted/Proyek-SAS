@@ -72,7 +72,7 @@ $totalPages = ceil($totalProducts / $perPage);
               <th>Category</th>
               <th>Price</th>
               <th>Stock</th>
-              <th>Action</th>
+              <th style="padding-right: 130px;">Action</th>
             </tr>
           </thead>
           <tbody>

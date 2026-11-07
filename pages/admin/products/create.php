@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . "/../../../middleware/auth.php";
 require_once __DIR__ . "/../../../repositories/category-repository.php";
-require_once __DIR__ . "/../../../middleware/auth.php";
 requireRole(["admin"]);
 
 $categories = getCategories("", "", 1, 100);
@@ -63,7 +62,10 @@ unset($_SESSION['errors'], $_SESSION['old']);
                         <label for="category_id">Category</label>
                         <select id="category_id" name="category_id">
                             <?php foreach ($categories as $category): ?>
-                                <option <?= $old['category_id'] ?? '' === $category['id'] ? 'selected' : '' ?> value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
+                                <!-- Pilihan pertama akan otomatis terpilih jika belum ada $old['category_id'] -->
+                                <option value="<?= $category['id'] ?>" <?= (isset($old['category_id']) ? $old['category_id'] : $categories[0]['id']) == $category['id'] ? 'selected' : '' ?>>
+                                    <?= $category['name'] ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                         <?php if (isset($errors['category_id'])) : ?>
