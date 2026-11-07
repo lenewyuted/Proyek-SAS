@@ -34,7 +34,7 @@ function validateProduct($request, $ignoreBookId = 0) // sebuah validasi akan di
 
     // Validate category_id: required, isTaken?
     if ($request['category_id'] === '') {
-        $errors['category_id'] = "Category_id wajib diisi";
+        $errors['category_id'] = "Category wajib dipilih";
     }
 
     // Validate price : required, isNumber
