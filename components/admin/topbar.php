@@ -1,6 +1,6 @@
 <?php 
 const BASE_URL = "http://localhost:3000"; 
-$user = $_SESSION["user"] ?? '';
+$loggedInUser = $_SESSION["user"] ?? '';
 ?>
 
 <link rel="stylesheet" href="../../styles/base.css">
