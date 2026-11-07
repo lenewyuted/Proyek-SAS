@@ -2,12 +2,13 @@
 //require_once __DIR__ . "/../../middleware/auth.php";
 require_once __DIR__ . "/../../../repositories/user-repository.php";
 
-$perPage = 4;
+$perPage = 2;
 $currentPage = max(1, intval($_GET['page'] ?? 1));
 
 $search = trim($_GET['search'] ?? "");
 
 $users = getUsers($search, $currentPage, $perPage);
+
 $totalUsers = countOfUsers($search);
 $totalPages = ceil($totalUsers / $perPage);
 ?>
@@ -60,7 +61,7 @@ $totalPages = ceil($totalUsers / $perPage);
               <th>Name</th>
               <th>Email</th>
               <th>Role</th>
-              <th>Action</th>
+              <th style="padding-left: 93px;">Action</th>
             </tr>
           </thead>
           <tbody>

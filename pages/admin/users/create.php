@@ -1,10 +1,8 @@
 <?php
 require_once __DIR__ . "/../../../middleware/auth.php";
-require_once __DIR__ . "/../../../repositories/category-repository.php";
-require_once __DIR__ . "/../../../middleware/auth.php";
-requireRole(["admin"]);
+require_once __DIR__ . "/../../../repositories/user-repository.php";
 
-$categories = getCategories("", "", 1, 100);
+requireRole(["admin"]);
 
 $errors = $_SESSION['errors'] ?? [];
 $old = $_SESSION['old'] ?? [];
@@ -48,11 +46,11 @@ unset($_SESSION['errors'], $_SESSION['old']);
                     </a>
                 </div>
             </div>
-            <form action="../../../actions/products/store.php" method="POST" enctype="multipart/form-data" class="product-form-create">
+            <form action="../../../actions/users/store.php" method="POST" enctype="multipart/form-data" class="product-form-create">
                 <div class="form-group full-width">
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input value="<?= $old['name'] ?? '' ?>" type="text" id="name" name="name" placeholder="Enter product name">
+                        <input value="<?= $old['name'] ?? '' ?>" type="text" id="name" name="name" placeholder="Enter name">
                         <?php if (isset($errors['name'])) : ?>
                             <p style="font-size: 12px; margin-top: 4px; color: red;">
                                 <?= $errors['name'] ?>
@@ -62,79 +60,45 @@ unset($_SESSION['errors'], $_SESSION['old']);
                 </div>
                 <div class="form-group full-width">
                     <div class="form-group">
-                        <label for="price">Email</label>
-                        <input value="<?= $old['price'] ?? '' ?>" type="text" id="price" name="price" placeholder="Enter price">
-                        <?php if (isset($errors['price'])) : ?>
+                        <label for="email">Email</label>
+                        <input value="<?= $old['email'] ?? '' ?>" type="text" id="email" name="email" placeholder="Enter email">
+                        <?php if (isset($errors['email'])) : ?>
                             <p style="font-size: 12px; margin-top: 4px; color: red;">
-                                <?= $errors['price'] ?>
+                                <?= $errors['email'] ?>
                             </p>
                         <?php endif; ?>
                     </div>
                 </div>
                 <div class="form-group full-width">
                     <div class="form-group">
-                        <label for="stock">Password</label>
-                        <input value="<?= $old['stock'] ?? '' ?>" type="number" id="stock" name="stock" placeholder="Enter quantity">
-                        <?php if (isset($errors['stock'])) : ?>
+                        <label for="password">Password</label>
+                        <input value="<?= $old['password'] ?? '' ?>" type="password" id="password" name="password" placeholder="Enter password">
+                        <?php if (isset($errors['password'])) : ?>
                             <p style="font-size: 12px; margin-top: 4px; color: red;">
-                                <?= $errors['stock'] ?>
+                                <?= $errors['password'] ?>
                             </p>
                         <?php endif; ?>
                     </div>
                 </div>
                 <div class="form-group full-width">
                     <div class="form-group">
-                        <label for="category_id">Role</label>
-                        <select id="category_id" name="category_id">
-                            <?php foreach ($categories as $category): ?>
-                                <option <?= $old['category_id'] ?? '' === $category['id'] ? 'selected' : '' ?> value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
-                            <?php endforeach; ?>
+                        <label for="role">Role</label>
+                        <select id="role" name="role">
+                            <option value="admin" <?= (isset($old['role']) && $old['role'] === 'admin') ? 'selected' : '' ?>>Admin</option>
+                            <option value="customer" <?= (isset($old['role']) && $old['role'] === 'customer') ? 'selected' : '' ?>>Customer</option>
                         </select>
-                        <?php if (isset($errors['category_id'])) : ?>
+                        <?php if (isset($errors['role'])) : ?>
                             <p style="font-size: 12px; margin-top: 4px; color: red;">
-                                <?= $errors['category_id'] ?>
+                                <?= $errors['role'] ?>
                             </p>
                         <?php endif; ?>
                     </div>
-                </div>
-                <div class="form-actions-center">
+                <div class="form-actions-center" style="margin-top: 25px;">
                     <button name="store" type="submit" class="btn-submit-add">Add User</button>
                     <a href="index.php" class="btn-cancel">Cancel</a>
                 </div>
             </form>
         </main>
     </div>
-
-    <script>
-        const fileInput = document.getElementById('picture');
-        const previewContainer = document.getElementById('preview-container');
-        const uploadContent = document.getElementById('upload-content');
-        // Agar ketika teks "Browse Photo" atau kotaknya diklik, file explorer terbuka
-        previewContainer.addEventListener('click', function() {
-            fileInput.click();
-        });
-        // Mencegah event klik ganda saat klik langsung pada input file
-        fileInput.addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-        // Event saat user memilih file gambar
-        fileInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // Ganti isi dalam kotak upload dengan gambar preview
-                    uploadContent.innerHTML = `
-                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px;">
-                            <img src="${e.target.result}" alt="Preview" style="max-height: 150px; max-width: 100%; object-fit: contain; border-radius: 6px; margin-bottom: 8px;">
-                            <span style="font-size: 14px; color: #333; font-weight: 600;">${file.name}</span>
-                            <span style="font-size: 12px; color: #666; margin-top: 4px;">Klik untuk mengganti gambar</span>
-                        </div>
-                    `;
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-    </script>
 </body>
 </html>
