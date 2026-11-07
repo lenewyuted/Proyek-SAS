@@ -1,47 +1,48 @@
 <?php
 require_once __DIR__ . "/../config/database.php";
 
-
-function getUsers()
+function getUsers($search, $currentPage, $perPage)
 {
-  global $pdo;
+    global $pdo;
 
-  $query = "select * from users";
+    $query = "select * from users
+            where name like :search
+            limit :limit offset :offset";
 
-  $stmt = $pdo -> prepare($query);
-  $stmt -> execute();
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
+        'search' => "%$search%",
+        'limit' => $perPage,
+        'offset' => ($currentPage -1) * $perPage,
+    ]);
 
-  $users = $stmt -> fetchAll();
+    $products = $stmt->fetchAll();
 
-  return $users;
+    return $products;
 }
+
 
 function getUser($id)
 {
-  global $pdo;
+    global $pdo;
 
-  $query = "select * from users where id = :id";
+    $query = "select * from users where id = :id";
 
-  $stmt = $pdo->prepare($query);
-  $stmt -> execute([
-    'id' => $id
-  ]);
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
+        'id' => $id
+    ]);
 
-  $user = $stmt -> fetch(PDO::FETCH_ASSOC);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-  if(!$user) {
-    header('location: ../pages/admin/users/index.php');
-    exit;
-  }
-
-  return $user;
+    return $user;
 }
 
 function getProfile($id)
 {
     global $pdo;
 
-    $query = "SELECT * FROM users WHERE id = :id";
+    $query = "select * from users where id = :id";
 
     $stmt = $pdo->prepare($query);
     $stmt->execute([
@@ -56,57 +57,57 @@ function getProfile($id)
 
 function isEmailTaken($email)
 {
-  global $pdo;
+    global $pdo;
 
-  $query = "select count(id) from users where email = :email";
+    $query = "select count(id) from users where email = :email";
 
-  $stmt = $pdo->prepare($query);
-  $stmt->execute([
-    'email' => $email
-  ]);
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
+        'email' => $email
+    ]);
 
-  $isEmailTaken = $stmt->fetchColumn() > 0;
+    $isEmailTaken = $stmt->fetchColumn() > 0;
 
-  return $isEmailTaken;
+    return $isEmailTaken;
 }
 
-function getUserByEmail($email) 
+function getUserByEmail($email)
 {
-  global $pdo;
+    global $pdo;
 
-  $query = "select * from users where email = :email";
+    $query = "select * from users where email = :email";
 
-  $stmt = $pdo->prepare($query);
-  $stmt->execute([
-    'email' => $email
-  ]);
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
+        'email' => $email
+    ]);
 
-  $user = $stmt->fetch();
+    $user = $stmt->fetch();
 
-  return $user;
+    return $user;
 }
 
-function countUsers() {
-    global $pdo; 
+function countUsers()
+{
+    global $pdo;
     $stmt = $pdo->query("select count(*) as total from users");
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['total'] ?? 0;
 }
 
 
-function countOfUsers($search) 
+function countOfUsers($search)
 {
     global $pdo;
 
     $query = "select count(id) from users where name like :name";
 
-    $stmt = $pdo -> prepare($query);
+    $stmt = $pdo->prepare($query);
     $stmt->execute([
         'name' => "%$search%",
     ]);
 
-    $totalUsers = $stmt -> fetchColumn();
-    
+    $totalUsers = $stmt->fetchColumn();
+
     return $totalUsers;
 }
-?>
