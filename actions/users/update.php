@@ -18,7 +18,7 @@ if (isset($_POST['update']) && $_SERVER['REQUEST_METHOD'] === "POST") {
             // Jika diisi, update data beserta password baru yang sudah di-hash
             $hashedPassword = password_hash($request['password'], PASSWORD_DEFAULT);
 
-            $query = "UPDATE users SET name = :name, email = :email, password = :password, role = :role WHERE id = :id";
+            $query = "update users set name = :name, email = :email, password = :password, role = :role where id = :id";
             $stmt = $pdo->prepare($query);
             $stmt->execute([
                 'name' => $request['name'],
@@ -29,7 +29,7 @@ if (isset($_POST['update']) && $_SERVER['REQUEST_METHOD'] === "POST") {
             ]);
         } else {
             // Jika kosong, update data lainnya TANPA mengubah/menimpa password lama
-            $query = "UPDATE users SET name = :name, email = :email, role = :role WHERE id = :id";
+            $query = "update users set name = :name, email = :email, role = :role where id = :id";
             $stmt = $pdo->prepare($query);
             $stmt->execute([
                 'name' => $request['name'],
