@@ -5,16 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TechHub - Login</title>
   
-  <!-- Font & icons -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- CSS -->
+
   <link rel="stylesheet" href="../styles/base.css">
   <link rel="stylesheet" href="../../styles/auth/login.css">
+ 
 </head>
 <body>
+  <img src="/assets/img/Logo.png" alt="TechHub Logo" class="footer-logo">
   <div class="announcement-bar">
     Discover Premium PC Components Built for Performance, Speed, and Reliability
   </div>
@@ -33,13 +34,6 @@
               <input type="email" id="email" name="email" placeholder="example@gmail.com" required>
             </div>
           </div>
-          <!-- <div class="form-group">
-            <label for="phone">Number Phone</label>
-            <div class="input-with-icon">
-              <i class="bi bi-telephone"></i>
-              <input type="tel" id="phone" name="phone" placeholder="+62 812 3465 2309" required>
-            </div>
-          </div> -->
           <div class="form-group">
             <label for="password">Password</label>
             <div class="input-with-icon">
@@ -62,9 +56,12 @@
           <img src="../assets/images/laptop-illustration.svg" alt="Laptop Illustration">
         </div>
       </div>
-
     </div>
   </div>
-  <?php require_once __DIR__ . "/../../components/landing/footer.php"?>
+
+
+
+  
+  <?php require_once __DIR__ . "/../../components/landing/footer.php"; ?>
 </body>
 </html>
