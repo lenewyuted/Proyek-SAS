@@ -1,0 +1,103 @@
+/* Layout Utama Halaman Edit Profile */
+.profile-edit-container {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 30px;
+    align-items: stretch; /* Membuat sisi kiri dan kanan tingginya seimbang */
+}
+
+.profile-form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Kartu Sisi Kanan untuk Foto Profil */
+.profile-picture-card {
+    background: var(--white);
+    border: 1.5px solid var(--primary-blue);
+    border-radius: 12px;
+    padding: 25px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.profile-picture-card h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
+    align-self: flex-start;
+}
+
+/* Kotak Lingkaran / Preview Avatar di Kanan */
+.profile-avatar-box {
+    width: 150px;
+    height: 150px;
+    background-color: var(--light-blue-bg);
+    border: 2px dashed var(--primary-blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 20px 0;
+    position: relative;
+}
+
+.profile-avatar-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-avatar-box i {
+    font-size: 40px;
+    color: var(--primary-blue);
+}
+
+/* Tombol Aksi di Dalam Kartu Foto */
+.profile-picture-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-primary-action {
+    background: var(--primary-blue);
+    color: var(--white);
+    border: 1.5px solid var(--primary-blue);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+    display: block;
+    transition: opacity 0.2s ease;
+}
+
+.btn-primary-action:hover {
+    opacity: 0.9;
+}
+
+.btn-outline-action {
+    background: var(--white);
+    color: var(--primary-blue);
+    border: 1.5px solid var(--primary-blue);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s ease;
+}
+
+.btn-outline-action:hover {
+    background-color: var(--light-blue-bg);
+}
