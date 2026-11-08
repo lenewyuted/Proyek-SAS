@@ -373,7 +373,7 @@
                 <li><a href="#">RAM &amp; Storage</a></li>
                 <li><a href="#">Power Supplies</a></li>
             </ul>
-        </div>
+        </div>   
 
         <div class="footer-col">
             <h4>Support</h4>
