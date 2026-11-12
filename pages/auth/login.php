@@ -15,7 +15,6 @@
  
 </head>
 <body>
-  <img src="/assets/img/Logo.png" alt="TechHub Logo" class="footer-logo">
   <div class="announcement-bar">
     Discover Premium PC Components Built for Performance, Speed, and Reliability
   </div>
