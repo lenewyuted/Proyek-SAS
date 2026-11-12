@@ -80,7 +80,7 @@ $totalPages = ceil($totalCategories / $perPage);
               <tr onclick="window.location.href='show.php?id=<?= $category['id'] ?>'" style="cursor: pointer;">
                 <td>
                   <div class="product-img-box">
-                    <img src="/assets/img/<?= $category['picture'] ?>" alt="<?= htmlspecialchars($category['name']) ?>">
+                    <img src="/assets/img/category/<?= $category['picture'] ?>" alt="<?= htmlspecialchars($category['name']) ?>">
                   </div>
                 </td>
                 <td class="category-name"><?= $category['name']; ?></td>
