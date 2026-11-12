@@ -71,5 +71,19 @@ function countOfProducts($search, $categoryId)
 
     return $totalProducts;
 }
+
+function getLatestProducts()
+{
+    global $pdo;
+
+    $query = "select * from products order by id desc limit 3";
+
+    $stmt = $pdo -> prepare($query);
+    $stmt -> execute([]);
+
+    $products = $stmt -> fetchAll();
+
+    return $products;
+}
 ?>
 
