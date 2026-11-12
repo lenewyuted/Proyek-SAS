@@ -24,6 +24,19 @@ function getCategories($search, $categoryId, $currentPage, $perPage)
     return $categories;
 }
 
+function getCategoriesLandingPage() 
+{
+    global $pdo;
+    // Fetch Data Kategori (maks 8 sesuai desain)
+    $queryCategories = "SELECT * FROM categories ORDER BY id ASC LIMIT 8";
+    $stmtCat = $pdo->prepare($queryCategories);
+    $stmtCat->execute();
+    $categories = $stmtCat->fetchAll();
+
+    return $categories;
+
+}
+
 
 function getCategory($id)
 {
