@@ -33,7 +33,7 @@ if (isset($_POST['store']) && $_SERVER['REQUEST_METHOD'] === "POST") {
             $safeName = str_replace(' ', '_', $originalName);
 
             // 3. Lokasi folder penyimpanan
-            $uploadDir = __DIR__ . "/../../assets/img/";
+            $uploadDir = __DIR__ . "/../../assets/img/category/";
 
             // 4. Tentukan lokasi folder dan gabungkan dengan nama yang sudah aman
             $destination = $uploadDir . $safeName;
