@@ -47,50 +47,23 @@ $products = $stmtProd->fetchAll();
 </head>
 <body>
 
-    <!-- TOP BAR ANNOUNCEMENT -->
-    <div class="top-announcement">
-        Discover Premium PC Components Built for Performance, Speed, and Reliability
-    </div>
+   
 
     <!-- MAIN HEADER -->
-    <header class="main-header">
-        <div class="header-container">
-            <div class="logo">
-                <a href="index.php">
-                    <img src="../../asset/images/logo.png" alt="TechHub Logo" id="brandlogo">
-                </a>
-            </div>
-
-            <div class="search-box">
-                <form action="index.php" method="GET">
-                    <input type="text" name="q" value="<?= htmlspecialchars($search) ?>"
-                           placeholder="Search for parts to build your dream PC...">
-                    <button type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </form>
-            </div>
-
-            <div class="header-nav-icons">
-                <a href="#" aria-label="Recommendation"><i class="fa-regular fa-thumbs-up"></i></a>
-                <a href="#" aria-label="Compare"><i class="fa-solid fa-code-compare"></i></a>
-                <a href="#" aria-label="Cart"><i class="fa-solid fa-cart-shopping"></i></a>
-                <a href="#" aria-label="Profile"><i class="fa-regular fa-circle-user"></i></a>
-            </div>
-        </div>
-    </header>
+    <?php require_once __DIR__ . "/../../components/landing/header.php"; ?>
 
     <!-- HERO BANNER -->
     <section class="hero-banner">
-        <div class="banner-wrapper">
-            <img src="../../asset/images/banner-legion.jpg" alt="Lenovo Legion Monitor Banner">
-            <img src="../../asset/images/banner-legion.jpg" alt="Lenovo Legion Monitor Banner">
-            <img src="../../asset/images/banner-legion.jpg" alt="Lenovo Legion Monitor Banner">
-            <div class="banner-dots">
-                <span class="dot active"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-            </div>
+    <div class="banner-wrapper">
+        <img src="../../assets/img/Banner-1.jpg" alt="Lenovo Legion Monitor Banner">
+
+        <div class="banner-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- CATEGORY -->
     <section class="section-container">
