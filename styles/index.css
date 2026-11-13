@@ -1,0 +1,86 @@
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img, 
+.brand-logo-img {
+    height: 38px !important; /* Sesuaikan tinggi yang diinginkan, misal 35px - 40px */
+    width: auto !important;  /* Lebar otomatis menyesuaikan agar tidak gepeng */
+    object-fit: contain;
+}
+
+/* Styling Navbar & Logo Layout */
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo img.brand-logo-img {
+    height: 38px !important;
+    width: auto !important;
+    object-fit: contain;
+}
+
+/* Kumpulan Tombol Kanan (Profil & Logout) */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    border: 1.5px solid var(--primary-blue, #0056c6);
+    border-radius: 30px;
+    background-color: var(--white, #ffffff);
+    color: var(--primary-blue, #0056c6);
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.nav-btn-outline:hover {
+    background-color: var(--light-blue-bg, #eaf2ff);
+}
+
+/* Buat kontainer navbar, hero, dan section merata memenuhi layar */
+.navbar-container,
+.hero-banner,
+.section-container,
+.main-footer .footer-container {
+    max-width: 100% !important;
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+}
+
+/* Pastikan navbar membentang penuh 100% */
+.navbar {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Perlebar grid kategori dan produk agar menyesuaikan lebar layar */
+.category-grid {
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 16px;
+}
+
+.products-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+body {
+    width: 100%;
+    overflow-x: hidden;
+}

@@ -1,3 +1,15 @@
+:root {
+  --primary-blue: #0056c6;
+  --blue-dark: #0b3c8c;
+  --light-blue-bg: #eaf2ff;
+  --border-blue: #0056c6;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+  --white: #ffffff;
+  --gray-img: #f8fafc;
+}
+
+/* PERBAIKAN: Gunakan tanda * menggantikan tanda - */
 * {
     margin: 0;
     padding: 0;
@@ -5,22 +17,27 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-
-
 /* bar pengumuman bagian atas */
 .top-bar {
-    background-color: #0d5cab;
-    color: #ffffff;
+    background-color: var(--primary-blue);
+    color: var(--white);
     text-align: center;
-    padding: 6px 15px;
-    font-size: 13px;
+    padding: 10px 15px;
+    font-size: 14px;
     font-weight: 500;
 }
 
-.navbar {
-    background-color: #ffffff;
-    border-bottom: 1px solid #e5e5e5;
-    padding: 12px 5%;
+/* HEADER CONTAINER (Gabungan Navbar & Top Header agar tidak bentrok) */
+.top-header, .navbar {
+    width: 100%;
+    min-height: 75px;
+    padding: 12px 40px;
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    border-bottom: 1px solid #e5e7eb;
     box-shadow: 0 2px 4px rgba(0,0,0,0.03);
 }
 
@@ -31,36 +48,33 @@
     align-items: center;
     justify-content: space-between;
     gap: 20px;
+    width: 100%;
 }
 
+/* LOGO */
 .logo {
     display: flex;
     align-items: center;
     text-decoration: none;
     gap: 8px;
+    flex-shrink: 0;
 }
 
-
-
-.logo-icon {
-    /* background-color: #0d5cab; */
-    color: white;
-    width: 35px;
-    height: 35px;
+.logo a {
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    font-size: 20px;
 }
 
-.logo-text {
-    display: flex;
-    flex-direction: column;
+.brand-logo-img {
+    display: block;
+    width: 180px;
+    height: auto;
+    max-height: 50px;
+    object-fit: contain;
 }
 
 .brand-name {
-    color: #0d5cab;
+    color: var(--primary-blue);
     font-weight: 900;
     font-size: 20px;
     line-height: 1;
@@ -68,18 +82,16 @@
 }
 
 .brand-tagline {
-    color: #777;
+    color: var(--text-muted);
     font-size: 9px;
     font-weight: 600;
     letter-spacing: 0.3px;
 }
 
-
-
-/* search bar */
+/* SEARCH BAR (Diperpanjang max-width-nya sesuai keinginan) */
 .search-form {
-   flex: 1;
-    max-width: 450px; 
+    flex: 1;
+    max-width: 1250px; /* Ukuran diperpanjang dari sebelumnya */
     position: relative;
     display: flex;
     align-items: center;
@@ -87,44 +99,74 @@
 
 .search-form input {
     width: 100%;
-    padding: 10px 45px 10px 15px;
-    border: 1px solid #0d5cab;
-    border-radius: 20px;
+    height: 40px;
+    padding: 0 45px 0 15px;
+    border: 1px solid var(--border-blue);
+    border-radius: 25px;
     outline: none;
     font-size: 13px;
-    color: #333;
+    color: var(--text-dark);
+    background-color: var(--white);
 }
 
-.search-form input::placeholder{
-    color: #999;
+.search-form input::placeholder {
+    color: var(--text-muted);
 }
 
 .search-btn {
     position: absolute;
-    right: 12px;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
     background: transparent;
     border: none;
-    color: #E5EFFF;
-    font-size: 15px;
+    color: var(--primary-blue);
+    font-size: 16px;
     cursor: pointer;
 }
 
-
-
-/* icons nav kanan */
-.nav-icons{
-    display: flex;
-    align-items: center;
-    gap:18px;
+.search-btn:hover {
+    color: var(--blue-dark);
 }
 
-.icon-link{
-    color: #0d5cab;
+/* ICONS NAV KANAN */
+.nav-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    flex-shrink: 0;
+}
+
+.icon-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-blue);
     font-size: 20px;
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
-.icon-link:hover{
-    color: #003b75
+.icon-link:hover {
+    color: var(--blue-dark);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .top-header, .navbar {
+        flex-wrap: wrap;
+        padding: 12px 20px;
+        gap: 15px;
+    }
+
+    .search-form {
+        order: 3;
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+
+    .brand-logo-img {
+        width: 150px;
+    }
 }
