@@ -15,7 +15,7 @@ $queryProducts = "SELECT products.*, categories.name AS category_name
 if ($search !== '') {
     $queryProducts .= " WHERE products.name LIKE :search";
 }
-$queryProducts .= " ORDER BY products.id ASC LIMIT 5";
+$queryProducts .= " ORDER BY products.id ASC LIMIT 6";
 
 $stmtProd = $pdo->prepare($queryProducts);
 if ($search !== '') {
@@ -55,7 +55,7 @@ $products = $stmtProd->fetchAll();
     <!-- HERO BANNER -->
     <section class="hero-banner">
     <div class="banner-wrapper">
-        <img src="../../assets/img/Banner-1.jpg" alt="Lenovo Legion Monitor Banner">
+        <img src="../../assets/img/banner/Banner-1.png" alt="Lenovo Legion Monitor Banner">
 
         <div class="banner-dots">
             <span class="dot active"></span>
@@ -67,21 +67,23 @@ $products = $stmtProd->fetchAll();
 
     <!-- CATEGORY -->
     <section class="section-container">
-        <h2 class="section-title">Category</h2>
-        <div class="category-grid">
-            <?php if (!empty($categories)): ?>
-                <?php foreach ($categories as $cat): ?>
-                    <a href="#" class="category-card">
+    <h2 class="section-title">Category</h2>
+    <div class="category-grid">
+        <?php if (!empty($categories)): ?>
+            <?php foreach ($categories as $cat): ?>
+                <a href="#" class="category-card">
+                    <div class="category-box">
                         <div class="category-icon">
                             <img src="../../assets/img/category/<?= htmlspecialchars($cat['picture'] ?? 'cat-cpu.png') ?>"
-                                 alt="<?= htmlspecialchars($cat['picture']) ?>">
+                                 alt="<?= htmlspecialchars($cat['name']) ?>">
                         </div>
-                        <span class="category-label"><?= htmlspecialchars($cat['name']) ?></span>
-                    </a>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
-    </section>
+                    </div>
+                    <span class="category-label"><?= htmlspecialchars($cat['name']) ?></span>
+                </a>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+</section>
 
     <!-- FEATURED PRODUCT -->
     <section class="section-container">
