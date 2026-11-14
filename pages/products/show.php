@@ -1,3 +1,5 @@
+
+
 <?php
 session_start();
 require_once __DIR__ . "/../../repositories/product-repository.php";
@@ -50,7 +52,7 @@ unset($_SESSION['flash_success']);
             <div class="header-actions">
                 <a href="#"><i class="fa-regular fa-thumbs-up"></i></a>
                 <a href="#"><i class="fa-solid fa-sliders"></i></a>
-                <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+                <a href="../cart/index.php"><i class="fa-solid fa-cart-shopping"></i></a>
                 <a href="#"><i class="fa-regular fa-user"></i></a>
             </div>
         </div>

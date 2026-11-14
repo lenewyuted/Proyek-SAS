@@ -2,14 +2,16 @@
 session_start();
 require_once __DIR__ . "/../../repositories/product-repository.php";
 
-
 // unset($_SESSION['cart']);
 // exit;
 
 $cart = $_SESSION['cart'] ?? [];
-echo json_encode($cart, JSON_PRETTY_PRINT);
-exit;
 
+// echo json_encode($cart);
+// exit;
+
+$subtotal = 0;
+$totalItems = 0;
 ?>
 
 <!DOCTYPE html>
@@ -61,97 +63,57 @@ exit;
                     <div class="col-action"></div>
                 </div>
 
-                <!-- Item 1 -->
-                <div class="cart-row">
-                    <div class="col-check"><input type="checkbox" checked></div>
-                    <div class="col-product">
-                        <div class="product-thumb">
-                            <img src="../../assets/img/prod-mobo1.png" alt="ASUS ROG Strix B650">
-                        </div>
-                        <span class="prod-name">ASUS ROG Strix B650</span>
+                <?php if (empty($cart)): ?>
+                    <div style="padding: 40px 20px; text-align: center; color: var(--text-muted, #666);">
+                        <p style="margin-bottom: 12px; font-size: 16px;">Keranjang belanja Anda masih kosong.</p>
+                        <a href="../landing/index.php" style="color: var(--primary-blue, #0d6efd); text-decoration: none; font-weight: 600;">
+                            <i class="fa-solid fa-arrow-left"></i> Mulai Belanja
+                        </a>
                     </div>
-                    <div class="col-price">Rp 2.499.000</div>
-                    <div class="col-qty">
-                        <div class="qty-control">
-                            <button type="button">-</button>
-                            <span>1</span>
-                            <button type="button">+</button>
-                        </div>
-                    </div>
-                    <div class="col-subtotal">Rp 2.499.000</div>
-                    <div class="col-action">
-                        <button class="btn-delete" type="button"><i class="fa-regular fa-trash-can"></i></button>
-                    </div>
-                </div>
+                <?php else: ?>
+                    <?php foreach ($cart as $item): ?>
+                        <?php
+                        // Ambil ID dari product_id atau id
+                        $productId = $item['product_id'] ?? $item['id'] ?? null;
+                        if (!$productId) continue;
 
-                <!-- Item 2 -->
-                <div class="cart-row">
-                    <div class="col-check"><input type="checkbox" checked></div>
-                    <div class="col-product">
-                        <div class="product-thumb">
-                            <img src="../../assets/img/prod-mobo2.png" alt="MSI B650 TOMAHAWK">
-                        </div>
-                        <span class="prod-name">MSI B650 TOMAHAWK</span>
-                    </div>
-                    <div class="col-price">Rp 4.299.000</div>
-                    <div class="col-qty">
-                        <div class="qty-control">
-                            <button type="button">-</button>
-                            <span>1</span>
-                            <button type="button">+</button>
-                        </div>
-                    </div>
-                    <div class="col-subtotal">Rp 4.299.000</div>
-                    <div class="col-action">
-                        <button class="btn-delete" type="button"><i class="fa-regular fa-trash-can"></i></button>
-                    </div>
-                </div>
+                        $product = getProduct($productId);
 
-                <!-- Item 3 -->
-                <div class="cart-row">
-                    <div class="col-check"><input type="checkbox" checked></div>
-                    <div class="col-product">
-                        <div class="product-thumb">
-                            <img src="../../assets/img/prod-mobo3.png" alt="GIGABYTE B650 AORUS">
-                        </div>
-                        <span class="prod-name">GIGABYTE B650 AORUS</span>
-                    </div>
-                    <div class="col-price">Rp 3.999.000</div>
-                    <div class="col-qty">
-                        <div class="qty-control">
-                            <button type="button">-</button>
-                            <span>1</span>
-                            <button type="button">+</button>
-                        </div>
-                    </div>
-                    <div class="col-subtotal">Rp 3.999.000</div>
-                    <div class="col-action">
-                        <button class="btn-delete" type="button"><i class="fa-regular fa-trash-can"></i></button>
-                    </div>
-                </div>
+                        // JIKA PRODUK TIDAK DITEMUKAN DI DATABASE, LEWATKAN AGAR TIDAK ERROR
+                        if (!$product) {
+                            continue;
+                        }
 
-                <!-- Item 4 -->
-                <div class="cart-row">
-                    <div class="col-check"><input type="checkbox" checked></div>
-                    <div class="col-product">
-                        <div class="product-thumb">
-                            <img src="../../assets/img/prod-mobo4.png" alt="ASRock B650M Pro RS">
+                        $quantity = $item['quantity'] ?? 1;
+                        $price = $product['price'] ?? 0; // Pastikan ada fallback ke 0
+                        $itemSubtotal = $price * $quantity;
+
+                        $subtotal += $itemSubtotal;
+                        $totalItems += $quantity;
+                        ?>
+                        <div class="cart-row">
+                            <div class="col-check"><input type="checkbox" checked></div>
+                            <div class="col-product">
+                                <div class="product-thumb">
+                                    <img src="../../assets/img/<?= htmlspecialchars($product['picture'] ?? 'default.png') ?>" alt="<?= htmlspecialchars($product['name'] ?? 'Produk') ?>">
+                                </div>
+                                <span class="prod-name"><?= htmlspecialchars($product['name'] ?? 'Produk Tidak Dikenal') ?></span>
+                            </div>
+                            <div class="col-price"><?= formatRupiah($price) ?></div>
+                            <div class="col-qty">
+                                <div class="qty-control">
+                                    <button type="button">-</button>
+                                    <span><?= $quantity ?></span>
+                                    <button type="button">+</button>
+                                </div>
+                            </div>
+                            <div class="col-subtotal"><?= formatRupiah($itemSubtotal) ?></div>
+                            <div class="col-action">
+                                <button class="btn-delete" type="button"><i class="fa-regular fa-trash-can"></i></button>
+                            </div>
                         </div>
-                        <span class="prod-name">ASRock B650M Pro RS</span>
-                    </div>
-                    <div class="col-price">Rp 2.400.000</div>
-                    <div class="col-qty">
-                        <div class="qty-control">
-                            <button type="button">-</button>
-                            <span>1</span>
-                            <button type="button">+</button>
-                        </div>
-                    </div>
-                    <div class="col-subtotal">Rp 2.400.000</div>
-                    <div class="col-action">
-                        <button class="btn-delete" type="button"><i class="fa-regular fa-trash-can"></i></button>
-                    </div>
-                </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
 
                 <!-- Footer Tabel / Remove All -->
                 <div class="cart-footer-actions">
@@ -165,8 +127,8 @@ exit;
                 <div class="summary-card">
                     <h2>Order Summary</h2>
                     <div class="summary-row">
-                        <span>Subtotal (4 Items)</span>
-                        <strong>Rp 13.397.000</strong>
+                        <span>Subtotal (<?= $totalItems ?> Items)</span>
+                        <strong><?= formatRupiah($subtotal) ?></strong>
                     </div>
                     <div class="summary-row">
                         <span>Shipping</span>
@@ -175,7 +137,7 @@ exit;
                     <div class="summary-divider"></div>
                     <div class="summary-total">
                         <span>Total</span>
-                        <span class="total-price">Rp 13.397.000</span>
+                        <span class="total-price"><?= formatRupiah($subtotal) ?></span>
                     </div>
                     <button class="btn-checkout" type="button">
                         <i class="fa-solid fa-lock"></i> Proceed to Checkout

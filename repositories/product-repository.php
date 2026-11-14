@@ -22,10 +22,14 @@ function getProducts($search, $categoryId, $currentPage, $perPage)
     return $products;
 }
 
+// function formatRupiah($angka) {
+//     return 'Rp ' . number_format($angka, 0, ',', '.');
+// }
 function formatRupiah($angka) {
+    // Jika angka null, kosong, atau bukan numerik, set ke 0
+    $angka = is_numeric($angka) ? $angka : 0;
     return 'Rp ' . number_format($angka, 0, ',', '.');
 }
-
 
 function getProduct($id)
 {
@@ -38,11 +42,14 @@ function getProduct($id)
         'id' => $id
     ]);
 
-    $product = $stmt->fetch(PDO::FETCH_ASSOC);
+    $product = $stmt->fetch();
 
+    // if (!$product) {
+    //     header('location: ../pages/admin/products/index.php');
+    //     exit;
+    // }
     if (!$product) {
-        header('location: ../pages/admin/products/index.php');
-        exit;
+        return null; 
     }
 
     return $product;
