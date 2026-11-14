@@ -53,11 +53,16 @@
 
 /* LOGO */
 .logo {
+    padding-left: 0 !important; /* Hapus padding kiri sebesar 35px yang membuat ruang hijau */
+    margin-left: 0 !important;
     display: flex;
     align-items: center;
-    text-decoration: none;
-    gap: 8px;
-    flex-shrink: 0;
+}
+
+.logo img {
+    height: 36px;
+    width: auto;
+    display: block;
 }
 
 .logo a {

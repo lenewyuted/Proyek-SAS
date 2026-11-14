@@ -1,20 +1,27 @@
 .main-footer {
     background-color: #fff;
     margin-top: 30px;
-    padding: 20px 5% 14px;
+    /* Ubah angka 5% menjadi piksel yang lebih kecil, atau buat selebar kotak di atasnya (misal 30px atau 40px) */
+    padding: 25px 0 15px 0 !important; 
+    width: 100% !important;
     border-top: 1px solid #e5e5e5;
+    box-sizing: border-box;
 }
 
 .footer-container {
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1.2fr;
-    gap: 20px;
+    /* Perbesar proporsi kolom teks dan jarak antar kolom agar menyebar ke seluruh layar */
+    grid-template-columns: 2.2fr 1fr 1fr 1fr 1.4fr;
+    gap: 50px; 
+    box-sizing: border-box;
 }
 
 .footer-logo { 
-    height: 30px; 
+    height: 40px; 
     width: auto; 
     margin-bottom: 10px; 
 }

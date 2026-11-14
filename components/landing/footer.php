@@ -20,9 +20,8 @@
 
     <footer class="main-footer">
         <div class="footer-container">
-
             <div class="footer-col brand-info">
-                <img src="/assets/img/Logo.png" alt="TechHub Logo" class="footer-logo">
+                <img src="../../assets/img/Logo.png" alt="TechHub Logo" class="footer-logo">
                 <p>Your Hub for Genuine, Warrantied PC Components. The Ultimate Solution for Builders, Gamers, and Creators!</p>
             </div>
 
@@ -87,5 +86,9 @@
             <p>&copy; 2026 TechHub. All rights reserved.</p>
         </div>
     </footer>
+
 </body>
 </html>
+
+
+

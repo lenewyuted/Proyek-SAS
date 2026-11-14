@@ -3,11 +3,11 @@
 
 session_start();
 
-$baseUrl = '/Proyek-SAS';
+$baseUrl = $_SERVER['HTTP_HOST'];
 
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ' . $baseUrl . '/index.php');
+    header('Location: ' . $baseUrl . '/pages/landing-page/index.php');
     exit;
 }
 
@@ -27,15 +27,25 @@ if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
 
+$_SESSION['cart'] = [
+    "products" => [
+        "id" => $productId,
+        "quantity" => $quantity
+    ]
+];
 
-if (isset($_SESSION['cart'][$productId])) {
-    $_SESSION['cart'][$productId] += $quantity;
-} else {
-    $_SESSION['cart'][$productId] = $quantity;
-}
+
+
+// if (isset($_SESSION['cart'][$productId])) {
+//     $_SESSION['cart'][$productId] += $quantity;
+// } else {
+//     $_SESSION['cart'][$productId] = $quantity;
+// }
 
 $_SESSION['flash_success'] = 'Produk berhasil ditambahkan ke keranjang.';
 
 
-header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? $baseUrl . '/index.php'));
+echo "<script type='text/javascript'>
+        setTimeout(function(){ location.href='/pages/products/show.php?id=$productId'; }, 100);
+       </script>";
 exit;

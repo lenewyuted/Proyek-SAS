@@ -76,7 +76,7 @@ function getLatestProducts()
 {
     global $pdo;
 
-    $query = "select * from products order by id desc limit 3";
+    $query = "select * from products order by id desc limit 4";
 
     $stmt = $pdo -> prepare($query);
     $stmt -> execute([]);
@@ -85,5 +85,7 @@ function getLatestProducts()
 
     return $products;
 }
+
+
 ?>
 

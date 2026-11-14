@@ -1,0 +1,194 @@
+/* ---------- RESET & VARIABEL DASAR ---------- */
+:root {
+    --primary-blue: #0056b3;
+    --border-blue: #004aad;
+    --bg-blue-light: #e6f0fa;
+    --border-card: #b3d1ff;
+    --text-dark: #1e293b;
+    --text-gray: #64748b;
+    --white: #ffffff;
+    --bg-gray: #f8fafc;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+body {
+    background-color: var(--white);
+    color: var(--text-dark);
+}
+
+/* ---------- MAIN CHECKOUT CONTENT ---------- */
+.checkout-main-container {
+    max-width: 1350px !important;
+    margin: 30px auto 60px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    box-sizing: border-box !important;
+}
+
+.checkout-header-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 24px;
+}
+
+.checkout-header-title h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.checkout-header-title p {
+    font-size: 15px;
+    color: var(--text-gray);
+    margin-top: 4px;
+}
+
+.back-link {
+    color: var(--primary-blue);
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* ---------- LAYOUT UTAMA CHECKOUT (GRID 2 KOLOM) ---------- */
+.checkout-layout {
+    display: grid !important;
+    grid-template-columns: 1fr 450px !important;
+    gap: 30px !important;
+    align-items: start !important;
+    width: 100% !important;
+}
+
+/* Kartu / Kontainer Pembungkus */
+.checkout-card {
+    border: 2px solid var(--border-card);
+    border-radius: 12px;
+    padding: 24px;
+    background-color: var(--white);
+    margin-bottom: 20px;
+}
+
+.checkout-card h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text-dark);
+}
+
+/* Form Input Shipping Address */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border-card);
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    color: var(--text-dark);
+    background-color: var(--white);
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    border-color: var(--primary-blue);
+}
+
+/* Kolom Kanan */
+.checkout-right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0px; /* Jarak antar kartu diatur lewat margin-bottom checkout-card */
+}
+
+/* Pilihan Shipping & Payment Method (Radio Button Card) */
+.method-option {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border-card);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    background-color: var(--white);
+    transition: all 0.2s;
+}
+
+.method-option:hover {
+    border-color: var(--primary-blue);
+    background-color: var(--bg-blue-light);
+}
+
+.method-option input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-blue);
+    cursor: pointer;
+}
+
+.method-info {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.method-info strong {
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* Tombol Submit Checkout */
+.btn-checkout-submit {
+    width: 100%;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.2s;
+    margin-top: 10px;
+}
+
+.btn-checkout-submit:hover {
+    background-color: #004095;
+}
+
+/* Responsif untuk Layar Kecil */
+@media (max-width: 1024px) {
+    .checkout-layout {
+        grid-template-columns: 1fr !important;
+    }
+}

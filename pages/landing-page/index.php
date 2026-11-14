@@ -28,6 +28,7 @@ $products = $stmtProd->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,48 +43,82 @@ $products = $stmtProd->fetchAll();
 
     <!-- FontAwesome untuk Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <link rel="stylesheet" href="../../styles/pages/landing/style.css">
+    <link rel="stylesheet" href="../../styles/components/header.css">
+    <link rel="stylesheet" href="../../styles/components/footer.css">
+
+
 </head>
+
 <body>
 
-   
+
 
     <!-- MAIN HEADER -->
     <?php require_once __DIR__ . "/../../components/landing/header.php"; ?>
 
     <!-- HERO BANNER -->
     <section class="hero-banner">
-    <div class="banner-wrapper">
-        <img src="../../assets/img/banner/Banner-1.png" alt="Lenovo Legion Monitor Banner">
+        <!-- <div class="banner-wrapper">
+            <img src="../../assets/img/banner/Banner-1.png" alt="Lenovo Legion Monitor Banner">
 
-        <div class="banner-dots">
-            <span class="dot active"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
+            <div class="banner-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div> -->
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="d-block w-100" src="../../assets/img/banner/Banner-1.png" alt="First slide">
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="../../assets/img/banner/Banner-2.png" alt="Second slide">
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="../../assets/img/banner/Banner-3.png" alt="Third slide">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- CATEGORY -->
     <section class="section-container">
-    <h2 class="section-title">Category</h2>
-    <div class="category-grid">
-        <?php if (!empty($categories)): ?>
-            <?php foreach ($categories as $cat): ?>
-                <a href="#" class="category-card">
-                    <div class="category-box">
-                        <div class="category-icon">
-                            <img src="../../assets/img/category/<?= htmlspecialchars($cat['picture'] ?? 'cat-cpu.png') ?>"
-                                 alt="<?= htmlspecialchars($cat['name']) ?>">
-                        </div>
+        <h2 class="section-title">Category</h2>
+        <div class="category-grid">
+            <?php if (!empty($categories)): ?>
+                <?php foreach ($categories as $cat): ?>
+                    <div class="category-item">
+                        <!-- Kartu hanya membungkus kotak ikon saja -->
+                        <a href="#" class="category-card">
+                            <div class="category-icon">
+                                <img src="../../assets/img/category/<?= htmlspecialchars($cat['picture'] ?? 'cat-cpu.png') ?>"
+                                    alt="<?= htmlspecialchars($cat['name']) ?>">
+                            </div>
+                        </a>
+                        <!-- Label nama kategori berada di luar kartu, di bawahnya -->
+                        <span class="category-label"><?= htmlspecialchars($cat['name']) ?></span>
                     </div>
-                    <span class="category-label"><?= htmlspecialchars($cat['name']) ?></span>
-                </a>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
-</section>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+    </section>
 
     <!-- FEATURED PRODUCT -->
     <section class="section-container">
@@ -91,23 +126,25 @@ $products = $stmtProd->fetchAll();
         <div class="products-grid">
             <?php if (!empty($products)): ?>
                 <?php foreach ($products as $prod): ?>
-                    <div class="product-card">
-                        <div class="product-img">
-                            <img src="../../assets/img/<?= $prod["picture"]?>" alt="<?= $prod["name"]?>">
-                        
+                    <a href="../products/show.php?id=<?= $prod['id'] ?>">
+                        <div class="product-card">
+                            <div class="product-img">
+                                <img src="../../assets/img/<?= $prod["picture"] ?>" alt="<?= $prod["name"] ?>">
+
+                            </div>
+                            <h3 class="product-title"><?= htmlspecialchars($prod['name']) ?></h3>
+                            <div class="product-rating">
+                                <span><?= number_format((float)($prod['rating'] ?? 5), 1) ?></span>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <div class="product-footer">
+                                <span class="product-price">Rp.<?= number_format($prod['price'], 0, ',', '.') ?></span>
+                                <button class="btn-add-cart" type="button" aria-label="Tambah ke keranjang">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                </button>
+                            </div>
                         </div>
-                        <h3 class="product-title"><?= htmlspecialchars($prod['name']) ?></h3>
-                        <div class="product-rating">
-                            <span><?= number_format((float)($prod['rating'] ?? 5), 1) ?></span>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <div class="product-footer">
-                            <span class="product-price">Rp.<?= number_format($prod['price'], 0, ',', '.') ?></span>
-                            <button class="btn-add-cart" type="button" aria-label="Tambah ke keranjang">
-                                <i class="fa-solid fa-cart-shopping"></i>
-                            </button>
-                        </div>
-                    </div>
+                    </a>
                 <?php endforeach; ?>
             <?php else: ?>
                 <p class="empty-state">Produk tidak ditemukan.</p>
@@ -127,7 +164,7 @@ $products = $stmtProd->fetchAll();
                     </div>
                     <div class="promo-img">
                         <img src="../../assets/img/<?= htmlspecialchars($b['picture']) ?>"
-                             alt="<?= htmlspecialchars($b['name']) ?>">
+                            alt="<?= htmlspecialchars($b['name']) ?>">
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -138,71 +175,34 @@ $products = $stmtProd->fetchAll();
     <section class="section-container">
         <h2 class="section-title">Why Shop With Us</h2>
         <div class="why-box">
-            <div class="why-item"><i class="fa-regular fa-heart"></i><div><strong>Trusted</strong><small>Original products</small></div></div>
-            <div class="why-item"><i class="fa-solid fa-truck-fast"></i><div><strong>Fast Delivery</strong><small>Reliable shipping</small></div></div>
-            <div class="why-item"><i class="fa-solid fa-tags"></i><div><strong>Best Price</strong><small>Daily deals</small></div></div>
-            <div class="why-item"><i class="fa-solid fa-bag-shopping"></i><div><strong>Easy Shopping</strong><small>Simple checkout</small></div></div>
-            <div class="why-item"><i class="fa-solid fa-shield-halved"></i><div><strong>Secure</strong><small>Safe payment</small></div></div>
+            <div class="why-item"><i class="fa-regular fa-heart"></i>
+                <div><strong>Trusted</strong><small>Original products</small></div>
+            </div>
+            <div class="why-item"><i class="fa-solid fa-truck-fast"></i>
+                <div><strong>Fast Delivery</strong><small>Reliable shipping</small></div>
+            </div>
+            <div class="why-item"><i class="fa-solid fa-tags"></i>
+                <div><strong>Best Price</strong><small>Daily deals</small></div>
+            </div>
+            <div class="why-item"><i class="fa-solid fa-bag-shopping"></i>
+                <div><strong>Easy Shopping</strong><small>Simple checkout</small></div>
+            </div>
+            <div class="why-item"><i class="fa-solid fa-shield-halved"></i>
+                <div><strong>Secure</strong><small>Safe payment</small></div>
+            </div>
         </div>
     </section>
 
     <!-- MAIN FOOTER -->
-    <footer class="main-footer">
-        <div class="footer-container">
-            <div class="footer-col brand-info">
-                <img src="../../asset/images/logo.png" alt="TechHub Logo" class="footer-logo">
-                <p>Your Hub for Genuine, Warrantied PC Components. The Ultimate Solution for Builders, Gamers, and Creators!</p>
-            </div>
-
-            <div class="footer-col">
-                <h4>Shop</h4>
-                <ul>
-                    <li><a href="#">Processors</a></li>
-                    <li><a href="#">Motherboards</a></li>
-                    <li><a href="#">Graphics Cards</a></li>
-                    <li><a href="#">RAM &amp; Storage</a></li>
-                    <li><a href="#">Power Supplies</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <h4>Support</h4>
-                <ul>
-                    <li><a href="#">How to Order</a></li>
-                    <li><a href="#">Shipping</a></li>
-                    <li><a href="#">Payment Methods</a></li>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <h4>My Account</h4>
-                <ul>
-                    <li><a href="#">My Profile</a></li>
-                    <li><a href="#">Recommendation</a></li>
-                    <li><a href="#">Compare Products</a></li>
-                    <li><a href="#">Shopping Cart</a></li>
-                    <li><a href="#">Search Products</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col social-col">
-                <h4>Follow Us</h4>
-                <div class="social-links">
-                    <a href="#" class="ig" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" class="fb" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="#" class="yt" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#" class="wa" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-                    <a href="#" class="tt" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-                    <a href="#" class="xt" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 TechHub. All rights reserved.</p>
-        </div>
-    </footer>
-
+    <?php require_once __DIR__ . "/../../components/landing/footer.php" ?>
 </body>
+
 </html>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+    $('.carousel').carousel({
+        interval: 2000
+    })
+</script>

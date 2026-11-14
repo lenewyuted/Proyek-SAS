@@ -1,0 +1,148 @@
+/* ---------- RESET & VARIABEL DASAR ---------- */
+:root {
+    --primary-blue: #004aad;
+    --primary-blue-hover: #003885;
+    --success-green: #2ecc71;
+    --text-dark: #000000;
+    --text-gray: #64748b;
+    --white: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+body {
+    background-color: var(--white);
+    color: var(--text-dark);
+}
+
+/* ---------- MAIN SUCCESS CONTAINER ---------- */
+.success-main-container {
+    max-width: 1350px;
+    margin: 60px auto 80px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 55vh;
+}
+
+.success-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+}
+
+/* ---------- IKON CENTANG HIJAU ---------- */
+.success-icon-circle {
+    width: 130px;
+    height: 130px;
+    border: 8px solid var(--success-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+}
+
+.success-icon-circle i {
+    font-size: 64px;
+    color: var(--success-green);
+}
+
+/* ---------- JUDUL & TEKS KETERANGAN ---------- */
+.success-title {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+}
+
+.success-subtitle {
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--text-gray);
+    line-height: 1.6;
+    margin-bottom: 32px;
+}
+
+/* ---------- KOTAK ORDER NUMBER ---------- */
+.order-number-box {
+    width: 100%;
+    max-width: 340px;
+    border: 2px solid var(--primary-blue);
+    border-radius: 8px;
+    padding: 18px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--white);
+}
+
+.order-label {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-gray);
+}
+
+.order-code {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-dark);
+    letter-spacing: 0.5px;
+}
+
+/* ---------- TOMBOL CONTINUE SHOPPING ---------- */
+.btn-continue-shopping {
+    width: 100%;
+    max-width: 340px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 700;
+    display: inline-block;
+    transition: background-color 0.2s ease;
+}
+
+.btn-continue-shopping:hover {
+    background-color: var(--primary-blue-hover);
+}
+
+/* ---------- RESPONSIF LAYAR KECIL ---------- */
+@media (max-width: 600px) {
+    .success-icon-circle {
+        width: 100px;
+        height: 100px;
+        border-width: 6px;
+    }
+
+    .success-icon-circle i {
+        font-size: 48px;
+    }
+
+    .success-title {
+        font-size: 34px;
+    }
+
+    .success-subtitle {
+        font-size: 16px;
+    }
+
+    .order-number-box,
+    .btn-continue-shopping {
+        max-width: 100%;
+    }
+}

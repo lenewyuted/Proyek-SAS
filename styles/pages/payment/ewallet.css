@@ -1,0 +1,348 @@
+/* ---------- RESET & VARIABEL DASAR ---------- */
+:root {
+    --primary-blue: #0056b3;
+    --border-blue: #004aad;
+    --bg-blue-light: #e6f0fa;
+    --border-card: #b3d1ff;
+    --text-dark: #1e293b;
+    --text-gray: #64748b;
+    --white: #ffffff;
+    --bg-gray: #f8fafc;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+body {
+    background-color: var(--white);
+    color: var(--text-dark);
+}
+
+/* ---------- MAIN PAYMENT CONTAINER ---------- */
+.payment-main-container {
+    max-width: 1350px !important;
+    margin: 30px auto 60px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    box-sizing: border-box !important;
+}
+
+.payment-header-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 24px;
+}
+
+.payment-header-title h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.back-link {
+    color: var(--primary-blue);
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* ---------- KARTU UTAMA SECTION ---------- */
+.payment-card {
+    border: 2px solid var(--border-card);
+    border-radius: 12px;
+    padding: 24px;
+    background-color: var(--white);
+    margin-bottom: 24px;
+}
+
+/* Judul Langkah (1, 2, 3 dengan Nomor Biru) */
+.step-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+    background-color: var(--bg-blue-light);
+    color: var(--primary-blue);
+    font-weight: 700;
+    font-size: 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step-title h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* ---------- 1. GRID PILIHAN E-WALLET ---------- */
+.card-provider-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.provider-card {
+    border: 1.5px solid var(--border-card);
+    border-radius: 10px;
+    padding: 16px;
+    display: block;
+    cursor: pointer;
+    background-color: var(--white);
+    position: relative;
+    transition: all 0.2s;
+}
+
+.provider-card input[type="radio"] {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    accent-color: var(--primary-blue);
+    width: 16px;
+    height: 16px;
+}
+
+.provider-card:hover {
+    border-color: var(--primary-blue);
+    background-color: var(--bg-blue-light);
+}
+
+.provider-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Kustom Teks & Logo Brand E-Wallet */
+.brand-text {
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.5px;
+}
+.brand-text.dana { color: #0080ff; }
+.brand-text.ovo { color: #4b2382; }
+.brand-text.gopay { color: #00aa13; }
+.brand-text.linkaja { color: #ed1c24; font-size: 16px; display: flex; align-items: center; gap: 4px; }
+.linkaja-badge { background-color: #ed1c24; color: white; padding: 1px 6px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+
+.provider-desc {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dark);
+    line-height: 1.4;
+}
+
+.provider-desc small {
+    font-size: 11px;
+    color: var(--text-gray);
+    font-weight: 500;
+}
+
+/* ---------- 2. E-WALLET DETAILS GRID ---------- */
+.ewallet-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon i {
+    position: absolute;
+    left: 16px;
+    color: var(--text-gray);
+    font-size: 16px;
+}
+
+.input-with-icon input {
+    width: 100%;
+    padding: 12px 16px 12px 48px;
+    border: 1.5px solid var(--border-card);
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    color: var(--text-dark);
+    background-color: var(--white);
+    transition: border-color 0.2s;
+}
+
+.input-with-icon input:focus {
+    border-color: var(--primary-blue);
+}
+
+.form-helper-text {
+    font-size: 12px;
+    color: var(--text-gray);
+    margin-top: 2px;
+}
+
+/* Payment Guide Box (Langkah 2 Kanan) */
+.payment-guide-box {
+    border: 1.5px solid var(--border-card);
+    border-radius: 10px;
+    padding: 16px 20px;
+    background-color: var(--white);
+}
+
+.payment-guide-box strong {
+    font-size: 14px;
+    color: var(--text-dark);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.payment-guide-box p {
+    font-size: 12px;
+    color: var(--text-gray);
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+/* ---------- 3. COMPLETE PAYMENT SECTION ---------- */
+.complete-payment-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 16px;
+    align-items: center;
+}
+
+.empty-placeholder-box {
+    background-color: var(--bg-gray);
+    border: 1.5px solid var(--border-card);
+    border-radius: 10px;
+    height: 75px;
+}
+
+.summary-shipping-box {
+    background-color: var(--bg-blue-light);
+    border: 1.5px solid var(--border-card);
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+}
+
+.shipping-icon-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.shipping-icon-title i {
+    font-size: 24px;
+    color: var(--primary-blue);
+}
+
+.shipping-icon-title strong {
+    font-size: 14px;
+    color: var(--text-dark);
+    display: block;
+}
+
+.shipping-icon-title p {
+    font-size: 13px;
+    color: var(--text-gray);
+    margin-top: 2px;
+}
+
+.total-payment-box {
+    border: 1.5px solid var(--border-card);
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    background-color: var(--white);
+    height: 75px;
+}
+
+.total-title {
+    font-size: 13px;
+    color: var(--text-gray);
+    font-weight: 600;
+}
+
+.total-amount {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-top: 2px;
+}
+
+/* ---------- TOMBOL PAY NOW ---------- */
+.btn-pay-now {
+    width: 100%;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.btn-pay-now:hover {
+    background-color: #004095;
+}
+
+/* ---------- RESPONSIF LAYAR KECIL ---------- */
+@media (max-width: 1024px) {
+    .card-provider-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .complete-payment-grid {
+        grid-template-columns: 1fr;
+    }
+    .total-payment-box {
+        align-items: flex-start;
+    }
+    .ewallet-details-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .card-provider-grid {
+        grid-template-columns: 1fr;
+    }
+}
