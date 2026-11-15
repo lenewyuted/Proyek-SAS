@@ -12,6 +12,10 @@ $cart = $_SESSION['cart'] ?? [];
 
 $subtotal = 0;
 $totalItems = 0;
+
+$flashSuccess = $_SESSION['flash_success'] ?? null;
+$flashError   = $_SESSION['flash_error'] ?? null;
+unset($_SESSION['flash_success'], $_SESSION['flash_error']);
 ?>
 
 <!DOCTYPE html>
@@ -50,6 +54,17 @@ $totalItems = 0;
             <a href="../landing/index.php" class="back-link">Back <i class="fa-solid fa-arrow-right"></i></a>
         </div>
 
+        <?php if ($flashSuccess): ?>
+            <div style="background-color: #d1e7dd; color: #0f5132; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-weight: 500;">
+                <i class="fa-solid fa-circle-check"></i> <?= htmlspecialchars($flashSuccess) ?>
+            </div>
+        <?php endif; ?>
+        <?php if ($flashError): ?>
+            <div style="background-color: #f8d7da; color: #842029; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-weight: 500;">
+                <i class="fa-solid fa-circle-exclamation"></i> <?= htmlspecialchars($flashError) ?>
+            </div>
+        <?php endif; ?>
+
         <div class="cart-layout">
             <!-- SISI KIRI: TABEL KERANJANG -->
             <section class="cart-items-section">
@@ -66,7 +81,7 @@ $totalItems = 0;
                 <?php if (empty($cart)): ?>
                     <div style="padding: 40px 20px; text-align: center; color: var(--text-muted, #666);">
                         <p style="margin-bottom: 12px; font-size: 16px;">Keranjang belanja Anda masih kosong.</p>
-                        <a href="../landing/index.php" style="color: var(--primary-blue, #0d6efd); text-decoration: none; font-weight: 600;">
+                        <a href="../landing-page/index.php" style="color: var(--primary-blue, #0d6efd); text-decoration: none; font-weight: 600;">
                             <i class="fa-solid fa-arrow-left"></i> Mulai Belanja
                         </a>
                     </div>
@@ -109,16 +124,28 @@ $totalItems = 0;
                             </div>
                             <div class="col-subtotal"><?= formatRupiah($itemSubtotal) ?></div>
                             <div class="col-action">
-                                <button class="btn-delete" type="button"><i class="fa-regular fa-trash-can"></i></button>
+                                <form action="../../actions/cart/remove.php" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini dari keranjang?');">
+                                    <input type="hidden" name="product_id" value="<?= $productId ?>">
+                                    <button class="btn-delete" type="submit" title="Hapus produk">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
 
                 <!-- Footer Tabel / Remove All -->
-                <div class="cart-footer-actions">
-                    <button class="btn-remove-all"><i class="fa-regular fa-trash-can"></i> Remove all</button>
-                </div>
+                <?php if (!empty($cart)): ?>
+                    <div class="cart-footer-actions">
+                        <form action="../../actions/cart/remove.php" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua barang dari keranjang?');">
+                            <input type="hidden" name="remove_all" value="1">
+                            <button class="btn-remove-all" type="submit">
+                                <i class="fa-regular fa-trash-can"></i> Remove all
+                            </button>
+                        </form>
+                    </div>
+                <?php endif; ?>
             </section>
 
             <!-- SISI KANAN: RINGKASAN & KEUNTUNGAN -->
@@ -139,9 +166,15 @@ $totalItems = 0;
                         <span>Total</span>
                         <span class="total-price"><?= formatRupiah($subtotal) ?></span>
                     </div>
-                    <button class="btn-checkout" type="button">
-                        <i class="fa-solid fa-lock"></i> Proceed to Checkout
-                    </button>
+                    <?php if (!empty($cart)): ?>
+                        <a href="../checkout/index.php" class="btn-checkout" style="text-decoration: none;">
+                            <i class="fa-solid fa-lock"></i> Proceed to Checkout
+                        </a>
+                    <?php else: ?>
+                        <button class="btn-checkout" type="button" disabled style="opacity: 0.6; cursor: not-allowed;">
+                            <i class="fa-solid fa-lock"></i> Proceed to Checkout
+                        </button>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Info Benefits Card 1 -->
