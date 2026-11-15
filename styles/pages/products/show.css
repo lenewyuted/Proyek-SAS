@@ -1,295 +1,388 @@
 /* ---------- RESET & VARIABEL DASAR ---------- */
 :root {
-    --primary-blue: #0056b3;
-    --primary-blue-hover: #004095;
-    --border-blue: #004aad;
-    --bg-blue-light: #e6f0fa;
-    --border-card: #b3d1ff;
-    --text-dark: #1e293b;
-    --text-gray: #64748b;
-    --white: #ffffff;
-    --bg-gray: #f8fafc;
-    --star-yellow: #ffc107;
+  --primary-blue: #0056b3;
+  --primary-blue-hover: #004095;
+  --border-blue: #004aad;
+  --bg-blue-light: #e6f0fa;
+  --border-card: #b3d1ff;
+  --text-dark: #1e293b;
+  --text-gray: #64748b;
+  --white: #ffffff;
+  --bg-gray: #f8fafc;
+  --star-yellow: #ffc107;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Kumbh Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Kumbh Sans", sans-serif;
 }
 
 body {
-    background-color: var(--white);
-    color: var(--text-dark);
+  background-color: var(--white);
+  color: var(--text-dark);
 }
 
 /* ---------- MAIN PRODUCT CONTAINER ---------- */
 .product-main-container {
-    max-width: 1350px;
-    margin: 30px auto 60px;
-    padding: 0 20px;
+  width: calc(
+    100% - 80px
+  ) !important; /* Wajib ada agar ditarik memenuhi layar (dikurangi margin kiri-kanan 40px) */
+  max-width: none !important; /* Hapus batas 1350px jika ingin full mengikuti margin 40px kiri-kanan di layar lebar */
+  margin-top: 29px;
+  margin-left: 40px !important;
+  margin-right: 40px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.product-main-container > div {
+  width: 100% !important;
+  box-sizing: border-box;
 }
 
 .product-header-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 30px;
+  width: 100%;
 }
 
 .product-header-title h1 {
-    font-size: 36px;
-    font-weight: 700;
-    color: var(--text-dark);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+/* ---------- ISI KONTEN PRODUK (GAMBAR + INFO) ---------- */
+/* Pastikan pembungkus gambar & .product-info-card menggunakan flex/grid penuh */
+.product-detail-grid, /* sesuaikan dengan nama class pembungkus gambar & info Anda */
+.product-content-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 40px;
+  width: 100%;
+}
+
+/* Kotak Gambar Kiri */
+.product-image-container, /* sesuaikan dengan nama class kotak gambar Anda */
+.product-image-box {
+  flex: 0 0 42%; /* Mengambil 42% lebar container */
+  width: 42%;
+  min-height: 380px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.product-image-container img,
+.product-image-box img {
+  width: 75%; /* Memperbesar gambar VGA agar proporsional memenuhi kotak */
+  height: auto;
+  max-height: 300px;
+  object-fit: contain;
+}
+
+/* Kolom Info Kanan (.product-info-card) */
+.product-info-card {
+  flex: 1; /* Otomatis ditarik memenuhi seluruh sisa ruang sampai sejajar tombol Back -> */
+  width: 100%;
+  max-width: none !important; /* Hapus jika sebelumnya ada batas lebar */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+
+.product-info-card h2 {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+/* Pastikan deskripsi & kotak harga di dalam .product-info-card ikut melebar 100% */
+.product-info-card p,
+.product-price-box, /* sesuaikan dengan nama class kotak harga biru muda Anda */
+.price-container {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box;
+}
+
+.product-info-card p {
+  font-size: 20px;
 }
 
 .back-link {
-    color: var(--primary-blue);
-    font-weight: 600;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 16px;
+  color: var(--primary-blue);
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
 }
 
 .back-link:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 /* ---------- GRID DETAIL PRODUK (2 KOLOM) ---------- */
 .product-detail-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 40px;
-    align-items: start;
-    margin-bottom: 50px;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 50px;
 }
 
 /* Kotak Gambar Produk */
 .product-image-card {
-    border: 2px solid var(--border-card);
-    border-radius: 16px;
-    padding: 30px;
-    background-color: var(--bg-gray);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 420px;
+  border: 2px solid var(--border-card);
+  border-radius: 16px;
+  padding: 30px;
+  background-color: var(--bg-gray);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 420px;
 }
 
 .product-image-card img {
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    max-width: 350px; /* Diperbesar agar lebar gambar bisa memenuhi kotak */
+    max-height: 350px; /* Diperbesar agar tinggi gambar proporsional */
+    object-fit: contain; /* Memastikan rasio gambar tetap proporsional */
 }
 
 /* Informasi Produk */
 .product-info-card {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .product-title {
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--text-dark);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-dark);
 }
 
 .product-description {
-    font-size: 16px;
-    color: var(--text-gray);
-    line-height: 1.6;
+  font-size: 16px;
+  color: var(--text-gray);
+  line-height: 1.6;
 }
 
 /* Rating Singkat di Info */
 .product-rating-overview {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .rating-number {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text-dark);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
 }
 
 .stars {
-    color: var(--star-yellow);
-    font-size: 18px;
-    display: flex;
-    gap: 4px;
+  color: var(--star-yellow);
+  font-size: 18px;
+  display: flex;
+  gap: 4px;
 }
 
 .stars.large {
-    font-size: 22px;
+  font-size: 22px;
 }
 
 /* Kotak Harga */
 .product-price-box {
-    background-color: var(--bg-blue-light);
-    border: 1.5px solid var(--border-card);
-    border-radius: 10px;
-    padding: 16px 20px;
+  background-color: var(--bg-blue-light);
+  border: 1.5px solid var(--border-card);
+  border-radius: 10px;
+  padding: 16px 20px;
 }
 
 .price-amount {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--primary-blue);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--primary-blue);
 }
 
 /* Tombol Aksi (Quantity & Add to Cart) */
 .purchase-action-row {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    margin-top: 10px;
+  display: flex;
+  flex-direction: row; /* Berjajar ke samping secara rapi */
+  gap: 15px;
+  align-items: center;
+  margin-top: 10px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .quantity-selector {
-    display: flex;
-    align-items: center;
-    border: 1.5px solid var(--border-card);
-    border-radius: 8px;
-    background-color: var(--white);
-    overflow: hidden;
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--border-card);
+  border-radius: 8px;
+  background-color: var(--white);
+  overflow: hidden;
 }
 
 .qty-btn {
-    background: none;
-    border: none;
-    padding: 12px 18px;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text-dark);
-    cursor: pointer;
-    transition: background 0.2s;
+  background: none;
+  border: none;
+  padding: 12px 18px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .qty-btn:hover {
-    background-color: var(--bg-blue-light);
-    color: var(--primary-blue);
+  background-color: var(--bg-blue-light);
+  color: var(--primary-blue);
 }
 
 .qty-value {
-    padding: 0 16px;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-dark);
+  padding: 0 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
 }
 
 .btn-add-to-cart {
-    flex: 1;
-    background-color: var(--primary-blue);
-    color: var(--white);
-    border: none;
-    border-radius: 8px;
-    padding: 14px 24px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.2s;
-    text-align: center;
+  flex: 1;
+  background-color: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-align: center;
 }
 
 .btn-add-to-cart:hover {
-    background-color: var(--primary-blue-hover);
+  background-color: var(--primary-blue-hover);
+}
+
+.cart-form-inline {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 350px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin-top: 20px;
+}
+
+.purchase-action-row {
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 /* ---------- BAGIAN RATING & ULASAN ---------- */
 .rating-reviews-section {
-    margin-top: 40px;
+  margin-top: 40px;
 }
 
 .section-heading {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 20px;
 }
 
 /* Kotak Total Rating Besar */
 .total-rating-box {
-    background-color: var(--bg-blue-light);
-    border: 1.5px solid var(--border-card);
-    border-radius: 12px;
-    padding: 20px 24px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 30px;
+  background-color: var(--bg-blue-light);
+  border: 1.5px solid var(--border-card);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
 .total-rating-score {
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--text-dark);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-dark);
 }
 
 /* Item Ulasan */
 .review-item {
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .reviewer-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
 .reviewer-avatar {
-    width: 40px;
-    height: 40px;
-    background-color: var(--bg-blue-light);
-    border: 1.5px solid var(--border-card);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--primary-blue);
-    font-size: 16px;
+  width: 40px;
+  height: 40px;
+  background-color: var(--bg-blue-light);
+  border: 1.5px solid var(--border-card);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-blue);
+  font-size: 16px;
 }
 
 .reviewer-name {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text-dark);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
 }
 
 .review-box {
-    border: 1.5px solid var(--border-card);
-    border-radius: 10px;
-    padding: 16px 20px;
-    background-color: var(--white);
+  border: 1.5px solid var(--border-card);
+  border-radius: 10px;
+  padding: 16px 20px;
+  background-color: var(--white);
 }
 
 .review-box p {
-    font-size: 14px;
-    color: var(--text-dark);
-    line-height: 1.6;
+  font-size: 14px;
+  color: var(--text-dark);
+  line-height: 1.6;
 }
 
 /* ---------- RESPONSIF LAYAR KECIL ---------- */
 @media (max-width: 1024px) {
-    .product-detail-grid {
-        grid-template-columns: 1fr;
-    }
+  .product-detail-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 600px) {
-    .product-title {
-        font-size: 26px;
-    }
-    .purchase-action-row {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .quantity-selector {
-        justify-content: center;
-    }
+  .product-title {
+    font-size: 26px;
+  }
+  .purchase-action-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .quantity-selector {
+    justify-content: center;
+  }
 }
