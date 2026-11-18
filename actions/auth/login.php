@@ -34,7 +34,16 @@ if(isset($_POST['login']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
             'role' => $user['role'],
         ];
 
-        header("Location: " . LANDING_PAGE);
+        // HYBRID CART: Sinkronkan dan pulihkan (merge & restore) keranjang belanja
+        require_once __DIR__ . "/../../repositories/cart-repository.php";
+        $guestCartItems = $_SESSION['cart'] ?? [];
+        $_SESSION['cart'] = mergeAndRestoreCart($user['id'], $guestCartItems);
+
+        // Jika sebelumnya ada niat checkout, langsung arahkan ke checkout
+        $redirectUrl = $_SESSION['redirect_after_login'] ?? LANDING_PAGE;
+        unset($_SESSION['redirect_after_login']);
+
+        header("Location: " . $redirectUrl);
         exit;
         
     } catch (PDOException $e) {
