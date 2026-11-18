@@ -9,11 +9,14 @@
   --gray-img: #f8fafc;
 }
 
-/* PERBAIKAN: Gunakan tanda * menggantikan tanda - */
+/* Reset dasar */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+.top-bar, .top-header, .navbar {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -155,6 +158,124 @@
 
 .icon-link:hover {
     color: var(--blue-dark);
+}
+
+/* DROPDOWN USER PROFILE */
+.nav-icons .dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.nav-icons .dropdown-toggle::after {
+    display: none !important;
+}
+
+.nav-icons .dropdown-menu.user-dropdown-menu,
+.nav-icons .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: auto;
+    z-index: 1050;
+    min-width: 230px;
+    margin-top: 10px;
+    padding: 0;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.nav-icons .dropdown-menu.show,
+.nav-icons .dropdown.show > .dropdown-menu {
+    display: block !important;
+}
+
+.user-dropdown-header {
+    background-color: #f8fafc;
+    padding: 14px 18px 12px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.user-dropdown-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 2px;
+}
+
+.user-dropdown-email {
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 8px;
+    word-break: break-all;
+}
+
+.user-dropdown-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    color: #0284c7;
+    background-color: #e0f2fe;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.user-dropdown-body {
+    padding: 6px 0;
+}
+
+.nav-icons .dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #334155;
+    text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    clear: both;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.nav-icons .dropdown-item:hover {
+    background-color: #f8fafc;
+    color: #0f172a;
+}
+
+.user-dropdown-icon {
+    width: 18px;
+    margin-right: 10px;
+    font-size: 14px;
+    color: #0284c7;
+    text-align: center;
+}
+
+.nav-icons .dropdown-item.text-danger {
+    color: #ef4444 !important;
+}
+
+.nav-icons .dropdown-item.text-danger .user-dropdown-icon {
+    color: #ef4444 !important;
+}
+
+.nav-icons .dropdown-item.text-danger:hover {
+    background-color: #fef2f2 !important;
+    color: #dc2626 !important;
+}
+
+.nav-icons .dropdown-divider {
+    height: 1px;
+    margin: 6px 0;
+    background-color: #f1f5f9;
+    border: none;
+    overflow: hidden;
 }
 
 /* RESPONSIVE */
