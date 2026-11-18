@@ -69,7 +69,7 @@
       </div>
       <div class="register-banner-section">
         <div class="banner-image">
-          <img src="../assets/images/laptop-illustration.svg" alt="Laptop Illustration">
+          <img src="../../assets/img/register.png" alt="Laptop Illustration">
         </div>
       </div>
     </div>

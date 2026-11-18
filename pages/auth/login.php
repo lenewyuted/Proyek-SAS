@@ -12,6 +12,7 @@
 
   <link rel="stylesheet" href="../styles/base.css">
   <link rel="stylesheet" href="../../styles/auth/login.css">
+  <link rel="stylesheet" href="../../styles/components/footer.css">
  
 </head>
 <body>
@@ -48,11 +49,8 @@
         </form>
       </div>
       <div class="login-banner-section">
-        <div class="banner-content">
-          <h2>Upgrade Your Components,<br>Boost Your Performance.</h2>
-        </div>
         <div class="banner-image">
-          <img src="../assets/images/laptop-illustration.svg" alt="Laptop Illustration">
+          <img src="../../assets/img/login.png" alt="Laptop Illustration">
         </div>
       </div>
     </div>
@@ -61,6 +59,9 @@
 
 
   
-  <?php require_once __DIR__ . "/../../components/landing/footer.php"; ?>
+  <?php 
+  require_once __DIR__ . "/../../components/landing/footer.php"; 
+  
+  ?>
 </body>
 </html>
