@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once __DIR__ . "/../../repositories/product-repository.php";
+require_once __DIR__ . "/../../repositories/cart-repository.php";
 
 $baseUrl = $_SERVER['HTTP_HOST'];
 
@@ -21,22 +23,38 @@ if (!$productId || $productId < 1 || !$quantity || $quantity < 1) {
 
 $quantity = min($quantity, 99);
 
+$product = getProduct($productId);
+if (!$product) {
+    $_SESSION['flash_error'] = 'Produk tidak ditemukan.';
+    header('Location: ../../pages/landing-page/index.php');
+    exit;
+}
+
+$currentInCart = $_SESSION['cart'][$productId]['quantity'] ?? 0;
+if (($currentInCart + $quantity) > $product['stock']) {
+    $_SESSION['flash_error'] = 'Jumlah melebihi stok yang tersedia (Sisa stok: ' . $product['stock'] . ').';
+    header('Location: ../../pages/products/show.php?id=' . $productId);
+    exit;
+}
+
 // 1. Inisialisasi session cart jika belum ada
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
 
-
-// 2. Simpan ke session dengan struktur yang jelas (ada label field):
-// Jika produk sudah ada di keranjang, cukup tambahkan quantity-nya
+// 2. Simpan ke session (Hybrid Cart: Session Layer)
 if (isset($_SESSION['cart'][$productId])) {
     $_SESSION['cart'][$productId]['quantity'] += $quantity;
 } else {
-    // Jika belum ada, buat item baru dengan detail product_id dan quantity
     $_SESSION['cart'][$productId] = [
         'product_id' => $productId,
         'quantity'   => $quantity
     ];
+}
+
+// 3. JIKA user sudah login, sinkronkan juga ke database (Hybrid Cart: DB Layer)
+if (isset($_SESSION['user']['id'])) {
+    syncItemToDbCart($_SESSION['user']['id'], $productId, $quantity);
 }
 
 $_SESSION['flash_success'] = 'Produk berhasil ditambahkan ke keranjang.';
