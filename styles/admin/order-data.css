@@ -1,0 +1,401 @@
+:root {
+  --primary-blue: #0056c6;
+  --light-blue-bg: #eaf2ff;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  background-color: #f8fafc;
+  color: var(--text-dark);
+}
+
+/* Sidebar */
+.sidebar {
+  margin-left: 40px;
+  border-radius: 10px;
+  width: 230px;
+  min-width: 230px;
+  flex-shrink: 0;
+  background: var(--white);
+  border: 2px solid var(--primary-blue);
+  padding: 20px 15px;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--primary-blue);
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.menu-item.active,
+.menu-item:hover {
+  background-color: var(--light-blue-bg);
+  color: var(--primary-blue);
+}
+
+.menu-item i {
+  -webkit-text-stroke: 0.4px currentColor;
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1 1 auto !important;
+  background-color: var(--paper);
+  min-width: 0 !important;
+  padding: 30px 40px;
+}
+
+.main-content form {
+  margin-top: -9px;
+}
+
+.page-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.page-header p {
+  color: var(--text-muted);
+  padding-top: 8px;
+  margin-top: 4px;
+  padding-bottom: 10px;
+  margin-bottom: 25px;
+  font-size: 14px;
+}
+
+.order-name {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.order-description {
+  line-height: 28px;
+}
+
+/* Table Card Container & Order Table Override */
+.table-card {
+  background: var(--white);
+  border: 1.5px solid var(--primary-blue);
+  border-radius: 12px;
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding: 0 !important;
+  margin-top: -10px;
+}
+
+.table-card .product-table {
+  display: table !important;
+  width: max-content !important;
+  min-width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+  text-align: left;
+}
+
+.table-card .product-table thead,
+.table-card .product-table tbody {
+  display: table-row-group;
+}
+
+.table-card .product-table tr {
+  display: table-row !important;
+}
+
+.table-card .product-table th,
+.table-card .product-table td {
+  display: table-cell !important;
+  position: static !important;
+  float: none !important;
+  white-space: nowrap !important;
+  padding: 14px 18px !important;
+  text-align: left !important;
+  vertical-align: middle !important;
+}
+
+.product-table th {
+  border-bottom: 1.5px solid var(--primary-blue);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+  background-color: var(--white);
+}
+
+.product-table td {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.product-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Kustomisasi Lebar Per Kolom (10 Kolom) */
+.table-card .product-table th:first-child,
+.table-card .product-table td:first-child {
+  width: 140px;
+  padding-left: 24px !important; /* Full Name */
+}
+
+.table-card .product-table th:nth-child(2),
+.table-card .product-table td:nth-child(2) {
+  width: 165px; /* Phone Number */
+}
+
+.table-card .product-table th:nth-child(3),
+.table-card .product-table td:nth-child(3) {
+  width: 240px;
+  white-space: normal !important; /* Address */
+}
+
+.table-card .product-table th:nth-child(4),
+.table-card .product-table td:nth-child(4) {
+  width: 130px; /* City */
+}
+
+.table-card .product-table th:nth-child(5),
+.table-card .product-table td:nth-child(5) {
+  width: 140px; /* Province */
+}
+
+.table-card .product-table th:nth-child(6),
+.table-card .product-table td:nth-child(6) {
+  width: 130px; /* Postal Code */
+}
+
+.table-card .product-table th:nth-child(7),
+.table-card .product-table td:nth-child(7) {
+  width: 165px; /* Shipping Method */
+}
+
+.table-card .product-table th:nth-child(8),
+.table-card .product-table td:nth-child(8) {
+  width: 150px; /* Shipping Cost */
+}
+
+.table-card .product-table th:nth-child(9),
+.table-card .product-table td:nth-child(9) {
+  width: 170px; /* Total Amount */
+}
+
+.table-card .product-table th:last-child,
+.table-card .product-table td:last-child {
+  width: 195px;
+  padding-right: 24px !important; /* Action */
+}
+
+.table-card .product-table td:last-child .action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Action Buttons (Edit / Delete / View) */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-edit,
+.btn-delete {
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-edit {
+  border: 1.5px solid var(--primary-blue);
+  color: var(--primary-blue);
+  background: var(--white);
+}
+
+.btn-edit:hover {
+  background: var(--light-blue-bg);
+}
+
+.btn-delete {
+  border: 1.5px solid #ef4444;
+  color: #ef4444;
+  background: var(--white);
+}
+
+.btn-delete:hover {
+  background: #fef2f2;
+}
+
+.action-buttons .btn-delete:hover {
+  background-color: #f6e8e8;
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
+/* Form & Header Helpers (untuk edit.php / show.php) */
+.product-form-create,
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-transform: none;
+  letter-spacing: normal;
+  margin-bottom: 0;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1.5px solid var(--primary-blue);
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: "Inter", sans-serif;
+  color: var(--text-dark);
+  background-color: var(--white);
+  outline: none;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  background-color: var(--light-blue-bg);
+  box-shadow: none;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #94a3b8;
+}
+
+.form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23333' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  padding-right: 40px;
+}
+
+.header-col p {
+  color: var(--text-muted);
+  margin-top: 4px;
+  padding-top: 8px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.form-actions-center {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.btn-submit-add {
+  background: var(--primary-blue);
+  color: var(--white);
+  border: 1.5px solid var(--primary-blue);
+  padding: 12px 35px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.btn-submit-add:hover {
+  opacity: 0.9;
+}
+
+.btn-cancel {
+  background: var(--white);
+  color: var(--primary-blue);
+  border: 1.5px solid var(--primary-blue);
+  padding: 12px 35px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.btn-cancel:hover {
+  background-color: var(--light-blue-bg);
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary-blue);
+  text-decoration: none;
+  text-align: right;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.page-header-flex {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+.header-col {
+  flex: 1;
+}
