@@ -9,7 +9,7 @@
 
 .footer-container {
     width: 100% !important;
-    max-width: 1350px !important; /* Samakan dengan lebar kontainer/section di atasnya */
+    max-width: 1350px !important;
     margin: 0 auto !important;
     padding: 0;
     display: grid;
