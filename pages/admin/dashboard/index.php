@@ -119,16 +119,16 @@ $totalUsers = countUsers();
   <div class="bottom-grid">
     <!-- Bungkus list produk dengan styling flexbox mendatar -->
     <div class="products-list-grid">
-    <?php foreach ($products as $product): ?>
-      <div class="product-item-card">
-        <div class="product-img-box">
-          <img src="/Proyek-SAS/assets/img/<?= $product['picture'] ?>" alt="<?= htmlspecialchars($product['name']) ?>">
+      <?php foreach ($products as $product): ?>
+        <div class="product-item-card">
+          <div class="product-img-box">
+            <img src="/assets/img/<?= $product['picture'] ?>" alt="<?= htmlspecialchars($product['name']) ?>">
+          </div>
+          <h4 class="product-name"><?= $product['name']; ?></h4>
         </div>
-        <h4 class="product-name"><?= $product['name']; ?></h4>
-      </div>
-    <?php endforeach; ?>
-</div>
-    
+      <?php endforeach; ?>
+    </div>
+
     <div class="calendar-card">
       <div class="calendar-header">
         <button class="cal-nav">&lt;</button>
