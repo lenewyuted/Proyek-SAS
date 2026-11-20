@@ -179,10 +179,10 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
 
                 <!-- Info Benefits Card 1 -->
                 <div class="benefit-card">
-                    <i class="fa-solid fa-truck-fast"></i>
+                    <i class="fa-solid fa-certificate"></i>
                     <div>
-                        <strong>Free Shipping</strong>
-                        <p>For orders over Rp 500.000</p>
+                        <strong>100% Authentic Parts</strong>
+                        <p>Tested & Verified Hardware</p>
                     </div>
                 </div>
 
@@ -190,14 +190,14 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                 <div class="benefit-card">
                     <i class="fa-solid fa-shield-halved"></i>
                     <div>
-                        <strong>Official Warranty</strong>
-                        <p>100% Original & Guaranteed Products</p>
+                        <strong>Quality Checked</strong>
+                        <p>Inspected Before Dispatch</p>
                     </div>
                 </div>
 
                 <!-- Info Benefits Card 3 -->
                 <div class="benefit-card">
-                    <i class="fa-solid fa-rotate"></i>
+                    <i class="fa-solid fa-lock"></i>
                     <div>
                         <strong>Secure Payment</strong>
                         <p>100% Protected Transactions</p>
