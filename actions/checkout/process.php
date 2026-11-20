@@ -117,7 +117,7 @@ try {
                         province = :province, 
                         postal_code = :postal_code 
                         WHERE id = :id";
-                        
+
     $updateUserStmt = $pdo->prepare($updateUserQuery);
     $updateUserStmt->execute([
         'phone'       => $phoneNumber,
@@ -131,7 +131,6 @@ try {
     // 10. Redirect ke Halaman Sukses Transaksi
     header("Location: ../../pages/checkout/success.php?order=" . urlencode($orderNumber));
     exit;
-
 } catch (Exception $e) {
     $_SESSION['flash_error'] = 'Terjadi kesalahan sistem saat memproses pesanan: ' . $e->getMessage();
     header('Location: ../../pages/checkout/index.php');
