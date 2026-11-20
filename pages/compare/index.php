@@ -1,19 +1,32 @@
 <?php
-// Database belum ada -> daftar produk kosong.
-// Ubah $useDemoData jadi true untuk mencoba dengan data contoh.
-$useDemoData = false;
- 
-$products = [];
-if ($useDemoData) {
-    $products = [
-        ['id' => 1, 'name' => 'AMD Ryzen 5 5600X',        'brand' => 'AMD',    'category' => 'Processor',     'price' => 2450000, 'specs' => '6 Core / 12 Thread, 3.7 GHz', 'warranty' => '3 Tahun',  'stock' => 12],
-        ['id' => 2, 'name' => 'Intel Core i5-12400F',     'brand' => 'Intel',  'category' => 'Processor',     'price' => 2300000, 'specs' => '6 Core / 12 Thread, 4.4 GHz', 'warranty' => '3 Tahun',  'stock' => 8],
-        ['id' => 3, 'name' => 'NVIDIA GeForce RTX 4060',  'brand' => 'NVIDIA', 'category' => 'Graphics Card', 'price' => 5600000, 'specs' => '8 GB GDDR6',                  'warranty' => '2 Tahun',  'stock' => 5],
-        ['id' => 4, 'name' => 'Corsair Vengeance 16GB',   'brand' => 'Corsair', 'category' => 'RAM',          'price' => 780000,  'specs' => '2 x 8 GB DDR4, 3200 MHz',     'warranty' => 'Lifetime', 'stock' => 20],
-    ];
+require __DIR__ . '/../../config/database.php';   
+
+
+$sql = "
+    SELECT
+        p.id,
+        p.name,
+        p.brand,
+        c.name AS category,
+        p.price,
+        p.specs,
+        p.warranty,
+        p.stock
+    FROM products p
+    LEFT JOIN categories c ON c.id = p.category_id
+    ORDER BY p.name
+";
+
+$products = $pdo->query($sql)->fetchAll();
+
+foreach ($products as &$p) {
+    $p['id']    = (int) $p['id'];
+    $p['price'] = (int) $p['price'];
+    $p['stock'] = (int) $p['stock'];
 }
- 
-// Baris tabel: key => label
+unset($p);
+
+
 $rows = [
     'price'    => 'Harga',
     'brand'    => 'Brand',
