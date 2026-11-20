@@ -50,17 +50,18 @@ body {
 }
 
 .cart-header-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
 }
 
 .cart-header-title h1 {
-    font-size: 32px;
-    font-weight: 700;
-    padding-top: 20px;
-    color: var(--text-dark);
+    margin-top: 22px;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2; 
+  color: var(--text-dark);
 }
 
 .cart-header-title p {
@@ -70,13 +71,14 @@ body {
 }
 
 .back-link {
-    color: var(--primary-blue);
-    font-weight: 600;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 16px;
+  color: var(--primary-blue);
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center; 
+  gap: 8px;
+  font-size: 16px;
+  height: 38px; 
 }
 
 .back-link:hover {
@@ -93,29 +95,38 @@ body {
 
 /* ---------- SISI KIRI: KOTAK TABEL KERANJANG ---------- */
 .cart-items-section {
-    border: 2px solid var(--border-card);
+    border: 2px solid var(--border-blue);
     border-radius: 12px;
     padding: 24px;
     background-color: var(--white);
 }
 
+/* Rumus kolom ke-2: 75px (lebar kotak gambar) + 55px (jarak gap) = 130px */
 .cart-table-header {
     display: grid;
-    grid-template-columns: 20px 1fr 1fr 120px 1fr 50px;
+    grid-template-columns: 50px 130px 285px 1.1fr 1fr 1fr 40px;
     align-items: center;
     padding-bottom: 16px;
     border-bottom: 1px solid #e2e8f0;
     font-weight: 600;
     font-size: 14px;
-    color: var(--text-gray);
+    color: var(--text-dark);
 }
 
 .cart-row {
     display: grid;
-    grid-template-columns: 40px 1.5fr 1fr 120px 1fr 40px;
+    grid-template-columns: 50px 130px 285px 1.1fr 1fr 1fr 40px;
     align-items: center;
     padding: 20px 0;
     border-bottom: 1px solid #f1f5f9;
+}
+
+/* Bersihkan bagian ini dari CSS Anda dan ganti dengan kode di bawah */
+.cart-row .col-product {
+    grid-column: span 2;
+    display: flex;
+    align-items: center;
+    gap: 55px; /* Ubah angka ini (misal: 40px, 60px, 80px) untuk mengatur jarak gambar & nama produk */
 }
 
 .cart-row input[type="checkbox"],
@@ -233,7 +244,7 @@ body {
 }
 
 .summary-card {
-    border: 2px solid var(--border-card);
+    border: 2px solid var(--border-blue);
     border-radius: 12px;
     padding: 24px;
     background-color: var(--white);
@@ -297,11 +308,12 @@ body {
 
 .btn-checkout:hover {
     background-color: #004095;
+    color: var(--white);
 }
 
 /* Benefit Cards (Free Shipping, Warranty, Secure) */
 .benefit-card {
-    border: 2px solid var(--border-card);
+    border: 2px solid var(--border-blue);
     border-radius: 12px;
     padding: 16px 20px;
     display: flex;
@@ -315,15 +327,21 @@ body {
     color: var(--primary-blue);
 }
 
+
 .benefit-card strong {
     font-size: 14px;
     color: var(--text-dark);
     display: block;
+    margin-top: 2px;
 }
 
 .benefit-card p {
     font-size: 12px;
     color: var(--text-gray);
     margin-top: 2px;
+    margin-bottom: -1px;
 }
 
+.main-footer .footer-container {
+    max-width: 1600px !important; 
+}
