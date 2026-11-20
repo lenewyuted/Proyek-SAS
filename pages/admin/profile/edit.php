@@ -44,7 +44,6 @@ unset($_SESSION['errors'], $_SESSION['old']);
     <link rel="stylesheet" href="../../../styles/base.css">
     <link rel="stylesheet" href="../../../styles/admin/sidebar.css">
     <link rel="stylesheet" href="../../../styles/admin/topbar.css">
-    <link rel="stylesheet" href="../../../styles/admin/products.css">
     <link rel="stylesheet" href="../../../styles/admin/profile.css">
     <link rel="stylesheet" href="../../../styles/admin/pagination.css">
 </head>
