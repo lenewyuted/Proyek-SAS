@@ -25,53 +25,8 @@ $orders = getOrders();
     <link rel="stylesheet" href="../../../styles/base.css">
     <link rel="stylesheet" href="../../../styles/admin/sidebar.css">
     <link rel="stylesheet" href="../../../styles/admin/topbar.css">
-    <link rel="stylesheet" href="../../../styles/admin/categories.css">
+    <link rel="stylesheet" href="../../../styles/admin/order-data.css">
     <link rel="stylesheet" href="../../../styles/admin/pagination.css">
-
-    <style>
-        .main-content {
-            min-width: 0 !important;
-            flex: 1 1 auto !important;
-        }
-
-        .table-card {
-            display: block !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            overflow-x: auto !important;
-            overflow-y: hidden !important;
-            padding: 0 !important;
-        }
-
-        .table-card .product-table {
-            display: table !important;
-            width: max-content !important;
-            min-width: 100% !important;
-            table-layout: auto !important;
-            border-collapse: collapse !important;
-        }
-
-        .table-card .product-table thead,
-        .table-card .product-table tbody,
-        .table-card .product-table tr {
-            display: table-row-group;
-        }
-
-        .table-card .product-table tr {
-            display: table-row !important;
-        }
-
-        .table-card .product-table th,
-        .table-card .product-table td {
-            display: table-cell !important;
-            position: static !important;
-            float: none !important;
-            white-space: nowrap !important;
-            padding: 14px 18px !important;
-            text-align: left !important;
-            vertical-align: middle !important;
-        }
-    </style>
 </head>
 
 <body>
@@ -83,7 +38,7 @@ $orders = getOrders();
         <main class="main-content">
             <div class="page-header">
                 <h1>Manage Orders</h1>
-                <p>Add, edit, and delete order data</p>
+                <p>View, edit, and delete order data</p>
             </div>
             <div class="table-card">
                 <table class="product-table">
@@ -118,6 +73,7 @@ $orders = getOrders();
                                         <!-- Tambahkan event onclick.stopPropagation() agar tombol Edit & Delete tidak ikut membuka show.php -->
                                         <a href="edit.php?id=<?= $order['id'] ?>" class="btn-edit" onclick="event.stopPropagation();">Edit</a>
                                         <a href="../../../actions/categories/destroy.php?id=<?= $order['id']; ?>" class="btn-delete" onclick="event.stopPropagation(); return confirm('Yakin ingin menghapus produk ini?')">Delete</a>
+                                        <a href="detail.php?id=<?= $order['id'] ?>" class="btn-edit" onclick="event.stopPropagation();"><i class="bi bi-eye-fill"></i></a>
                                     </div>
                                 </td>
                             </tr>
