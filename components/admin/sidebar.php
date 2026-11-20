@@ -9,12 +9,11 @@
         <a href="../categories/index.php" class="menu-item" id="sidebar-categories">
             <i class="bi bi-grid"></i> Categories
         </a>
-        <!-- Diperbaiki: href ke index.php dan id menjadi sidebar-users -->
+        <a href="../order-data/index.php" class="menu-item" id="sidebar-order-data">
+            <i class="bi bi-card-checklist"></i> Order Data
+        </a>
         <a href="../users/index.php" class="menu-item" id="sidebar-users">
             <i class="bi bi-person"></i> Users
-        </a>
-        <a href="../order-data/index.php" class="menu-item" id="sidebar-order-data">
-            <i class="bi bi-person-vcard"></i> Order Data
         </a>
         <a href="../profile/edit.php" class="menu-item" id="sidebar-profile">
             <i class="bi bi-person-vcard"></i> Profile
