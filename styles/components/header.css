@@ -21,13 +21,17 @@
 }
 
 /* bar pengumuman bagian atas */
-.top-bar {
-    background-color: var(--primary-blue);
-    color: var(--white);
-    text-align: center;
-    padding: 10px 15px;
-    font-size: 14px;
-    font-weight: 500;
+/* bar pengumuman bagian atas */
+div.top-bar,
+.announcement-bar {
+  background-color: #0056c6 !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  text-align: center !important;
+  padding: 10px 15px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
 }
 
 /* HEADER CONTAINER (Gabungan Navbar & Top Header agar tidak bentrok) */
