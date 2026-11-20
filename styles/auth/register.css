@@ -156,7 +156,7 @@ body {
 }
 
 /* Right Banner Section */
-.register-banner-section {
+/* .register-banner-section {
   background: var(--light-blue-bg);
   border-radius: 16px;
   padding: 40px;
@@ -164,11 +164,14 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-}
+} */
 
 .banner-image {
   text-align: center;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
 }
 
 .banner-image img {

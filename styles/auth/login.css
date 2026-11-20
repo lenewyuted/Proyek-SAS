@@ -156,7 +156,7 @@ body {
 }
 
 /* Right Banner Section */
-.login-banner-section {
+/* .login-banner-section {
   background: var(--light-blue-bg);
   border-radius: 16px;
   padding: 40px;
@@ -164,7 +164,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
-}
+} */
 
 .banner-content h2 {
   font-size: 28px;
@@ -175,7 +175,10 @@ body {
 
 .banner-image {
   text-align: center;
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
 }
 
 .banner-image img {
