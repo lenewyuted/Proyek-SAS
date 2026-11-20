@@ -9,6 +9,7 @@ $authUser = isLoggedIn() ? getAuthUser() : null;
 
 <!-- Bootstrap 4.6 CSS (Dibawa oleh header agar dropdown & carousel berfungsi konsisten) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+<link rel="stylesheet" href="../../styles/components/header.css">
 
 <!-- bar bagian atas -->
 <div class="top-bar">
@@ -91,15 +92,15 @@ $authUser = isLoggedIn() ? getAuthUser() : null;
 </header>
 
 <script>
-document.addEventListener('click', function (e) {
-    var dropdown = document.querySelector('.nav-icons .dropdown');
-    if (!dropdown) return;
+    document.addEventListener('click', function(e) {
+        var dropdown = document.querySelector('.nav-icons .dropdown');
+        if (!dropdown) return;
 
-    if (e.target.closest('#userMenuDropdown')) {
-        e.preventDefault();
-        dropdown.classList.toggle('show');
-    } else if (!dropdown.contains(e.target)) {
-        dropdown.classList.remove('show');
-    }
-});
+        if (e.target.closest('#userMenuDropdown')) {
+            e.preventDefault();
+            dropdown.classList.toggle('show');
+        } else if (!dropdown.contains(e.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
 </script>
