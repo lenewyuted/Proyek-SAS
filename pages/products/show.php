@@ -129,7 +129,7 @@ function renderStars(float $rating): string
                         </div>
                         <input type="hidden" name="product_id" value="<?= (int) ($product['id'] ?? 0) ?>">
                         <input type="hidden" name="quantity" value="1">
-                        <button name="add" type="submit" class="btn-add-to-cart">Add to Cart</button>
+                        <button name="add" type="submit" class="btn-add-to-cart" <?= $isAdminUser ? " disabled" : "" ?>>Add to Cart</button>
                     </form>
                 </div>
             </div>
