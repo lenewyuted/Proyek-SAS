@@ -301,7 +301,7 @@ unset($_SESSION['flash_error']);
                         </div>
 
                         <div class="complete-pay-row">
-                            <div class="complete-pay-placeholder"></div>
+
                             <div class="complete-pay-shipping">
                                 <i class="fa-regular fa-credit-card"></i>
                                 <div>
@@ -507,7 +507,11 @@ unset($_SESSION['flash_error']);
                         </div>
 
                         <div class="complete-pay-row">
-                            <div class="complete-pay-placeholder"></div>
+                            <div class="complete-pay-placeholder" id="complete-pay-placeholder-ewallet">
+                                <div class="btp-bank-logo-js dana">DANA</div>
+                                <div>0812-3456-7890</div>
+                                <div>Available 24 Hours</div>
+                            </div>
                             <div class="complete-pay-shipping">
                                 <i class="fa-regular fa-credit-card"></i>
                                 <div>
@@ -610,11 +614,22 @@ unset($_SESSION['flash_error']);
         });
 
         // 5. Efek Aktif pada Kartu Bank / E-Wallet yang Dipilih 
+        //complete-pay-placeholder-ewallet
+        let placeholderEwallet = document.getElementById("complete-pay-placeholder-ewallet");
         document.querySelectorAll('.btp-bank-card').forEach(card => {
             card.addEventListener('click', function() {
                 const activeCard = this.closest('.btp-bank-grid').querySelector('.btp-bank-card.active');
                 if (activeCard) activeCard.classList.remove('active');
                 this.classList.add('active');
+                const paymentChannel = this.querySelector(".btp-bank-logo").classList;
+
+                placeholderEwallet.innerHTML = `
+                    <div class="btp-bank-logo-js ${paymentChannel}">${this.querySelector(".btp-bank-logo").innerText}</div>
+                    <div>0812-3456-7890</div>
+                    <div>Available 24 Hours</div>
+                
+                `;
+
             });
         });
     </script>

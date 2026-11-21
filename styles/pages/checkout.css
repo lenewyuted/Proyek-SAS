@@ -320,6 +320,12 @@ body {
   letter-spacing: -0.5px;
   margin-bottom: 6px;
 }
+.btp-bank-logo-js {
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
 
 .btp-bank-logo.mandiri {
   color: #003d79;
@@ -359,6 +365,11 @@ body {
 .btp-bank-logo.dana {
   color: #0086e0;
 }
+
+.btp-bank-logo-js.dana {
+  color: #0086e0;
+}
+
 
 .btp-bank-logo.ovo {
   color: #4c2a86;
