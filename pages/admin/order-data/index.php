@@ -6,6 +6,13 @@ require_once __DIR__ . "/../../../middleware/auth.php";
 requireRole(["admin"]);
 
 $orders = getOrders();
+
+if (!function_exists('formatRupiah')) {
+    function formatRupiah($amount): string
+    {
+        return 'Rp ' . number_format((float) $amount, 0, ',', '.');
+    }
+}
 ?>
 
 
@@ -66,14 +73,14 @@ $orders = getOrders();
                                 <td class="order-description"><?= htmlspecialchars($order['province']); ?></td>
                                 <td class="order-description"><?= htmlspecialchars($order['postal_code']); ?></td>
                                 <td class="order-description"><?= htmlspecialchars($order['shipping_method']); ?></td>
-                                <td class="order-description"><?= htmlspecialchars($order['shipping_cost']); ?></td>
-                                <td class="order-description"><?= htmlspecialchars($order['total_amount']); ?></td>
+                                <td class="order-description"><?= formatRupiah($order['shipping_cost'] ?? 0); ?></td>
+                                <td class="order-description"><?= formatRupiah($order['total_amount'] ?? 0); ?></td>
                                 <td>
                                     <div class="action-buttons">
                                         <!-- Tambahkan event onclick.stopPropagation() agar tombol Edit & Delete tidak ikut membuka show.php -->
                                         <a href="edit.php?id=<?= $order['id'] ?>" class="btn-edit" onclick="event.stopPropagation();">Edit</a>
-                                        <a href="../../../actions/categories/destroy.php?id=<?= $order['id']; ?>" class="btn-delete" onclick="event.stopPropagation(); return confirm('Yakin ingin menghapus produk ini?')">Delete</a>
-                                        <a href="detail.php?id=<?= $order['id'] ?>" class="btn-edit" onclick="event.stopPropagation();"><i class="bi bi-eye-fill"></i></a>
+                                        <a href="../../../actions/orders/destroy.php?id=<?= $order['id']; ?>" class="btn-delete" onclick="event.stopPropagation(); return confirm('Yakin ingin menghapus orderan ini?')">Delete</a>
+                                        <a href="show.php?id=<?= $order['id'] ?>" class="btn-edit" onclick="event.stopPropagation();"><i class="bi bi-eye-fill"></i></a>
                                     </div>
                                 </td>
                             </tr>
