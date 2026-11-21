@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . "/../../repositories/category-repository.php";
 require_once __DIR__ . "/../../repositories/product-repository.php";
+require_once __DIR__ . "/../../repositories/review-repository.php";
 
 $banners = getLatestProducts();
 $categories = getCategoriesLandingPage();
@@ -125,16 +126,27 @@ $products = $stmtProd->fetchAll();
         <div class="products-grid">
             <?php if (!empty($products)): ?>
                 <?php foreach ($products as $prod): ?>
-                    <a href="../products/show.php?id=<?= $prod['id'] ?>">
+                    <?php
+                    $ratingSummary = getProductRatingSummary((int) $prod['id']);
+                    $avgRating = number_format($ratingSummary['average_rating'], 1);
+                    $totalReviews = $ratingSummary['total_reviews'];
+                    ?>
+                    <a href="../products/show.php?id=<?= (int) $prod['id'] ?>">
                         <div class="product-card">
                             <div class="product-img">
-                                <img src="../../assets/img/<?= $prod["picture"] ?>" alt="<?= $prod["name"] ?>">
-
+                                <img src="../../assets/img/<?= htmlspecialchars($prod["picture"]) ?>" alt="<?= htmlspecialchars($prod["name"]) ?>">
                             </div>
                             <h3 class="product-title"><?= htmlspecialchars($prod['name']) ?></h3>
                             <div class="product-rating">
-                                <span><?= number_format((float)($prod['rating'] ?? 5), 1) ?></span>
-                                <i class="fa-solid fa-star"></i>
+                                <?php if ($totalReviews > 0): ?>
+                                    <span><?= htmlspecialchars($avgRating) ?></span>
+                                    <i class="fa-solid fa-star"></i>
+                                    <small>(<?= (int) $totalReviews ?>)</small>
+                                <?php else: ?>
+                                    <span>0.0</span>
+                                    <i class="fa-regular fa-star"></i>
+                                    <small>(0)</small>
+                                <?php endif; ?>
                             </div>
                             <div class="product-footer">
                                 <span class="product-price">Rp.<?= number_format($prod['price'], 0, ',', '.') ?></span>
@@ -203,4 +215,5 @@ $products = $stmtProd->fetchAll();
         interval: 2000
     })
 </script>
+
 </html>
