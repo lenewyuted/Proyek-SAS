@@ -1,4 +1,4 @@
-<?php
+1<?php
 require_once __DIR__ . "/../../config/database.php";
 
 if (isset($_GET['id']) && $_SERVER['REQUEST_METHOD'] === "GET") {
