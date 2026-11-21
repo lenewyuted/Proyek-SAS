@@ -21,7 +21,7 @@ if (!$order) {
     exit;
 }
 
-if (!empty($order['order_number']) && !array_key_exists('payment_method', $order) && function_exists('getOrderByNumber')) {
+if (!empty($order['order_number']) && (!array_key_exists('payment_method', $order) || !array_key_exists('paid_at', $order)) && function_exists('getOrderByNumber')) {
     $orderWithPayment = getOrderByNumber($order['order_number']);
     if (is_array($orderWithPayment)) {
         $order = array_merge($orderWithPayment, $order);
@@ -62,9 +62,21 @@ switch ($currentStatus) {
 
 $canReject = in_array($currentStatus, ['pending', 'processing', 'shipped'], true);
 
+$createdAtFormatted = !empty($order['created_at']) ? date('d M Y, H:i', strtotime((string) $order['created_at'])) : '-';
+$paidAtFormatted    = !empty($order['paid_at']) ? date('d M Y, H:i', strtotime((string) $order['paid_at'])) : 'Belum dibayar';
+
 $paymentMethodLabel = str_replace('_', ' ', strtoupper((string) ($order['payment_method'] ?? '-')));
 $paymentChannelText = !empty($order['payment_channel']) ? ' (' . strtoupper((string) $order['payment_channel']) . ')' : '';
 $paymentStatusText  = str_replace('_', ' ', strtoupper((string) ($order['payment_status'] ?? '-')));
+
+$paymentMethodRaw = strtolower(trim((string) ($order['payment_method'] ?? '')));
+$isBankTransfer   = ($paymentMethodRaw === 'bank_transfer');
+
+$proofFile     = trim((string) ($order['payment_proof'] ?? ''));
+$proofSafeName = $proofFile !== '' ? basename($proofFile) : '';
+$proofUrl      = $proofSafeName !== '' ? '../../../assets/img/payments/' . rawurlencode($proofSafeName) : '';
+$proofExt      = $proofSafeName !== '' ? strtolower(pathinfo($proofSafeName, PATHINFO_EXTENSION)) : '';
+$isPdfProof    = ($proofExt === 'pdf');
 
 $flashSuccess = $_SESSION['flash_success'] ?? null;
 $flashError   = $_SESSION['flash_error'] ?? null;
@@ -139,6 +151,17 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
 
                     <div class="form-row">
                         <div class="show-field-group">
+                            <label>Created At</label>
+                            <div class="show-field-value"><?= htmlspecialchars($createdAtFormatted) ?></div>
+                        </div>
+                        <div class="show-field-group">
+                            <label>Paid At</label>
+                            <div class="show-field-value"><?= htmlspecialchars($paidAtFormatted) ?></div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="show-field-group">
                             <label>Full Name</label>
                             <div class="show-field-value"><?= htmlspecialchars($order['full_name'] ?? '-') ?></div>
                         </div>
@@ -188,7 +211,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                         </div>
                     </div>
 
-                    <?php if (isset($order['payment_method']) || isset($order['payment_status']) || isset($order['account_holder']) || isset($order['account_number']) || isset($order['payment_proof'])): ?>
+                    <?php if (isset($order['payment_method']) || isset($order['payment_status']) || isset($order['account_holder']) || isset($order['account_number']) || $proofSafeName !== ''): ?>
                         <div class="form-row">
                             <div class="show-field-group">
                                 <label>Payment Method</label>
@@ -213,23 +236,39 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                             </div>
                         <?php endif; ?>
 
-                        <?php if (!empty($order['payment_proof'])): ?>
-                            <div class="show-field-group">
-                                <label>Payment Proof</label>
-                                <?php
-                                $proofUrl = '../../../assets/img/payments/' . rawurlencode($order['payment_proof']);
-                                $isPdf    = strtolower(pathinfo($order['payment_proof'], PATHINFO_EXTENSION)) === 'pdf';
-                                ?>
-                                <a href="<?= $proofUrl ?>" target="_blank" class="payment-proof-box">
-                                    <?php if ($isPdf): ?>
-                                        <i class="bi bi-file-earmark-pdf" style="font-size: 36px; color: #ef4444;"></i>
+                        <div class="show-field-group">
+                            <label>Payment Proof</label>
+                            <?php if (!$isBankTransfer): ?>
+                                <div class="show-field-value">Tidak perlu bukti transfer (metode pembayaran: <?= htmlspecialchars($paymentMethodLabel . $paymentChannelText) ?>)</div>
+                            <?php elseif ($proofSafeName !== ''): ?>
+                                <div class="payment-proof-viewer">
+                                    <?php if ($isPdfProof): ?>
+                                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+                                            <i class="bi bi-file-earmark-pdf-fill" style="font-size: 32px; color: #ef4444;"></i>
+                                            <div>
+                                                <div style="font-weight: 600; color: #0f172a;"><?= htmlspecialchars($proofSafeName) ?></div>
+                                                <small style="color: #64748b;">Dokumen PDF bukti pembayaran</small>
+                                            </div>
+                                        </div>
                                     <?php else: ?>
-                                        <img src="<?= $proofUrl ?>" alt="Payment Proof">
+                                        <a href="<?= htmlspecialchars($proofUrl) ?>" target="_blank" rel="noopener noreferrer" style="display: inline-block; margin-bottom: 10px;">
+                                            <img
+                                                src="<?= htmlspecialchars($proofUrl) ?>"
+                                                alt="Bukti Pembayaran <?= htmlspecialchars($proofSafeName) ?>"
+                                                style="max-width: 320px; max-height: 260px; width: auto; height: auto; border-radius: 6px; border: 1px solid #cbd5e1; display: block;">
+                                        </a>
                                     <?php endif; ?>
-                                    <span>Klik untuk melihat bukti pembayaran (<?= htmlspecialchars($order['payment_proof']) ?>)</span>
-                                </a>
-                            </div>
-                        <?php endif; ?>
+
+                                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+                                        <span style="font-size: 13px; color: #475569;">
+                                            File: <strong><?= htmlspecialchars($proofSafeName) ?></strong>
+                                        </span>
+                                    </div>
+                                </div>
+                            <?php else: ?>
+                                <div class="show-field-value">User belum mengunggah bukti transfer.</div>
+                            <?php endif; ?>
+                        </div>
                     <?php endif; ?>
                 </div>
 

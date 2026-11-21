@@ -57,7 +57,6 @@ function createOrder(array $orderData, array $items, array $paymentData)
                 'subtotal'   => $item['subtotal'],
             ]);
 
-            // Potong stok produk & pastikan stok mencukupi
             $stmtStock->execute([
                 'qty_sub'    => $item['quantity'],
                 'product_id' => $item['product_id'],
@@ -70,7 +69,8 @@ function createOrder(array $orderData, array $items, array $paymentData)
         }
 
         // 3. Simpan data pembayaran ke tabel payments
-        $paymentStatus = !empty($paymentData['payment_proof']) ? 'pending_verification' : 'unpaid';
+        $paymentMethod = strtolower(trim((string) ($paymentData['payment_method'] ?? 'bank_transfer')));
+        $paymentStatus = ($paymentMethod === 'bank_transfer') ? 'unpaid' : 'pending_verification';
 
         $paymentSql = "INSERT INTO payments (
                            order_id, payment_method, payment_channel,
@@ -110,7 +110,7 @@ function getOrderByNumber($orderNumber)
 {
     global $pdo;
 
-    $query = "SELECT o.*, p.payment_method, p.payment_channel, p.account_number, p.account_holder, p.payment_status, p.payment_proof
+    $query = "SELECT o.*, p.payment_method, p.payment_channel, p.account_number, p.account_holder, p.payment_status, p.payment_proof, p.paid_at
               FROM orders o
               LEFT JOIN payments p ON p.order_id = o.id
               WHERE o.order_number = :order_number";
@@ -118,7 +118,7 @@ function getOrderByNumber($orderNumber)
     $stmt->execute([
         'order_number' => $orderNumber
     ]);
-    return $stmt->fetch();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 /**
@@ -136,37 +136,35 @@ function getOrderItemsByOrderId($orderId)
     $stmt->execute([
         'order_id' => $orderId
     ]);
-    return $stmt->fetchAll();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 /**
- * Mengambil seluruh data pesanan.
+ * Mengambil seluruh data pesanan (orderan lama di atas, orderan baru di bawah).
  */
 function getOrders()
 {
     global $pdo;
 
-    $query = "SELECT * FROM orders";
+    $query = "SELECT * FROM orders ORDER BY id ASC";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
 
     return $stmt->fetchAll();
 }
 
-/**
- * Mengambil satu data pesanan berdasarkan ID.
- */
 function getOrderById($id)
 {
     global $pdo;
 
-    $query = "SELECT * FROM orders WHERE id = :id";
+    $query = "SELECT o.*, p.payment_method, p.payment_channel, p.account_number, p.account_holder, p.payment_status, p.payment_proof, p.paid_at
+              FROM orders o
+              LEFT JOIN payments p ON p.order_id = o.id
+              WHERE o.id = :id";
     $stmt = $pdo->prepare($query);
-    $stmt->execute([
-        'id' => $id
-    ]);
+    $stmt->execute(['id' => $id]);
 
-    return $stmt->fetch();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 /**
@@ -203,24 +201,82 @@ function updateOrder($id, array $data)
     ]);
 }
 
-/**
- * Memperbarui status pesanan berdasarkan ID.
- */
 function updateOrderStatus(int $id, string $newStatus): bool
 {
     global $pdo;
 
+    $newStatus = strtolower(trim($newStatus));
     $allowedStatuses = ['pending', 'processing', 'shipped', 'completed', 'cancelled'];
     if (!in_array($newStatus, $allowedStatuses, true)) {
         return false;
     }
 
-    $query = "UPDATE orders SET order_status = :order_status WHERE id = :id";
-    $stmt = $pdo->prepare($query);
-    return $stmt->execute([
-        'id'           => $id,
-        'order_status' => $newStatus,
-    ]);
+    try {
+        $pdo->beginTransaction();
+
+        $stmtCurrent = $pdo->prepare("SELECT order_status FROM orders WHERE id = :id FOR UPDATE");
+        $stmtCurrent->execute(['id' => $id]);
+        $currentOrder = $stmtCurrent->fetch(PDO::FETCH_ASSOC);
+
+        if (!$currentOrder) {
+            $pdo->rollBack();
+            return false;
+        }
+
+        $previousStatus = strtolower(trim((string) ($currentOrder['order_status'] ?? '')));
+
+        $query = "UPDATE orders SET order_status = :order_status WHERE id = :id";
+        $stmt = $pdo->prepare($query);
+        $updated = $stmt->execute([
+            'id'           => $id,
+            'order_status' => $newStatus,
+        ]);
+
+        if (!$updated) {
+            $pdo->rollBack();
+            return false;
+        }
+
+        // Sudah di-approve (processing, shipped, completed) -> paid & isi paid_at jika masih NULL
+        if (in_array($newStatus, ['processing', 'shipped', 'completed'], true)) {
+            $stmtPay = $pdo->prepare("
+                UPDATE payments
+                SET payment_status = 'paid',
+                    paid_at = COALESCE(paid_at, NOW())
+                WHERE order_id = :order_id
+            ");
+            $stmtPay->execute(['order_id' => $id]);
+        } elseif ($newStatus === 'cancelled') {
+            if ($previousStatus !== 'cancelled') {
+                $stmtItems = $pdo->prepare("SELECT product_id, quantity FROM order_items WHERE order_id = :order_id");
+                $stmtItems->execute(['order_id' => $id]);
+                $items = $stmtItems->fetchAll(PDO::FETCH_ASSOC);
+
+                $stmtRestore = $pdo->prepare("UPDATE products SET stock = stock + :qty WHERE id = :product_id");
+                foreach ($items as $item) {
+                    $stmtRestore->execute([
+                        'qty'        => (int) $item['quantity'],
+                        'product_id' => (int) $item['product_id'],
+                    ]);
+                }
+            }
+
+            $stmtPay = $pdo->prepare("
+                UPDATE payments
+                SET payment_status = 'failed'
+                WHERE order_id = :order_id
+            ");
+            $stmtPay->execute(['order_id' => $id]);
+        }
+
+        $pdo->commit();
+        return true;
+    } catch (Throwable $e) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        throw $e;
+    }
 }
 
 function getOrdersByUserId(int $userId, string $statusFilter = 'all'): array
@@ -228,7 +284,7 @@ function getOrdersByUserId(int $userId, string $statusFilter = 'all'): array
     global $pdo;
 
     $sql = "
-        SELECT o.*, p.payment_method, p.payment_channel, p.payment_status 
+        SELECT o.*, p.payment_method, p.payment_channel, p.payment_status, p.paid_at
         FROM orders o 
         LEFT JOIN payments p ON o.id = p.order_id 
         WHERE o.user_id = :user_id
@@ -256,7 +312,6 @@ function cancelOrder(int $orderId, int $userId): bool
     try {
         $pdo->beginTransaction();
 
-        // 1. Kunci baris order untuk mencegah race condition & pastikan status masih pending
         $stmtOrder = $pdo->prepare("SELECT id, order_status FROM orders WHERE id = :id AND user_id = :user_id FOR UPDATE");
         $stmtOrder->execute([
             'id'      => $orderId,
@@ -269,7 +324,6 @@ function cancelOrder(int $orderId, int $userId): bool
             return false;
         }
 
-        // 2. Ambil item pesanan untuk mengembalikan stok produk
         $stmtItems = $pdo->prepare("SELECT product_id, quantity FROM order_items WHERE order_id = :order_id");
         $stmtItems->execute(['order_id' => $orderId]);
         $items = $stmtItems->fetchAll(PDO::FETCH_ASSOC);
@@ -282,9 +336,11 @@ function cancelOrder(int $orderId, int $userId): bool
             ]);
         }
 
-        // 3. Ubah status order menjadi cancelled
         $stmtUpdateOrder = $pdo->prepare("UPDATE orders SET order_status = 'cancelled' WHERE id = :id");
         $stmtUpdateOrder->execute(['id' => $orderId]);
+
+        $stmtUpdatePayment = $pdo->prepare("UPDATE payments SET payment_status = 'failed' WHERE order_id = :order_id");
+        $stmtUpdatePayment->execute(['order_id' => $orderId]);
 
         $pdo->commit();
         return true;

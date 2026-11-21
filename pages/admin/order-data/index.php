@@ -51,6 +51,7 @@ if (!function_exists('formatRupiah')) {
                 <table class="product-table">
                     <thead>
                         <tr>
+                            <th>Number</th>
                             <th>Full Name</th>
                             <th>Phone Number</th>
                             <th>Address</th>
@@ -60,27 +61,41 @@ if (!function_exists('formatRupiah')) {
                             <th>Shipping Method</th>
                             <th>Shipping Cost</th>
                             <th>Total Amount</th>
+                            <th>Order Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($orders as $order): ?>
-                            <tr onclick="window.location.href='show.php?id=<?= $order['id'] ?>'" style="cursor: pointer;">
-                                <td class="order-name"><?= htmlspecialchars($order['full_name']); ?></td>
-                                <td class="order-description"><?= htmlspecialchars($order['phone_number']); ?></td>
-                                <td class="order-description"><?= htmlspecialchars($order['address']); ?></td>
-                                <td class="order-description"><?= htmlspecialchars($order['city']); ?></td>
-                                <td class="order-description"><?= htmlspecialchars($order['province']); ?></td>
-                                <td class="order-description"><?= htmlspecialchars($order['postal_code']); ?></td>
-                                <td class="order-description"><?= htmlspecialchars($order['shipping_method']); ?></td>
+                        <?php foreach ($orders as $index => $order): ?>
+                            <?php
+                            $statusRaw = strtolower(trim($order['order_status'] ?? 'pending'));
+                            $statusLabel = ($statusRaw === 'completed') ? 'complete' : $statusRaw;
+                            $allowedStatuses = ['pending', 'processing', 'shipped', 'complete', 'cancelled'];
+                            if (!in_array($statusLabel, $allowedStatuses, true)) {
+                                $statusLabel = 'pending';
+                            }
+                            ?>
+                            <tr onclick="window.location.href='show.php?id=<?= (int) $order['id'] ?>'" style="cursor: pointer;">
+                                <td><?= $index + 1 ?></td>
+                                <td class="order-name"><?= htmlspecialchars($order['full_name'] ?? '') ?></td>
+                                <td class="order-description"><?= htmlspecialchars($order['phone_number'] ?? '') ?></td>
+                                <td class="order-description"><?= htmlspecialchars($order['address'] ?? '') ?></td>
+                                <td class="order-description"><?= htmlspecialchars($order['city'] ?? '') ?></td>
+                                <td class="order-description"><?= htmlspecialchars($order['province'] ?? '') ?></td>
+                                <td class="order-description"><?= htmlspecialchars($order['postal_code'] ?? '') ?></td>
+                                <td class="order-description"><?= htmlspecialchars($order['shipping_method'] ?? '') ?></td>
                                 <td class="order-description"><?= formatRupiah($order['shipping_cost'] ?? 0); ?></td>
                                 <td class="order-description"><?= formatRupiah($order['total_amount'] ?? 0); ?></td>
                                 <td>
+                                    <span class="status-badge status-<?= htmlspecialchars($statusLabel) ?>">
+                                        <?= htmlspecialchars($statusLabel) ?>
+                                    </span>
+                                </td>
+                                <td>
                                     <div class="action-buttons">
-                                        <!-- Tambahkan event onclick.stopPropagation() agar tombol Edit & Delete tidak ikut membuka show.php -->
-                                        <a href="edit.php?id=<?= $order['id'] ?>" class="btn-edit" onclick="event.stopPropagation();">Edit</a>
-                                        <a href="../../../actions/orders/destroy.php?id=<?= $order['id']; ?>" class="btn-delete" onclick="event.stopPropagation(); return confirm('Yakin ingin menghapus orderan ini?')">Delete</a>
-                                        <a href="show.php?id=<?= $order['id'] ?>" class="btn-edit" onclick="event.stopPropagation();"><i class="bi bi-eye-fill"></i></a>
+                                        <a href="edit.php?id=<?= (int) $order['id'] ?>" class="btn-edit" onclick="event.stopPropagation();">Edit</a>
+                                        <a href="../../../actions/orders/destroy.php?id=<?= (int) $order['id'] ?>" class="btn-delete" onclick="event.stopPropagation(); return confirm('Yakin ingin menghapus orderan ini?')">Delete</a>
+                                        <a href="show.php?id=<?= (int) $order['id'] ?>" class="btn-edit" onclick="event.stopPropagation();"><i class="bi bi-eye-fill"></i></a>
                                     </div>
                                 </td>
                             </tr>
