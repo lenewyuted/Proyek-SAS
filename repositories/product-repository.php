@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once __DIR__ . "/../config/database.php";
 
 function getProducts($search, $categoryId, $currentPage, $perPage)
@@ -8,16 +8,16 @@ function getProducts($search, $categoryId, $currentPage, $perPage)
     $query = "select p.*, c.name as category_name from products p 
     left join categories c on p.category_id = c.id
     where p.name like :search
-    limit :limit offset :offset" ;
+    limit :limit offset :offset";
 
-    $stmt = $pdo -> prepare($query);
-    $stmt -> execute([
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
         'search' => "%$search%",
         'limit' => $perPage,
-        'offset' => ($currentPage -1) * $perPage,
+        'offset' => ($currentPage - 1) * $perPage,
     ]);
 
-    $products = $stmt -> fetchAll();
+    $products = $stmt->fetchAll();
 
     return $products;
 }
@@ -25,7 +25,8 @@ function getProducts($search, $categoryId, $currentPage, $perPage)
 // function formatRupiah($angka) {
 //     return 'Rp ' . number_format($angka, 0, ',', '.');
 // }
-function formatRupiah($angka) {
+function formatRupiah($angka)
+{
     // Jika angka null, kosong, atau bukan numerik, set ke 0
     $angka = is_numeric($angka) ? $angka : 0;
     return 'Rp ' . number_format($angka, 0, ',', '.');
@@ -49,32 +50,33 @@ function getProduct($id)
     //     exit;
     // }
     if (!$product) {
-        return null; 
+        return null;
     }
 
     return $product;
 }
 
-function countProducts() {
-    global $pdo; 
+function countProducts()
+{
+    global $pdo;
     $stmt = $pdo->query("select count(*) as total from products");
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['total'] ?? 0;
 }
 
 
-function countOfProducts($search, $categoryId) 
+function countOfProducts($search, $categoryId)
 {
     global $pdo;
 
     $query = "select count(id) from products where name like :name";
 
-    $stmt = $pdo -> prepare($query);
+    $stmt = $pdo->prepare($query);
     $stmt->execute([
         'name' => "%$search%",
     ]);
 
-    $totalProducts = $stmt -> fetchColumn();
+    $totalProducts = $stmt->fetchColumn();
 
     return $totalProducts;
 }
@@ -85,14 +87,25 @@ function getLatestProducts()
 
     $query = "select * from products order by id desc limit 4";
 
-    $stmt = $pdo -> prepare($query);
-    $stmt -> execute([]);
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([]);
 
-    $products = $stmt -> fetchAll();
+    $products = $stmt->fetchAll();
 
     return $products;
 }
 
+function getAllProducts()
+{
+    global $pdo;
 
-?>
+    $query = "SELECT p.*, c.name AS category_name
+              FROM products p
+              LEFT JOIN categories c ON p.category_id = c.id
+              ORDER BY p.name ASC";
 
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([]);
+
+    return $stmt->fetchAll();
+}

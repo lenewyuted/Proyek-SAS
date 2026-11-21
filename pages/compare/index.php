@@ -1,280 +1,226 @@
 <?php
-require __DIR__ . '/../../config/database.php';   
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . "/../../repositories/product-repository.php";
 
-
-$sql = "
-    SELECT
-        p.id,
-        p.name,
-        p.brand,
-        c.name AS category,
-        p.price,
-        p.specs,
-        p.warranty,
-        p.stock
-    FROM products p
-    LEFT JOIN categories c ON c.id = p.category_id
-    ORDER BY p.name
-";
-
-$products = $pdo->query($sql)->fetchAll();
-
-foreach ($products as &$p) {
-    $p['id']    = (int) $p['id'];
-    $p['price'] = (int) $p['price'];
-    $p['stock'] = (int) $p['stock'];
-}
-unset($p);
-
-
-$rows = [
-    'price'    => 'Harga',
-    'brand'    => 'Brand',
-    'category' => 'Kategori',
-    'specs'    => 'Spesifikasi',
-    'warranty' => 'Garansi',
-    'stock'    => 'Stok',
-];
-$slots = 3;
+$products = getAllProducts();
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perbandingan Produk | TechHub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../../styles/base.css">
-    <link rel="stylesheet" href="../../../styles/pages/compare.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perbandingan Produk - TechHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../../styles/pages/compare.css" />
+
+    <!-- Bootstrap 4.6 CSS (Dibawa oleh header agar dropdown & komponen konsisten) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
 </head>
-<body class="compare-page">
- 
-    <div class="top-banner">Discover Premium PC Components Built for Performance, Speed, and Reliability</div>
- 
-    <header class="site-header">
-        <a href="../../../index.php" class="logo"><img src="logo.png" alt="TechHub"></a>
-        <form class="search-box" action="../products/index.php" method="get">
-            <input type="text" name="q" placeholder="Search for parts to build your dream PC...">
-            <button type="submit" aria-label="Search">🔍</button>
-        </form>
-        <nav class="header-icons">
-            <a href="../products/index.php">👍</a>
-            <a href="index.php" class="active">⇄</a>
-            <a href="../cart/index.php">🛒</a>
-            <a href="../profile/index.php">👤</a>
-        </nav>
-    </header>
- 
-    <main class="container">
-        <div class="page-title">
+
+<body>
+
+    <?php
+    require_once __DIR__ . "/../../components/landing/header.php";
+    ?>
+
+    <!-- MAIN CONTENT -->
+    <main class="container compare-page">
+        <!-- PAGE TITLE & BACK LINK -->
+        <div class="page-header">
             <h1>Perbandingan Produk</h1>
-            <a href="javascript:history.back()" class="back-link">Back <span>→</span></a>
+            <a href="javascript:history.back()" class="back-link">
+                <span>Back</span>
+                <i class="fa-solid fa-arrow-right-long"></i>
+            </a>
         </div>
- 
-        <!-- Slot produk -->
-        <section class="compare-slots">
-            <div class="slot-spacer"></div>
-            <?php for ($i = 0; $i < $slots; $i++): ?>
-                <div class="slot-col" data-slot="<?= $i ?>">
-                    <button type="button" class="slot-empty" onclick="openModal(<?= $i ?>)">
-                        <span class="plus-icon">+</span>
-                        <strong>Add Product</strong>
-                        <span>Choose Product</span>
-                    </button>
- 
-                    <div class="slot-filled" hidden>
-                        <button type="button" class="slot-remove" onclick="removeProduct(<?= $i ?>)">✕</button>
-                        <div class="slot-thumb">🖥️</div>
-                        <strong class="slot-name"></strong>
-                        <span class="slot-price"></span>
-                        <button type="button" class="slot-change" onclick="openModal(<?= $i ?>)">Ganti produk</button>
-                    </div>
- 
-                    <button type="button" class="btn-compare" onclick="compare()" disabled>Compare</button>
-                </div>
-            <?php endfor; ?>
+
+        <!-- ADD PRODUCT SLOTS -->
+        <section class="add-products-grid" aria-label="Pilih produk untuk dibandingkan">
+            <div class="spec-spacer" aria-hidden="true"></div>
+
+            <!-- Trigger pada kartu Add Product (bisa dipasang di slot 1, 2, 3) -->
+            <button
+                type="button"
+                class="add-product-card"
+                data-slot="1"
+                data-toggle="modal"
+                data-target="#selectProductModal">
+                <span class="plus-circle"><i class="fa-solid fa-plus"></i></span>
+                <span class="add-title">Add Product</span>
+                <span class="add-subtitle">Choose Product</span>
+            </button>
+
+
+
+            <button type="button" class="add-product-card" data-slot="2" data-toggle="modal"
+                data-target="#selectProductModal">
+                <span class="plus-circle"><i class="fa-solid fa-plus"></i></span>
+                <span class="add-title">Add Product</span>
+                <span class="add-subtitle">Choose Product</span>
+            </button>
+
+            <button type="button" class="add-product-card" data-slot="3" data-toggle="modal"
+                data-target="#selectProductModal">
+                <span class="plus-circle"><i class="fa-solid fa-plus"></i></span>
+                <span class="add-title">Add Product</span>
+                <span class="add-subtitle">Choose Product</span>
+            </button>
         </section>
- 
-        <!-- Tabel -->
-        <section class="compare-table-wrap">
+
+        <!-- COMPARISON TABLE (4 Columns x 6 Rows) -->
+        <section class="table-wrapper" aria-label="Tabel spesifikasi perbandingan">
             <table class="compare-table">
-                <?php foreach ($rows as $key => $label): ?>
-                    <tr data-row="<?= $key ?>">
-                        <th><?= $label ?></th>
-                        <?php for ($i = 0; $i < $slots; $i++): ?><td>-</td><?php endfor; ?>
+                <tbody>
+                    <tr>
+                        <td>Spesifikasi</td>
+                        <td id="product_specification_1"></td>
+                        <td id="product_specification_2"></td>
+                        <td id="product_specification_3"></td>
                     </tr>
-                <?php endforeach; ?>
+                    <tr>
+                        <td>Harga</td>
+                        <td id="product_price_1"></td>
+                        <td id="product_price_2"></td>
+                        <td id="product_price_3"></td>
+                    </tr>
+                    <tr>
+                        <td>CPU</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Dukungan Processor</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Chipset</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Form Factor</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
             </table>
         </section>
-    </main>
- 
-    <footer class="site-footer">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <a href="../../../index.php" class="logo"><img src="logo.png" alt="TechHub"></a>
-                <p>Your Hub for Genuine, Warrantied PC Components. The Ultimate Solution for Builders, Gamers, and Creators!</p>
-            </div>
-            <div class="footer-col">
-                <h5>Shop</h5>
-                <a href="../products/index.php">Processors</a>
-                <a href="../products/index.php">Motherboards</a>
-                <a href="../products/index.php">Graphics Cards</a>
-                <a href="../products/index.php">RAM &amp; Storage</a>
-                <a href="../products/index.php">Power Supplies</a>
-            </div>
-            <div class="footer-col">
-                <h5>Support</h5>
-                <a href="../contact/index.php">How to Order</a>
-                <a href="../contact/index.php">Shipping</a>
-                <a href="../contact/index.php">Payment Methods</a>
-                <a href="../contact/index.php">FAQ</a>
-                <a href="../contact/index.php">Contact Us</a>
-            </div>
-            <div class="footer-col">
-                <h5>My Account</h5>
-                <a href="../profile/index.php">My Profile</a>
-                <a href="../products/index.php">Recommendation</a>
-                <a href="index.php">Compare Products</a>
-                <a href="../cart/index.php">Shopping Cart</a>
-                <a href="../products/index.php">Search Products</a>
-            </div>
-            <div class="footer-col">
-                <h5>Follow Us</h5>
-                <div class="social">
-                    <a href="#">IG</a><a href="#">f</a><a href="#">▶</a>
-                    <a href="#">WA</a><a href="#">TT</a><a href="#">X</a>
+
+        <section>
+            <!-- Modal Select Products to Compare -->
+            <div
+                class="modal fade compare-picker-modal"
+                id="selectProductModal"
+                tabindex="-1"
+                aria-labelledby="selectProductModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content compare-picker-content">
+                        <div class="modal-header compare-picker-header">
+                            <div>
+                                <h5 class="modal-title compare-picker-title" id="selectProductModalLabel">
+                                    Select Products to Compare
+                                </h5>
+                                <p class="compare-picker-subtitle">
+                                    Select products from any category to compare
+                                </p>
+                            </div>
+                            <button
+                                type="button"
+                                class="compare-picker-close"
+                                data-dismiss="modal"
+                                aria-label="Close">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+
+                        <div class="modal-body compare-picker-body">
+                            <div class="picker-products-grid">
+                                <?php if (!empty($products)): ?>
+                                    <?php foreach ($products as $prod): ?>
+                                        <?php
+                                        $ratingSummary = function_exists('getProductRatingSummary')
+                                            ? getProductRatingSummary((int) $prod['id'])
+                                            : ['average_rating' => 0, 'total_reviews' => 0];
+                                        $avgRating = number_format((float) ($ratingSummary['average_rating'] ?? 0), 1);
+                                        $totalReviews = (int) ($ratingSummary['total_reviews'] ?? 0);
+                                        ?>
+                                        <div
+                                            class="picker-product-card"
+                                            role="button"
+                                            tabindex="0"
+                                            data-id="<?= (int) $prod['id'] ?>"
+                                            data-name="<?= htmlspecialchars($prod['name'] ?? '', ENT_QUOTES) ?>"
+                                            data-price="<?= (float) ($prod['price'] ?? 0) ?>"
+                                            data-category="<?= htmlspecialchars($prod['category_name'] ?? '-', ENT_QUOTES) ?>"
+                                            data-brand="<?= htmlspecialchars($prod['brand'] ?? '-', ENT_QUOTES) ?>"
+                                            data-stock="<?= htmlspecialchars($prod['stock'] ?? '0', ENT_QUOTES) ?>"
+                                            data-description="<?= htmlspecialchars($prod['description'] ?? '-', ENT_QUOTES) ?>"
+                                            data-picture="<?= htmlspecialchars($prod['picture'] ?? 'default.png', ENT_QUOTES) ?>">
+                                            <div class="picker-product-img">
+                                                <img
+                                                    src="../../assets/img/<?= htmlspecialchars($prod['picture'] ?? 'default.png') ?>"
+                                                    alt="<?= htmlspecialchars($prod['name'] ?? 'Product') ?>">
+                                            </div>
+
+                                            <h3 class="picker-product-title"><?= htmlspecialchars($prod['name'] ?? '') ?></h3>
+
+                                            <div class="picker-product-rating">
+                                                <?php if ($totalReviews > 0): ?>
+                                                    <span><?= htmlspecialchars($avgRating) ?></span>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <small>(<?= $totalReviews ?>)</small>
+                                                <?php else: ?>
+                                                    <span>0.0</span>
+                                                    <i class="fa-regular fa-star"></i>
+                                                    <small>(0)</small>
+                                                <?php endif; ?>
+                                            </div>
+
+                                            <div class="picker-product-footer">
+                                                <span class="picker-product-price">
+                                                    Rp.<?= number_format((float) ($prod['price'] ?? 0), 0, ',', '.') ?>
+                                                </span>
+                                                <span class="picker-select-badge">Pilih</span>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <p class="empty-state">Produk tidak ditemukan.</p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </section>
+
+        <!-- COMPARE BUTTON -->
+        <div class="compare-action">
+            <button type="button" class="btn-compare">Compare</button>
         </div>
-        <p class="copyright">© <?= date('Y') ?> TechHub. All rights reserved.</p>
-    </footer>
- 
-    <!-- Popup pilih produk -->
-    <div class="modal" id="modal" hidden>
-        <div class="modal-backdrop" onclick="closeModal()"></div>
-        <div class="modal-box">
-            <div class="modal-head">
-                <h2>Pilih Produk</h2>
-                <button type="button" class="modal-close" onclick="closeModal()">✕</button>
-            </div>
-            <input type="search" id="search" class="modal-search" placeholder="Cari produk..." oninput="renderList()">
-            <ul class="modal-list" id="list"></ul>
-            <p class="modal-empty" id="empty" hidden></p>
-        </div>
-    </div>
- 
-    <div class="toast" id="toast" hidden></div>
- 
+    </main>
+
+    <?php
+    require_once __DIR__ . "/../../components/landing/footer.php";
+    ?>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
     <script>
-    const PRODUCTS = <?= json_encode($products, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
-    const ROWS = <?= json_encode(array_keys($rows)) ?>;
-    const selected = [null, null, null];
-    let activeSlot = null;
- 
-    const $ = (id) => document.getElementById(id);
-    const rupiah = (n) => 'Rp ' + Number(n).toLocaleString('id-ID');
-    const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- 
-    function show(key, value) {
-        if (value === undefined || value === '') return '-';
-        if (key === 'price') return rupiah(value);
-        if (key === 'stock') return value > 0 ? value + ' unit' : 'Habis';
-        return value;
-    }
- 
-    function toast(msg) {
-        const t = $('toast');
-        t.textContent = msg;
-        t.hidden = false;
-        setTimeout(() => t.hidden = true, 2500);
-    }
- 
-    // ----- Popup -----
-    function openModal(slot) {
-        activeSlot = slot;
-        $('search').value = '';
-        renderList();
-        $('modal').hidden = false;
-    }
- 
-    function closeModal() {
-        $('modal').hidden = true;
-    }
- 
-    function renderList() {
-        const keyword = $('search').value.toLowerCase();
-        const chosen = selected.filter(Boolean).map(p => p.id);
-        const result = PRODUCTS.filter(p => (p.name + p.brand + p.category).toLowerCase().includes(keyword));
- 
-        $('search').hidden = PRODUCTS.length === 0;
-        $('empty').hidden = result.length > 0;
-        $('empty').textContent = PRODUCTS.length === 0
-            ? 'Belum ada produk tersedia. Produk akan muncul setelah database terhubung.'
-            : 'Produk tidak ditemukan.';
- 
-        $('list').innerHTML = result.map(p => `
-            <li>
-                <button type="button" class="modal-item" onclick="selectProduct(${p.id})" ${chosen.includes(p.id) ? 'disabled' : ''}>
-                    <span class="item-thumb">🖥️</span>
-                    <span class="item-info">
-                        <strong>${esc(p.name)}</strong>
-                        <small>${esc(p.category)} • ${rupiah(p.price)}</small>
-                    </span>
-                    ${chosen.includes(p.id) ? '<em>Dipilih</em>' : ''}
-                </button>
-            </li>`).join('');
-    }
- 
-    // ----- Pilih / hapus -----
-    function selectProduct(id) {
-        selected[activeSlot] = PRODUCTS.find(p => p.id === id);
-        closeModal();
-        render();
-    }
- 
-    function removeProduct(slot) {
-        selected[slot] = null;
-        render();
-    }
- 
-    // ----- Tampilkan slot dan tabel -----
-    function render() {
-        document.querySelectorAll('.slot-col').forEach((col, i) => {
-            const p = selected[i];
-            col.querySelector('.slot-empty').hidden = !!p;
-            col.querySelector('.slot-filled').hidden = !p;
-            col.querySelector('.btn-compare').disabled = !p;
-            if (p) {
-                col.querySelector('.slot-name').textContent = p.name;
-                col.querySelector('.slot-price').textContent = rupiah(p.price);
-            }
-        });
- 
-        ROWS.forEach(key => {
-            document.querySelectorAll(`tr[data-row="${key}"] td`).forEach((td, i) => {
-                td.textContent = selected[i] ? show(key, selected[i][key]) : '-';
-                td.className = '';
-            });
-        });
-    }
- 
-    // ----- Compare: kuning = beda, hijau = sama -----
-    function compare() {
-        const chosen = selected.filter(Boolean);
-        if (chosen.length < 2) return toast('Pilih minimal 2 produk untuk dibandingkan.');
- 
-        ROWS.forEach(key => {
-            const same = chosen.every(p => p[key] === chosen[0][key]);
-            document.querySelectorAll(`tr[data-row="${key}"] td`).forEach((td, i) => {
-                td.className = selected[i] ? (same ? 'same' : 'diff') : '';
-            });
-        });
-        toast('Kolom kuning menandakan perbedaan.');
-    }
- 
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-    render();
+
     </script>
 </body>
+
 </html>
- 
