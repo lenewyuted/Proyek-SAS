@@ -149,7 +149,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 420px;
+  min-height: 470px;
 }
 
 .product-image-card img {
