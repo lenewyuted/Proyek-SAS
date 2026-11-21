@@ -373,13 +373,9 @@ unset($_SESSION['flash_error']);
                             <h4 class="btp-section-title">Upload Payment Proof (Optional)</h4>
                         </div>
 
-                        <div class="btp-dropzone" id="btpDropzone">
-                            <input type="file" name="payment_proof" id="btpFileInput" accept="image/*,.pdf" hidden>
-                            <div class="btp-dropzone-icon"></div>
-                            <div class="btp-dropzone-text" id="btpDropzoneText">Drag &amp; Drop Transfer Receipt File Here</div>
-                            <div class="btp-dropzone-sub">
-                                or <button type="button" class="btp-browse-link" id="btpBrowseBtn">Browse File from Computer</button>
-                            </div>
+                        <div class="pay-upload-box">
+                            <input type="file" name="payment_proof" id="btpFileInput" accept="image/*,.pdf" class="pay-file-input">
+                            <small class="pay-upload-hint">Format yang didukung: JPG, PNG, atau PDF</small>
                         </div>
                     </div>
 
@@ -557,11 +553,11 @@ unset($_SESSION['flash_error']);
             const total = subtotal + shippingCost;
             shippingDisplay.innerText = formatRupiahJS(shippingCost);
             totalDisplay.innerText = formatRupiahJS(total);
-            modalShippingTexts.forEach(el => {
-                el.innerText = (isExpress ? 'Express Rp45.000' : 'Regular Rp35.000');
+            modalShippingTexts.forEach(modalShippingText => {
+                modalShippingText.innerText = (isExpress ? 'Express Rp45.000' : 'Regular Rp35.000');
             });
-            modalTotalTexts.forEach(el => {
-                el.innerText = formatRupiahJS(total);
+            modalTotalTexts.forEach(modalTotalText => {
+                modalTotalText.innerText = formatRupiahJS(total);
             });
         }
 
@@ -574,105 +570,51 @@ unset($_SESSION['flash_error']);
         const checkoutForm = document.getElementById('checkoutForm');
         const btnCheckoutSubmit = document.getElementById('btnCheckoutSubmit');
 
-        const modals = {
-            card: document.getElementById('creditCardModal'),
-            bank_transfer: document.getElementById('bankTransferModal'),
-            ewallet: document.getElementById('ewalletModal')
-        };
-
+        // 1. Fungsi Tutup Semua Modal
         function closeAllModals() {
-            Object.values(modals).forEach(m => {
-                if (!m) return;
-                m.classList.remove('show');
-                m.setAttribute('aria-hidden', 'true');
-            });
+            const modals = document.querySelectorAll('.btp-backdrop');
+            modals.forEach(modal => modal.classList.remove('show'));
         }
 
-        // Toggle kartu pilihan pada tiap grid (bank_transfer, card, ewallet)
-        ['#btpBankList', '#ccBrandList', '#ewProviderList'].forEach(selector => {
-            const cards = document.querySelectorAll(selector + ' .btp-bank-card');
-            cards.forEach(card => {
-                card.addEventListener('click', () => {
-                    cards.forEach(c => c.classList.remove('active'));
-                    card.classList.add('active');
-                    const r = card.querySelector('input[type="radio"]');
-                    if (r) r.checked = true;
-                });
-            });
-        });
-
-        // Dropzone bukti transfer (dipertahankan)
-        const dropzone = document.getElementById('btpDropzone');
-        const fileInput = document.getElementById('btpFileInput');
-        const browseBtn = document.getElementById('btpBrowseBtn');
-        const dropzoneText = document.getElementById('btpDropzoneText');
-
-        browseBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            fileInput.click();
-        });
-
-        fileInput.addEventListener('change', () => {
-            if (fileInput.files.length) {
-                dropzoneText.textContent = 'Selected: ' + fileInput.files[0].name;
+        // 2. Tutup modal jika klik tombol silang (close) atau klik area gelap (backdrop)
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btp-backdrop') || e.target.closest('.btp-close-btn, [data-close-modal]')) {
+                closeAllModals();
             }
         });
 
-        ['dragenter', 'dragover'].forEach(evt => {
-            dropzone.addEventListener(evt, (e) => {
-                e.preventDefault();
-                dropzone.classList.add('dragover');
-            });
-        });
-
-        ['dragleave', 'drop'].forEach(evt => {
-            dropzone.addEventListener(evt, (e) => {
-                e.preventDefault();
-                dropzone.classList.remove('dragover');
-            });
-        });
-
-        dropzone.addEventListener('drop', (e) => {
-            if (e.dataTransfer.files.length) {
-                fileInput.files = e.dataTransfer.files;
-                dropzoneText.textContent = 'Selected: ' + e.dataTransfer.files[0].name;
-            }
-        });
-
-        // Tutup modal lewat tombol close atau klik backdrop
-        document.querySelectorAll('[data-close-modal]').forEach(btn => {
-            btn.addEventListener('click', closeAllModals);
-        });
-        document.getElementById('btpCloseBtn').addEventListener('click', closeAllModals);
-
-        Object.values(modals).forEach(m => {
-            m.addEventListener('click', (e) => {
-                if (e.target === m) closeAllModals();
-            });
-        });
-
-        // Tombol Bayar Sekarang membuka modal sesuai payment_method terpilih
+        // 3. Tombol "Bayar Sekarang" membuka modal sesuai metode yang dipilih
         btnCheckoutSubmit.addEventListener('click', function(e) {
-            if (!checkoutForm.checkValidity()) {
-                return;
-            }
+            if (!checkoutForm.checkValidity()) return;
 
-            const selectedPayment = document.querySelector('input[name="payment_method"]:checked')?.value;
-            const targetModal = modals[selectedPayment];
+            const payment = document.querySelector('input[name="payment_method"]:checked')?.value;
 
+            const modalMap = {
+                card: 'creditCardModal',
+                bank_transfer: 'bankTransferModal',
+                ewallet: 'ewalletModal'
+            };
+
+            const targetModal = document.getElementById(modalMap[payment]);
             if (targetModal) {
                 e.preventDefault();
                 closeAllModals();
                 targetModal.classList.add('show');
-                targetModal.setAttribute('aria-hidden', 'false');
             }
         });
 
-        // Tombol Pay Now di dalam modal menutup modal dan submit form
-        document.querySelectorAll('.modal-confirm-pay').forEach(btn => {
-            btn.addEventListener('click', () => {
-                closeAllModals();
-                checkoutForm.submit();
+        // 4. Tombol "Pay Now" di dalam modal untuk kirim (submit) form
+        const modalButtons = document.querySelectorAll('.modal-confirm-pay');
+        modalButtons.forEach(btn => {
+            btn.addEventListener('click', () => checkoutForm.submit());
+        });
+
+        // 5. Efek Aktif pada Kartu Bank / E-Wallet yang Dipilih 
+        document.querySelectorAll('.btp-bank-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const activeCard = this.closest('.btp-bank-grid').querySelector('.btp-bank-card.active');
+                if (activeCard) activeCard.classList.remove('active');
+                this.classList.add('active');
             });
         });
     </script>

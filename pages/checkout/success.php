@@ -122,7 +122,23 @@ $orderItems = getOrderItemsByOrderId($order['id']);
                 <div>
                     <h3 style="font-size: 15px; margin-bottom: 8px; color: var(--primary-blue);">Informasi Pengiriman & Pembayaran</h3>
                     <p style="margin: 0;">Layanan: <strong><?= strtoupper(htmlspecialchars($order['shipping_method'])) ?></strong> (<?= formatRupiah($order['shipping_cost']) ?>)</p>
-                    <p style="margin: 4px 0 0;">Metode Pembayaran: <strong><?= strtoupper(htmlspecialchars($order['payment_method'])) ?></strong></p>
+                    <p style="margin: 4px 0 0;">
+                        Metode Pembayaran:
+                        <strong><?= strtoupper(htmlspecialchars(str_replace('_', ' ', $order['payment_method']))) ?></strong>
+                        <?php if (!empty($order['payment_channel'])): ?>
+                            <span style="color: var(--primary-blue); font-weight: 700;">(<?= strtoupper(htmlspecialchars($order['payment_channel'])) ?>)</span>
+                        <?php endif; ?>
+                    </p>
+                    <?php if (!empty($order['account_number'])): ?>
+                        <p style="margin: 4px 0 0; font-size: 13px; color: #555;">
+                            No. Akun / Kartu: <strong><?= htmlspecialchars($order['account_number']) ?></strong>
+                        </p>
+                    <?php endif; ?>
+                    <?php if (!empty($order['payment_proof'])): ?>
+                        <p style="margin: 4px 0 0; font-size: 13px; color: #16a34a;">
+                            <i class="fa-solid fa-file-circle-check"></i> Bukti transfer terlampir
+                        </p>
+                    <?php endif; ?>
                     <p style="margin: 4px 0 0;">Status Bayar: <span class="badge-status"><?= strtoupper(htmlspecialchars($order['payment_status'])) ?></span></p>
                 </div>
             </div>

@@ -4,112 +4,92 @@ require_once __DIR__ . "/../../config/database.php";
 require_once __DIR__ . "/../../repositories/product-repository.php";
 require_once __DIR__ . "/../../repositories/cart-repository.php";
 require_once __DIR__ . "/../../repositories/order-repository.php";
+require_once __DIR__ . "/../../validations/order-data-validation.php";
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../../pages/checkout/index.php');
     exit;
 }
 
-// 1. Validasi Autentikasi User (Wajib Login)
+// 1. Validasi Autentikasi User
 if (!isset($_SESSION['user']['id'])) {
     $_SESSION['flash_error'] = 'Silakan login terlebih dahulu untuk checkout.';
     header('Location: ../../pages/auth/login.php');
     exit;
 }
 
-$userId = (int) $_SESSION['user']['id'];
-$cartItems   = $_SESSION['cart'] ?? [];
+$userId    = (int) $_SESSION['user']['id'];
+$cartItems = $_SESSION['cart'] ?? [];
 
-// 2. Validasi Keranjang Belanja
-if (empty($cartItems)) {
-    $_SESSION['flash_error'] = 'Keranjang belanja Anda masih kosong.';
+// 2. Jalankan Validasi Stok & Keranjang
+$cartValidation = validateCartAndStock($cartItems);
+if (!empty($cartValidation['errors'])) {
+    $_SESSION['flash_error'] = $cartValidation['errors'][0];
     header('Location: ../../pages/cart/index.php');
     exit;
 }
 
-// 3. Validasi Form Input Alamat
-$fullName       = trim($_POST['full_name'] ?? '');
-$phoneNumber    = trim($_POST['phone_number'] ?? '');
-$address        = trim($_POST['address'] ?? '');
-$city           = trim($_POST['city'] ?? '');
-$province       = trim($_POST['province'] ?? '');
-$postalCode     = trim($_POST['postal_code'] ?? '');
-$shippingMethod = trim($_POST['shipping_method'] ?? 'regular');
-$paymentMethod  = trim($_POST['payment_method'] ?? 'card');
-
-if (empty($fullName) || empty($phoneNumber) || empty($address) || empty($city) || empty($province) || empty($postalCode)) {
-    $_SESSION['flash_error'] = 'Harap lengkapi semua data alamat pengiriman.';
+// 3. Jalankan Validasi Form Input & File Upload
+$formValidation = validateCheckoutData($_POST, $_FILES);
+if (!empty($formValidation['errors'])) {
+    $_SESSION['flash_error'] = $formValidation['errors'][0];
     header('Location: ../../pages/checkout/index.php');
     exit;
 }
 
-// 4. Hitung Tarif Ongkir Resmi di Server
-$shippingCost = ($shippingMethod === 'express') ? 45000 : 35000;
+// Ambil data bersih hasil validasi
+$cleanData          = $formValidation['data'];
+$orderItems         = $cartValidation['items'];
+$totalProductAmount = $cartValidation['total_amount'];
 
-// 5. Validasi Stok & Hitung Subtotal Asli dari Database
-$totalProductAmount = 0;
-$orderItems = [];
+// 4. Upload Bukti Pembayaran (Aman dijalankan di sini karena semua validasi sudah lolos)
+$paymentProof = null;
+if (isset($_FILES['payment_proof']) && $_FILES['payment_proof']['error'] === UPLOAD_ERR_OK) {
+    $ext       = strtolower(pathinfo($_FILES['payment_proof']['name'], PATHINFO_EXTENSION));
+    $safeName  = time() . '_' . bin2hex(random_bytes(8)) . '.' . $ext;
+    $uploadDir = __DIR__ . '/../../assets/img/payments/';
 
-foreach ($cartItems as $cartItem) {
-    $pId = (int) $cartItem['product_id'];
-    $qty = (int) $cartItem['quantity'];
-
-    $product = getProduct($pId);
-    if (!$product) {
-        $_SESSION['flash_error'] = "Produk dengan ID $pId tidak ditemukan.";
-        header('Location: ../../pages/cart/index.php');
-        exit;
+    if (move_uploaded_file($_FILES['payment_proof']['tmp_name'], $uploadDir . $safeName)) {
+        $paymentProof = $safeName;
     }
-
-    if ($product['stock'] < $qty) {
-        $_SESSION['flash_error'] = "Stok untuk produk {$product['name']} tidak mencukupi (Sisa stok: {$product['stock']}).";
-        header('Location: ../../pages/cart/index.php');
-        exit;
-    }
-
-    $subtotal = $product['price'] * $qty;
-    $totalProductAmount += $subtotal;
-
-    $orderItems[] = [
-        'product_id' => $pId,
-        'quantity'   => $qty,
-        'price'      => (int) $product['price'],
-        'subtotal'   => $subtotal,
-    ];
 }
 
-$grandTotal = $totalProductAmount + $shippingCost;
-
-// 6. Buat Kode Pesanan Unik (Format: ORD-YYYYMMDD-XXXXX)
-$orderNumber = 'ORD-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -5));
+// 5. Hitung Ongkir & Grand Total
+$shippingCost = ($cleanData['shipping_method'] === 'express') ? 45000 : 35000;
+$grandTotal   = $totalProductAmount + $shippingCost;
+$orderNumber  = 'ORD-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -5));
 
 $orderData = [
     'user_id'         => $userId,
     'order_number'    => $orderNumber,
-    'full_name'       => $fullName,
-    'phone_number'    => $phoneNumber,
-    'address'         => $address,
-    'city'            => $city,
-    'province'        => $province,
-    'postal_code'     => $postalCode,
-    'shipping_method' => $shippingMethod,
+    'full_name'       => $cleanData['full_name'],
+    'phone_number'    => $cleanData['phone_number'],
+    'address'         => $cleanData['address'],
+    'city'            => $cleanData['city'],
+    'province'        => $cleanData['province'],
+    'postal_code'     => $cleanData['postal_code'],
+    'shipping_method' => $cleanData['shipping_method'],
     'shipping_cost'   => $shippingCost,
     'total_amount'    => $grandTotal,
 ];
 
 $paymentData = [
-    'payment_method' => $paymentMethod,
+    'payment_method'  => $cleanData['payment_method'],
+    'payment_channel' => $cleanData['payment_channel'],
+    'account_number'  => $cleanData['account_number'],
+    'account_holder'  => $cleanData['account_holder'],
+    'payment_proof'   => $paymentProof,
 ];
 
 try {
-    // 7. Simpan Transaksi Lengkap ke Database (orders, order_items, payments, kurangi stok)
+    // 6. Simpan Transaksi ke Database
     createOrder($orderData, $orderItems, $paymentData);
 
-    // 8. Bersihkan Keranjang di Session & Database (Hybrid Cart Cleanup)
+    // 7. Bersihkan Keranjang
     unset($_SESSION['cart']);
     clearUserCartFromDb($userId);
 
-    // 9. Simpan / Perbarui data alamat ke profil user agar otomatis terisi di checkout berikutnya
+    // 8. Perbarui Profil Alamat User
     $updateUserQuery = "UPDATE users SET 
                         phone_number = :phone, 
                         address = :address, 
@@ -120,15 +100,15 @@ try {
 
     $updateUserStmt = $pdo->prepare($updateUserQuery);
     $updateUserStmt->execute([
-        'phone'       => $phoneNumber,
-        'address'     => $address,
-        'city'        => $city,
-        'province'    => $province,
-        'postal_code' => $postalCode,
+        'phone'       => $cleanData['phone_number'],
+        'address'     => $cleanData['address'],
+        'city'        => $cleanData['city'],
+        'province'    => $cleanData['province'],
+        'postal_code' => $cleanData['postal_code'],
         'id'          => $userId,
     ]);
 
-    // 10. Redirect ke Halaman Sukses Transaksi
+    // 9. Redirect ke Halaman Sukses
     header("Location: ../../pages/checkout/success.php?order=" . urlencode($orderNumber));
     exit;
 } catch (Exception $e) {
