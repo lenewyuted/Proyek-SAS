@@ -282,6 +282,33 @@ div.top-bar,
     overflow: hidden;
 }
 
+header a.cart-icon-link,
+.cart-icon-link {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-badge {
+  position: absolute !important;
+  top: -8px;
+  right: -10px;
+  background-color: #ef4444;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
     .top-header, .navbar {

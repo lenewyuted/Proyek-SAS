@@ -1,10 +1,24 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 if (!defined('BASE_URL')) {
     define('BASE_URL', 'http://localhost:3000');
 }
 
 require_once __DIR__ . '/../../middleware/auth.php';
 $authUser = isLoggedIn() ? getAuthUser() : null;
+
+$userId = isset($_SESSION['user']['id']) ? (int) $_SESSION['user']['id'] : 0;
+$cartItems = $_SESSION['cart'] ?? [];
+
+$cartBadgeCount = 0;
+if ($userId > 0 && !empty($cartItems) && is_array($cartItems)) {
+    foreach ($cartItems as $item) {
+        $cartBadgeCount += (int) ($item['quantity'] ?? 1);
+    }
+}
 ?>
 
 <!-- Bootstrap 4.6 CSS (Dibawa oleh header agar dropdown & carousel berfungsi konsisten) -->
@@ -42,8 +56,11 @@ $authUser = isLoggedIn() ? getAuthUser() : null;
             <i class="fa-solid fa-sliders"></i>
         </a>
 
-        <a href="/pages/cart/index.php" class="icon-link" title="Cart">
+        <a href="../cart/index.php" class="cart-icon-link">
             <i class="fa-solid fa-cart-shopping"></i>
+            <?php if ($cartBadgeCount > 0): ?>
+                <span class="cart-badge"><?= $cartBadgeCount ?></span>
+            <?php endif; ?>
         </a>
 
         <!-- Dropdown User Account -->
@@ -66,6 +83,9 @@ $authUser = isLoggedIn() ? getAuthUser() : null;
                         <?php endif; ?>
                         <a class="dropdown-item" href="#">
                             <i class="fa-solid fa-user-pen user-dropdown-icon"></i> Edit Profil
+                        </a>
+                        <a class="dropdown-item" href="/pages/cart/order-history.php">
+                            <i class="fa-solid fa-clock-rotate-left user-dropdown-icon"></i> Order History
                         </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item text-danger" href="/actions/auth/logout.php">
