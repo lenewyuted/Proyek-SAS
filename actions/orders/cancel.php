@@ -45,5 +45,5 @@ try {
     $_SESSION['flash_error'] = 'Terjadi kesalahan sistem: ' . $e->getMessage();
 }
 
-header('Location: ../../pages/order-history/index.php');
+header('Location: ../../pages/cart/order-history.php');
 exit;
