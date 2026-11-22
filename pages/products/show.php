@@ -12,13 +12,16 @@ if (!$product) {
     exit;
 }
 
+
+
+$currentUserId = isset($_SESSION['user']['id']) ? (int) $_SESSION['user']['id'] : 0;
+$isAdminUser   = (($_SESSION['user']['role'] ?? '') === 'admin');
+$canReview     = ($currentUserId > 0 && !$isAdminUser && hasUserPurchasedProduct($currentUserId, $id));
+
 $reviews       = getReviewsByProductId($id);
 $ratingSummary = getProductRatingSummary($id);
 $avgRating     = $ratingSummary['average_rating'];
 $totalReviews  = $ratingSummary['total_reviews'];
-
-$currentUserId = isset($_SESSION['user']['id']) ? (int) $_SESSION['user']['id'] : 0;
-$isAdminUser   = (($_SESSION['user']['role'] ?? '') === 'admin');
 
 $flashSuccess = $_SESSION['flash_success'] ?? "";
 $flashError   = $_SESSION['flash_error'] ?? "";
@@ -89,7 +92,7 @@ function renderStars(float $rating): string
             <div>
                 <h1>Product Description</h1>
             </div>
-            <a href="../landing/index.php" class="back-link">Back <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="../landing-page/index.php" class="back-link">Back <i class="fa-solid fa-arrow-right"></i></a>
         </div>
 
         <!-- DETAIL PRODUK UTAMA -->
@@ -129,7 +132,14 @@ function renderStars(float $rating): string
                         </div>
                         <input type="hidden" name="product_id" value="<?= (int) ($product['id'] ?? 0) ?>">
                         <input type="hidden" name="quantity" value="1">
-                        <button name="add" type="submit" class="btn-add-to-cart" <?= $isAdminUser ? " disabled" : "" ?>>Add to Cart</button>
+                        <button
+                            name="add"
+                            type="submit"
+                            id="btnAddToCart"
+                            class="btn-add-to-cart<?= $isAdminUser ? ' is-disabled' : '' ?>"
+                            <?= $isAdminUser ? 'aria-disabled="true" data-admin-blocked="1"' : '' ?>>
+                            Add to Cart
+                        </button>
                     </form>
                 </div>
             </div>
@@ -148,7 +158,7 @@ function renderStars(float $rating): string
             </div>
 
             <!-- Form Tambah Rating & Komentar -->
-            <?php if ($currentUserId > 0): ?>
+            <?php if ($canReview): ?>
                 <form action="../../actions/reviews/store.php" method="POST" class="review-form-card">
                     <h4>Write a Review</h4>
                     <input type="hidden" name="product_id" value="<?= (int) ($product['id'] ?? 0) ?>">
@@ -182,6 +192,10 @@ function renderStars(float $rating): string
                         <i class="fa-solid fa-paper-plane"></i> Submit Review
                     </button>
                 </form>
+            <?php elseif ($currentUserId > 0): ?>
+                <div class="login-to-review-box">
+                    <p>Ulasan hanya dapat diberikan oleh pembeli yang sudah menyelesaikan pesanan produk ini.</p>
+                </div>
             <?php else: ?>
                 <div class="login-to-review-box">
                     <p>Ingin memberikan rating dan ulasan untuk produk ini? <a href="../auth/login.php">Login sekarang</a>.</p>
@@ -245,5 +259,50 @@ function renderStars(float $rating): string
     <?php require_once __DIR__ . "/../../components/landing/footer.php" ?>
 
 </body>
+<script>
+    (function() {
+        const btn = document.getElementById('btnAddToCart');
+        if (!btn) return;
+
+        function showRedMessage(message) {
+            const mainContainer = document.querySelector('.product-main-container');
+            const headerTitle = document.querySelector('.product-header-title');
+            if (!mainContainer) return;
+
+            let box = document.getElementById('adminCartErrorBox');
+            if (!box) {
+                box = document.createElement('div');
+                box.id = 'adminCartErrorBox';
+                box.className = 'alert-box alert-error';
+                box.style.marginBottom = '20px';
+                box.style.backgroundColor = '#fee2e2';
+                box.style.color = '#991b1b';
+                box.style.border = '1px solid #fca5a5';
+                box.style.padding = '12px 16px';
+                box.style.borderRadius = '8px';
+                box.style.fontWeight = '600';
+
+                if (headerTitle) {
+                    mainContainer.insertBefore(box, headerTitle);
+                } else {
+                    mainContainer.prepend(box);
+                }
+            }
+
+            box.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + message;
+            box.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest'
+            });
+        }
+
+        btn.addEventListener('click', function(e) {
+            if (btn.dataset.adminBlocked === '1') {
+                e.preventDefault();
+                showRedMessage('Akun admin tidak dapat menambahkan produk ke keranjang.');
+            }
+        });
+    })();
+</script>
 
 </html>
