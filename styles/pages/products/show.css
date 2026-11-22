@@ -293,6 +293,12 @@ body {
   box-sizing: border-box !important;
 }
 
+.btn-add-to-cart.is-disabled {
+    background-color: var(--text-gray);
+    color: var(--white);
+    cursor: not-allowed;
+}
+
 /* ---------- BAGIAN RATING & ULASAN ---------- */
 .rating-reviews-section {
   margin-top: 40px;
