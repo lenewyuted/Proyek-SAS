@@ -4,28 +4,57 @@ require_once __DIR__ . "/../../repositories/category-repository.php";
 require_once __DIR__ . "/../../repositories/product-repository.php";
 require_once __DIR__ . "/../../repositories/review-repository.php";
 
-$banners = getLatestProducts();
-$categories = getCategoriesLandingPage();
+$banners          = getLatestProducts();
+$categories       = getCategoriesLandingPage();
+$search           = trim($_GET['q'] ?? '');
+$selectedCategory = isset($_GET['category']) ? (int) $_GET['category'] : 0;
 
-// Fetch Data Produk beserta Kategori (Featured: 5 produk, bisa difilter pencarian)
-$search = trim($_GET['q'] ?? '');
-
-$queryProducts = "SELECT products.*, categories.name AS category_name 
+$queryProducts = "SELECT products.*,
+                         categories.name AS category_name,
+                         COALESCE(AVG(pr.rating), 0) AS avg_rating,
+                         COUNT(pr.id) AS total_reviews
                   FROM products
-                  LEFT JOIN categories ON products.category_id = categories.id";
+                  LEFT JOIN categories ON products.category_id = categories.id
+                  LEFT JOIN `products-rating` pr ON pr.product_id = products.id";
+
+$params = [];
 if ($search !== '') {
     $queryProducts .= " WHERE products.name LIKE :search";
+    $params[':search'] = '%' . $search . '%';
 }
-$queryProducts .= " ORDER BY products.id ASC LIMIT 6";
+
+$queryProducts .= " GROUP BY products.id
+                  ORDER BY avg_rating DESC, total_reviews DESC, products.id ASC
+                  LIMIT 6";
 
 $stmtProd = $pdo->prepare($queryProducts);
-if ($search !== '') {
-    $stmtProd->bindValue(':search', '%' . $search . '%');
+foreach ($params as $key => $val) {
+    $stmtProd->bindValue($key, $val, PDO::PARAM_STR);
 }
 $stmtProd->execute();
 $products = $stmtProd->fetchAll();
 
+$categoryProducts = [];
+$selectedCategoryName = '';
 
+if ($selectedCategory > 0) {
+    foreach ($categories as $catItem) {
+        if ((int) ($catItem['id'] ?? 0) === $selectedCategory) {
+            $selectedCategoryName = (string) ($catItem['name'] ?? '');
+            break;
+        }
+    }
+
+    $queryCatProd = "SELECT products.*, categories.name AS category_name
+                     FROM products
+                     LEFT JOIN categories ON products.category_id = categories.id
+                     WHERE products.category_id = :category_id
+                     ORDER BY products.id";
+    $stmtCatProd = $pdo->prepare($queryCatProd);
+    $stmtCatProd->bindValue(':category_id', $selectedCategory, PDO::PARAM_INT);
+    $stmtCatProd->execute();
+    $categoryProducts = $stmtCatProd->fetchAll();
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -48,29 +77,15 @@ $products = $stmtProd->fetchAll();
     <link rel="stylesheet" href="../../styles/components/header.css">
     <link rel="stylesheet" href="../../styles/components/footer.css">
     <link rel="stylesheet" href="../../styles/index.css">
-
-
-
 </head>
 
 <body>
-
-
 
     <!-- MAIN HEADER -->
     <?php require_once __DIR__ . "/../../components/landing/header.php"; ?>
 
     <!-- HERO BANNER -->
     <section class="hero-banner">
-        <!-- <div class="banner-wrapper">
-            <img src="../../assets/img/banner/Banner-1.png" alt="Lenovo Legion Monitor Banner">
-
-            <div class="banner-dots">
-                <span class="dot active"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-            </div>
-        </div> -->
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -105,8 +120,11 @@ $products = $stmtProd->fetchAll();
         <div class="category-grid">
             <?php if (!empty($categories)): ?>
                 <?php foreach ($categories as $cat): ?>
-                    <!-- Kartu membungkus kotak dan label sekaligus agar menjadi satu kesatuan link -->
-                    <a href="#" class="category-card">
+                    <?php
+                    $catId = (int) ($cat['id'] ?? 0);
+                    $isActive = ($selectedCategory === $catId);
+                    ?>
+                    <a href="?category=<?= $catId ?>#category-products" class="category-card<?= $isActive ? ' active' : '' ?>">
                         <div class="category-box">
                             <div class="category-icon">
                                 <img src="../../assets/img/category/<?= htmlspecialchars($cat['picture'] ?? 'cat-cpu.png') ?>"
@@ -119,6 +137,56 @@ $products = $stmtProd->fetchAll();
             <?php endif; ?>
         </div>
     </section>
+
+    <?php if ($selectedCategory > 0): ?>
+        <section class="section-container" id="category-products">
+            <div class="category-products-header">
+                <h2 class="section-title">
+                    <?= htmlspecialchars($selectedCategoryName !== '' ? $selectedCategoryName : 'Category Products') ?>
+                </h2>
+                <a href="index.php" class="category-close-link">Tutup Kategori</a>
+            </div>
+
+            <div class="products-grid category-products-grid">
+                <?php if (!empty($categoryProducts)): ?>
+                    <?php foreach ($categoryProducts as $catProd): ?>
+                        <?php
+                        $catRatingSummary = getProductRatingSummary((int) $catProd['id']);
+                        $catAvgRating     = number_format($catRatingSummary['average_rating'], 1);
+                        $catTotalReviews  = (int) $catRatingSummary['total_reviews'];
+                        ?>
+                        <a href="../products/show.php?id=<?= (int) $catProd['id'] ?>" class="product-link-item">
+                            <div class="product-card category-product-card">
+                                <div class="product-img">
+                                    <img src="../../assets/img/<?= htmlspecialchars($catProd["picture"]) ?>" alt="<?= htmlspecialchars($catProd["name"]) ?>">
+                                </div>
+                                <h3 class="product-title"><?= htmlspecialchars($catProd['name']) ?></h3>
+                                <div class="product-rating">
+                                    <?php if ($catTotalReviews > 0): ?>
+                                        <span><?= htmlspecialchars($catAvgRating) ?></span>
+                                        <i class="fa-solid fa-star"></i>
+                                        <small>(<?= $catTotalReviews ?>)</small>
+                                    <?php else: ?>
+                                        <span>0.0</span>
+                                        <i class="fa-regular fa-star"></i>
+                                        <small>(0)</small>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="product-footer">
+                                    <span class="product-price">Rp.<?= number_format($catProd['price'], 0, ',', '.') ?></span>
+                                    <button class="btn-add-cart" type="button" aria-label="Tambah ke keranjang">
+                                        <i class="fa-solid fa-cart-shopping"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="empty-state">Belum ada produk pada kategori ini.</p>
+                <?php endif; ?>
+            </div>
+        </section>
+    <?php endif; ?>
 
     <!-- FEATURED PRODUCT -->
     <section class="section-container">
