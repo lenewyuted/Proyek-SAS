@@ -58,7 +58,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                 <h1>Order History</h1>
                 <p>Track, manage, and review all your past hardware purchases</p>
             </div>
-            <a href="../landing/index.php" class="back-link">Back <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="../landing-page/index.php" class="back-link">Back <i class="fa-solid fa-arrow-right"></i></a>
         </div>
 
         <?php if ($flashSuccess): ?>
