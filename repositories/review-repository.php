@@ -70,3 +70,28 @@ function deleteProductReview(int $reviewId, int $userId, bool $isAdmin = false):
 
     return $stmt->rowCount() > 0;
 }
+
+function hasUserPurchasedProduct(int $userId, int $productId): bool
+{
+    global $pdo;
+
+    if ($userId <= 0 || $productId <= 0) {
+        return false;
+    }
+
+    $sql = "SELECT 1
+            FROM orders o
+            JOIN order_items oi ON oi.order_id = o.id
+            WHERE o.user_id = :user_id
+              AND oi.product_id = :product_id
+              AND LOWER(o.order_status) IN ('completed')
+            LIMIT 1";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        'user_id'    => $userId,
+        'product_id' => $productId,
+    ]);
+
+    return (bool) $stmt->fetchColumn();
+}
