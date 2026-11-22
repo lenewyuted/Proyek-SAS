@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$productId = (int) ($_POST['product_id'] ?? 0);
+$productId   = (int) ($_POST['product_id'] ?? 0);
 $redirectUrl = "../../pages/products/show.php?id=" . $productId . "#reviews-section";
 
 if (!isset($_SESSION['user']['id'])) {
@@ -19,9 +19,16 @@ if (!isset($_SESSION['user']['id'])) {
     exit;
 }
 
-$userId  = (int) $_SESSION['user']['id'];
-$rating  = (int) ($_POST['rating'] ?? 0);
-$comment = (string) ($_POST['comment'] ?? '');
+$userId      = (int) $_SESSION['user']['id'];
+$isAdminUser = (($_SESSION['user']['role'] ?? '') === 'admin');
+$rating      = (int) ($_POST['rating'] ?? 0);
+$comment     = (string) ($_POST['comment'] ?? '');
+
+$product = $productId > 0 ? getProduct($productId) : null;
+if (!$product) {
+    header('Location: ../../pages/landing-page/index.php');
+    exit;
+}
 
 $errors = validateProductReview($productId, $rating, $comment);
 if (!empty($errors)) {
@@ -30,9 +37,9 @@ if (!empty($errors)) {
     exit;
 }
 
-$product = getProduct($productId);
-if (!$product) {
-    header('Location: ../../pages/landing/index.php');
+if ($isAdminUser || !hasUserPurchasedProduct($userId, $productId)) {
+    $_SESSION['flash_error'] = 'Anda hanya dapat mengulas produk yang sudah Anda beli dan selesaikan.';
+    header("Location: $redirectUrl");
     exit;
 }
 
