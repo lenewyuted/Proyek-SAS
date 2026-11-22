@@ -81,7 +81,7 @@ if ($userId > 0 && !empty($cartItems) && is_array($cartItems)) {
                                 <i class="fa-solid fa-compass user-dropdown-icon"></i> Dashboard Admin
                             </a>
                         <?php endif; ?>
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="/pages/profile/index.php">
                             <i class="fa-solid fa-user-pen user-dropdown-icon"></i> Edit Profil
                         </a>
                         <a class="dropdown-item" href="/pages/cart/order-history.php">
