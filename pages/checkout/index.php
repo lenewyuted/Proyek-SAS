@@ -64,7 +64,7 @@ unset($_SESSION['flash_error']);
     <link rel="stylesheet" href="../../styles/pages/checkout.css">
     <link rel="stylesheet" href="../../styles/components/header.css">
     <link rel="stylesheet" href="../../styles/components/footer.css">
-    <!-- Bootstrap 4.6 CSS (Dibawa oleh header agar dropdown & carousel berfungsi konsisten) -->
+    <!-- Bootstrap 4.6 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 </head>
 
@@ -300,17 +300,16 @@ unset($_SESSION['flash_error']);
                             <h4 class="btp-section-title">Complete Payment</h4>
                         </div>
 
-                        <div class="complete-pay-row" style="padding: 2px;">
-
+                        <div class="complete-pay-row">
                             <div class="complete-pay-shipping">
                                 <i class="fa-regular fa-credit-card"></i>
                                 <div>
-                                    <div style="font-size:1.3rem;font-weight:700;color:#0f172a;">Shipping Method</div>
-                                    <div class="modal-shipping-text" style="font-size:0.8rem;color:#334155;">Regular Rp35.000</div>
+                                    <div style="font-size:1.1rem;font-weight:700;color:#0f172a;">Shipping Method</div>
+                                    <div class="modal-shipping-text" style="font-size:0.82rem;color:#334155;">Regular Rp35.000</div>
                                 </div>
                             </div>
-                            <div class="complete-pay-total" style="padding-top: 2px;">
-                                <span style="font-size: 1.5rem;">Total Payment</span>
+                            <div class="complete-pay-total">
+                                <span>Total Payment</span>
                                 <strong class="modal-total-text"><?= formatRupiah($totalAmount) ?></strong>
                             </div>
                         </div>
@@ -373,10 +372,21 @@ unset($_SESSION['flash_error']);
                             <h4 class="btp-section-title">Upload Payment Proof (Optional)</h4>
                         </div>
 
-                        <div class="pay-upload-box">
-                            <input type="file" name="payment_proof" id="btpFileInput" accept="image/*,.pdf" class="pay-file-input">
-                            <small class="pay-upload-hint">Format yang didukung: JPG, PNG, atau PDF</small>
-                        </div>
+                        <label for="btpFileInput" class="pay-dropzone-vertical" id="btpUploadZone">
+                            <input type="file" name="payment_proof" id="btpFileInput" accept="image/*,.pdf" class="pay-file-hidden">
+
+                            <div class="pay-dropzone-square-icon" id="btpDropzoneIcon">
+                                <i class="fa-solid fa-file-arrow-up"></i>
+                            </div>
+
+                            <div class="pay-dropzone-main-text" id="btpFileName">
+                                Drag &amp; Drop Transfer Receipt File Here
+                            </div>
+
+                            <div class="pay-dropzone-sub-text" id="btpFileSubText">
+                                or <span class="pay-browse-link">Browse File from Computer</span>
+                            </div>
+                        </label>
                     </div>
 
                     <div class="btp-section">
@@ -508,15 +518,15 @@ unset($_SESSION['flash_error']);
 
                         <div class="complete-pay-row">
                             <div class="complete-pay-placeholder" id="complete-pay-placeholder-ewallet">
-                                <div class="btp-bank-logo-js dana">DANA</div>
+                                <div class="btp-bank-logo-js dana" id="ewalletSummaryLogo">DANA</div>
                                 <div class="btp-bank-sub-js">0812-3456-7890</div>
                                 <div class="btp-bank-desc-js">Available 24 Hours</div>
                             </div>
                             <div class="complete-pay-shipping">
                                 <i class="fa-regular fa-credit-card"></i>
                                 <div>
-                                    <div style="font-size:1.3rem;font-weight:700;color:#0f172a;">Shipping Method</div>
-                                    <div class="modal-shipping-text" style="font-size:0.8rem;color:#334155;">Regular Rp35.000</div>
+                                    <div style="font-size:1.1rem;font-weight:700;color:#0f172a;line-height:1.2;">Shipping Method</div>
+                                    <div class="modal-shipping-text" style="font-size:0.82rem;color:#334155;margin-top:2px;">Regular Rp35.000</div>
                                 </div>
                             </div>
                             <div class="complete-pay-total">
@@ -613,25 +623,83 @@ unset($_SESSION['flash_error']);
             btn.addEventListener('click', () => checkoutForm.submit());
         });
 
-        // 5. Efek Aktif pada Kartu Bank / E-Wallet yang Dipilih 
-        //complete-pay-placeholder-ewallet
-        let placeholderEwallet = document.getElementById("complete-pay-placeholder-ewallet");
+        // 5. Efek Aktif pada Kartu Bank / E-Wallet yang Dipilih
+        const summaryLogo = document.getElementById("ewalletSummaryLogo");
+
         document.querySelectorAll('.btp-bank-card').forEach(card => {
             card.addEventListener('click', function() {
-                const activeCard = this.closest('.btp-bank-grid').querySelector('.btp-bank-card.active');
+                const grid = this.closest('.btp-bank-grid');
+                const activeCard = grid ? grid.querySelector('.btp-bank-card.active') : null;
                 if (activeCard) activeCard.classList.remove('active');
                 this.classList.add('active');
-                const paymentChannel = this.querySelector(".btp-bank-logo").classList;
 
-                placeholderEwallet.innerHTML = `
-                    <div class="btp-bank-logo-js ${paymentChannel}">${this.querySelector(".btp-bank-logo").innerText}</div>
-                    <div class="btp-bank-sub-js">0812-3456-7890</div>
-                    <div class="btp-bank-desc-js">Available 24 Hours</div>
-                
-                `;
+                const logoEl = this.querySelector('.btp-bank-logo');
+                if (!logoEl || !summaryLogo) return;
 
+                // Ambil nama channel saja (misal: 'dana', 'ovo', 'gopay', 'linkaja') tanpa ikut membawa 'btp-bank-logo'
+                const channelClass = Array.from(logoEl.classList).find(cls => cls !== 'btp-bank-logo') || '';
+
+                // Update ringkasan e-wallet hanya jika kartu yang diklik adalah kartu e-wallet
+                if (['dana', 'ovo', 'gopay', 'linkaja'].includes(channelClass)) {
+                    summaryLogo.className = 'btp-bank-logo-js ' + channelClass;
+                    summaryLogo.textContent = logoEl.textContent.trim();
+                }
             });
         });
+    </script>
+
+    <script>
+        (function() {
+            const fileInput = document.getElementById('btpFileInput');
+            const dropZone = document.getElementById('btpUploadZone');
+            const mainText = document.getElementById('btpFileName');
+            const subText = document.getElementById('btpFileSubText');
+            const iconBox = document.getElementById('btpDropzoneIcon');
+
+            if (!fileInput || !dropZone || !mainText || !subText) return;
+
+            function updateFileDisplay(files) {
+                if (files && files.length > 0) {
+                    mainText.textContent = files[0].name;
+                    subText.innerHTML = 'File selected &bull; <span class="pay-browse-link">Change File</span>';
+                    dropZone.classList.add('has-file');
+                    if (iconBox) iconBox.innerHTML = '<i class="fa-solid fa-file-circle-check"></i>';
+                } else {
+                    mainText.textContent = 'Drag & Drop Transfer Receipt File Here';
+                    subText.innerHTML = 'or <span class="pay-browse-link">Browse File from Computer</span>';
+                    dropZone.classList.remove('has-file');
+                    if (iconBox) iconBox.innerHTML = '<i class="fa-solid fa-file-arrow-up"></i>';
+                }
+            }
+
+            fileInput.addEventListener('change', function() {
+                updateFileDisplay(this.files);
+            });
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropZone.classList.add('is-dragover');
+                });
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropZone.classList.remove('is-dragover');
+                });
+            });
+
+            dropZone.addEventListener('drop', function(e) {
+                const droppedFiles = e.dataTransfer ? e.dataTransfer.files : null;
+                if (droppedFiles && droppedFiles.length > 0) {
+                    fileInput.files = droppedFiles;
+                    updateFileDisplay(droppedFiles);
+                }
+            });
+        })();
     </script>
 </body>
 
