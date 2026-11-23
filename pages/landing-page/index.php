@@ -69,7 +69,7 @@ if (!$isSearching && $selectedCategory > 0) {
             <div class="search-page-topbar">
                 <div>
                     <h1 class="search-page-title">
-                        Search Results For <span>"<?= htmlspecialchars($search) ?>"</span>
+                        Search Results For <span style="color: #004aad;">"<?= htmlspecialchars($search) ?>"</span>
                     </h1>
                     <p class="search-results-count">
                         <?= $totalFound ?> <?= $totalFound === 1 ? 'result' : 'results' ?> found
