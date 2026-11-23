@@ -78,6 +78,8 @@ $paymentData = [
     'payment_channel' => $cleanData['payment_channel'],
     'account_number'  => $cleanData['account_number'],
     'account_holder'  => $cleanData['account_holder'],
+    'expiry_date'     => $cleanData['expiry_date'],
+    'cvv'             => $cleanData['cvv'],
     'payment_proof'   => $paymentProof,
 ];
 

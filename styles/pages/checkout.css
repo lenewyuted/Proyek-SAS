@@ -721,6 +721,11 @@ body {
   text-decoration: underline;
 }
 
+.cvv-masked-input {
+  -webkit-text-security: disc;
+  text-security: disc;
+}
+
 .main-footer .footer-container {
   max-width: 1600px !important;
 }

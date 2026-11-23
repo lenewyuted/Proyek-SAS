@@ -74,12 +74,12 @@ function createOrder(array $orderData, array $items, array $paymentData)
 
         $paymentSql = "INSERT INTO payments (
                            order_id, payment_method, payment_channel,
-                           account_number, account_holder, amount,
-                           payment_status, payment_proof
+                           account_number, account_holder, expiry_date, cvv,
+                           amount, payment_status, payment_proof
                        ) VALUES (
                            :order_id, :payment_method, :payment_channel,
-                           :account_number, :account_holder, :amount,
-                           :payment_status, :payment_proof
+                           :account_number, :account_holder, :expiry_date, :cvv,
+                           :amount, :payment_status, :payment_proof
                        )";
         $stmtPayment = $pdo->prepare($paymentSql);
         $stmtPayment->execute([
@@ -88,6 +88,8 @@ function createOrder(array $orderData, array $items, array $paymentData)
             'payment_channel' => $paymentData['payment_channel'] ?? null,
             'account_number'  => $paymentData['account_number'] ?? null,
             'account_holder'  => $paymentData['account_holder'] ?? null,
+            'expiry_date'     => $paymentData['expiry_date'] ?? null,
+            'cvv'             => $paymentData['cvv'] ?? null,
             'amount'          => $orderData['total_amount'],
             'payment_status'  => $paymentStatus,
             'payment_proof'   => $paymentData['payment_proof'] ?? null,
@@ -110,7 +112,7 @@ function getOrderByNumber($orderNumber)
 {
     global $pdo;
 
-    $query = "SELECT o.*, p.payment_method, p.payment_channel, p.account_number, p.account_holder, p.payment_status, p.payment_proof, p.paid_at
+    $query = "SELECT o.*, p.payment_method, p.payment_channel, p.account_number, p.account_holder, p.expiry_date, p.cvv, p.payment_status, p.payment_proof, p.paid_at
               FROM orders o
               LEFT JOIN payments p ON p.order_id = o.id
               WHERE o.order_number = :order_number";
@@ -157,7 +159,7 @@ function getOrderById($id)
 {
     global $pdo;
 
-    $query = "SELECT o.*, p.payment_method, p.payment_channel, p.account_number, p.account_holder, p.payment_status, p.payment_proof, p.paid_at
+    $query = "SELECT o.*, p.payment_method, p.payment_channel, p.account_number, p.account_holder, p.expiry_date, p.cvv, p.payment_status, p.payment_proof, p.paid_at
               FROM orders o
               LEFT JOIN payments p ON p.order_id = o.id
               WHERE o.id = :id";

@@ -129,9 +129,24 @@ $orderItems = getOrderItemsByOrderId($order['id']);
                             <span style="color: var(--primary-blue); font-weight: 700;">(<?= strtoupper(htmlspecialchars($order['payment_channel'])) ?>)</span>
                         <?php endif; ?>
                     </p>
+                    <?php if (!empty($order['account_holder'])): ?>
+                        <p style="margin: 4px 0 0; font-size: 13px; color: #555;">
+                            Nama Pemilik: <strong><?= htmlspecialchars($order['account_holder']) ?></strong>
+                        </p>
+                    <?php endif; ?>
                     <?php if (!empty($order['account_number'])): ?>
                         <p style="margin: 4px 0 0; font-size: 13px; color: #555;">
                             No. Akun / Kartu: <strong><?= htmlspecialchars($order['account_number']) ?></strong>
+                        </p>
+                    <?php endif; ?>
+                    <?php if (!empty($order['expiry_date'])): ?>
+                        <p style="margin: 4px 0 0; font-size: 13px; color: #555;">
+                            Expiry Date: <strong><?= htmlspecialchars($order['expiry_date']) ?></strong>
+                        </p>
+                    <?php endif; ?>
+                    <?php if (!empty($order['cvv'])): ?>
+                        <p style="margin: 4px 0 0; font-size: 13px; color: #555;">
+                            CVV: <strong><?= htmlspecialchars($order['cvv']) ?></strong>
                         </p>
                     <?php endif; ?>
                     <?php if (!empty($order['payment_proof'])): ?>

@@ -21,7 +21,16 @@ if (!$order) {
     exit;
 }
 
-if (!empty($order['order_number']) && (!array_key_exists('payment_method', $order) || !array_key_exists('paid_at', $order)) && function_exists('getOrderByNumber')) {
+if (
+    !empty($order['order_number']) &&
+    (
+        !array_key_exists('payment_method', $order) ||
+        !array_key_exists('paid_at', $order) ||
+        !array_key_exists('expiry_date', $order) ||
+        !array_key_exists('cvv', $order)
+    ) &&
+    function_exists('getOrderByNumber')
+) {
     $orderWithPayment = getOrderByNumber($order['order_number']);
     if (is_array($orderWithPayment)) {
         $order = array_merge($orderWithPayment, $order);
@@ -211,7 +220,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                         </div>
                     </div>
 
-                    <?php if (isset($order['payment_method']) || isset($order['payment_status']) || isset($order['account_holder']) || isset($order['account_number']) || $proofSafeName !== ''): ?>
+                    <?php if (isset($order['payment_method']) || isset($order['payment_status']) || isset($order['account_holder']) || isset($order['account_number']) || isset($order['expiry_date']) || isset($order['cvv']) || $proofSafeName !== ''): ?>
                         <div class="form-row">
                             <div class="show-field-group">
                                 <label>Payment Method</label>
@@ -232,6 +241,19 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                                 <div class="show-field-group">
                                     <label>Account / Card / Phone Number</label>
                                     <div class="show-field-value"><?= htmlspecialchars($order['account_number'] ?? '-') ?></div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if (!empty($order['expiry_date']) || !empty($order['cvv'])): ?>
+                            <div class="form-row">
+                                <div class="show-field-group">
+                                    <label>Expiry Date</label>
+                                    <div class="show-field-value"><?= htmlspecialchars($order['expiry_date'] ?? '-') ?></div>
+                                </div>
+                                <div class="show-field-group">
+                                    <label>CVV</label>
+                                    <div class="show-field-value"><?= htmlspecialchars($order['cvv'] ?? '-') ?></div>
                                 </div>
                             </div>
                         <?php endif; ?>

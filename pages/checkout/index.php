@@ -264,7 +264,7 @@ unset($_SESSION['flash_error']);
                                 <label for="card_number">Card Number</label>
                                 <div class="pay-input-wrap">
                                     <i class="fa-regular fa-credit-card"></i>
-                                    <input type="text" id="card_number" name="card_number" placeholder="1234 5678 9012 3456">
+                                    <input type="text" id="card_number" name="card_number" placeholder="1234 5678 9012 3456" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
                                 </div>
                             </div>
 
@@ -272,7 +272,7 @@ unset($_SESSION['flash_error']);
                                 <label for="cardholder_name">Cardholder Name</label>
                                 <div class="pay-input-wrap">
                                     <i class="fa-regular fa-user"></i>
-                                    <input type="text" id="cardholder_name" name="cardholder_name" placeholder="Cardholder Name">
+                                    <input type="text" id="cardholder_name" name="cardholder_name" placeholder="Cardholder Name" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
                                 </div>
                             </div>
 
@@ -280,7 +280,7 @@ unset($_SESSION['flash_error']);
                                 <label for="expiry_date">Expiry Date</label>
                                 <div class="pay-input-wrap">
                                     <i class="fa-regular fa-calendar"></i>
-                                    <input type="text" id="expiry_date" name="expiry_date" placeholder="11/26">
+                                    <input type="text" id="expiry_date" name="expiry_date" placeholder="11/26" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
                                 </div>
                             </div>
 
@@ -288,7 +288,7 @@ unset($_SESSION['flash_error']);
                                 <label for="card_cvv">CVV</label>
                                 <div class="pay-input-wrap">
                                     <i class="fa-solid fa-lock"></i>
-                                    <input type="password" id="card_cvv" name="card_cvv" placeholder="3 digits on the back of your card">
+                                    <input type="text" id="card_cvv" name="card_cvv" class="cvv-masked-input" maxlength="4" placeholder="3 digits on the back of your card" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
                                 </div>
                             </div>
                         </div>

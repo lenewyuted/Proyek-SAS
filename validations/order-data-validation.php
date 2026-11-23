@@ -42,14 +42,26 @@ function validateCheckoutData(array $postData, array $fileData): array
     $paymentChannel = null;
     $accountNumber  = null;
     $accountHolder  = null;
+    $expiryDate     = null;
+    $cvv            = null;
 
     if ($paymentMethod === 'card') {
         $paymentChannel = trim($postData['card_brand'] ?? '');
         $accountNumber  = trim($postData['card_number'] ?? '');
         $accountHolder  = trim($postData['cardholder_name'] ?? '');
+        $expiryDate     = trim($postData['expiry_date'] ?? '');
+        $cvv            = trim($postData['card_cvv'] ?? '');
 
-        if (empty($paymentChannel) || empty($accountNumber) || empty($accountHolder)) {
-            $errors[] = 'Harap lengkapi detail kartu kredit/debit Anda.';
+        if (empty($paymentChannel) || empty($accountNumber) || empty($accountHolder) || empty($expiryDate) || empty($cvv)) {
+            $errors[] = 'Harap lengkapi detail kartu kredit/debit Anda (nomor kartu, nama pemilik, expiry date, dan CVV).';
+        } else {
+            if (!preg_match('/^(0[1-9]|1[0-2])\/([0-9]{2}|[0-9]{4})$/', $expiryDate)) {
+                $errors[] = 'Format expiry date kartu tidak valid (gunakan MM/YY, contoh: 11/26).';
+            }
+
+            if (!preg_match('/^[0-9]{3,4}$/', $cvv)) {
+                $errors[] = 'Kode CVV kartu harus terdiri dari 3 atau 4 digit angka.';
+            }
         }
     } elseif ($paymentMethod === 'bank_transfer') {
         $paymentChannel = trim($postData['bank_va'] ?? '');
@@ -106,6 +118,8 @@ function validateCheckoutData(array $postData, array $fileData): array
             'payment_channel' => $paymentChannel,
             'account_number'  => $accountNumber,
             'account_holder'  => $accountHolder,
+            'expiry_date'     => $expiryDate,
+            'cvv'             => $cvv,
         ],
     ];
 }
