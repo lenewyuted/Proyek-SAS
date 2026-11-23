@@ -52,11 +52,11 @@ $searchQuery = trim((string) ($_GET['q'] ?? ''));
 
     <!-- tombol aksi kanan -->
     <div class="nav-icons">
-        <a href="#" class="icon-link" title="Likes">
+        <a href="../../pages/products/recommendation.php" class="icon-link" title="Likes">
             <i class="fa-solid fa-thumbs-up"></i>
         </a>
 
-        <a href="#" class="icon-link" title="Compare">
+        <a href="../../pages/compare/index.php" class="icon-link" title="Compare">
             <i class="fa-solid fa-sliders"></i>
         </a>
 
