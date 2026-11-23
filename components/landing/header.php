@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . "/../../repositories/product-repository.php";
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -19,6 +21,8 @@ if ($userId > 0 && !empty($cartItems) && is_array($cartItems)) {
         $cartBadgeCount += (int) ($item['quantity'] ?? 1);
     }
 }
+
+$searchQuery = trim((string) ($_GET['q'] ?? ''));
 ?>
 
 <!-- Bootstrap 4.6 CSS (Dibawa oleh header agar dropdown & carousel berfungsi konsisten) -->
@@ -40,7 +44,7 @@ if ($userId > 0 && !empty($cartItems) && is_array($cartItems)) {
 
     <!-- search bar -->
     <form action="/pages/landing-page/index.php" method="GET" class="search-form">
-        <input type="text" name="q" placeholder="Search for parts to build your dream PC..." required>
+        <input type="text" name="q" value="<?= htmlspecialchars($searchQuery) ?>" placeholder="Search for parts to build your dream PC...">
         <button type="submit" class="search-btn">
             <i class="fa-solid fa-magnifying-glass"></i>
         </button>

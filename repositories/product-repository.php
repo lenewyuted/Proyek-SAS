@@ -22,9 +22,6 @@ function getProducts($search, $categoryId, $currentPage, $perPage)
     return $products;
 }
 
-// function formatRupiah($angka) {
-//     return 'Rp ' . number_format($angka, 0, ',', '.');
-// }
 function formatRupiah($angka)
 {
     // Jika angka null, kosong, atau bukan numerik, set ke 0
@@ -45,10 +42,6 @@ function getProduct($id)
 
     $product = $stmt->fetch();
 
-    // if (!$product) {
-    //     header('location: ../pages/admin/products/index.php');
-    //     exit;
-    // }
     if (!$product) {
         return null;
     }
@@ -63,7 +56,6 @@ function countProducts()
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['total'] ?? 0;
 }
-
 
 function countOfProducts($search, $categoryId)
 {
@@ -108,4 +100,55 @@ function getAllProducts()
     $stmt->execute([]);
 
     return $stmt->fetchAll();
+}
+
+if (!function_exists('getFilteredProducts')) {
+    function getFilteredProducts(PDO $pdo, string $search = '', int $categoryId = 0, int $defaultLimit = 6): array
+    {
+        $search     = trim($search);
+        $categoryId = max(0, $categoryId);
+
+        $queryProducts = "SELECT products.*,
+                                 categories.name AS category_name,
+                                 COALESCE(AVG(pr.rating), 0) AS avg_rating,
+                                 COUNT(pr.id) AS total_reviews
+                          FROM products
+                          LEFT JOIN categories ON products.category_id = categories.id
+                          LEFT JOIN `products-rating` pr ON pr.product_id = products.id";
+
+        $conditions = [];
+        $params     = [];
+
+        if ($search !== '') {
+            $likeTerm               = '%' . $search . '%';
+            $conditions[]           = "(products.name LIKE :search_name OR products.description LIKE :search_desc OR categories.name LIKE :search_cat)";
+            $params[':search_name'] = $likeTerm;
+            $params[':search_desc'] = $likeTerm;
+            $params[':search_cat']  = $likeTerm;
+        }
+
+        if ($categoryId > 0) {
+            $conditions[]           = "products.category_id = :category_id";
+            $params[':category_id'] = $categoryId;
+        }
+
+        if (!empty($conditions)) {
+            $queryProducts .= " WHERE " . implode(" AND ", $conditions);
+        }
+
+        $queryProducts .= " GROUP BY products.id
+                          ORDER BY avg_rating DESC, total_reviews DESC, products.id ASC";
+
+        if ($search === '' && $categoryId === 0 && $defaultLimit > 0) {
+            $queryProducts .= " LIMIT " . (int) $defaultLimit;
+        }
+
+        $stmtProd = $pdo->prepare($queryProducts);
+        foreach ($params as $key => $val) {
+            $stmtProd->bindValue($key, $val, is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR);
+        }
+        $stmtProd->execute();
+
+        return $stmtProd->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

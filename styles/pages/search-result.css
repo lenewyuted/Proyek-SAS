@@ -1,0 +1,85 @@
+/* =========================================================
+   TECHHUB - SEARCH RESULTS PAGE
+   ========================================================= */
+
+.search-results-section {
+  margin-top: 29px;
+  min-height: 55vh;
+}
+
+.search-page-topbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.search-page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.search-page-title span {
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.search-results-count {
+  margin: 4px 0 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.search-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-blue);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.search-back-link:hover {
+  color: var(--blue-dark);
+  text-decoration: underline;
+}
+
+/* Samakan jumlah kolom & ukuran kartu dengan Featured Product (6 kolom) */
+.search-results-section .products-grid {
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  width: 100% !important;
+}
+
+.search-results-section .products-grid > a {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+@media (max-width: 1024px) {
+  .search-results-section .products-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .search-page-title {
+    font-size: 22px;
+  }
+
+  .search-results-section .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
