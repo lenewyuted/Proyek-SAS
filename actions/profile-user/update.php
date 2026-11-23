@@ -32,6 +32,7 @@ try {
         throw new Exception("Data user tidak ditemukan.");
     }
 
+    // Email sengaja tidak diambil dari $_POST agar tidak pernah bisa diubah atau dihapus
     $name        = trim((string) ($_POST["name"] ?? ""));
     $phoneNumber = trim((string) ($_POST["phone_number"] ?? ""));
     $gender      = strtolower(trim((string) ($_POST["gender"] ?? "")));
@@ -67,11 +68,9 @@ try {
         $errors["address"] = "Address maksimal 255 karakter.";
     }
 
-    // Ambil foto profil lama secara case-insensitive jika ada
-    $currentLower   = array_change_key_case($currentUser, CASE_LOWER);
+    $currentLower    = array_change_key_case($currentUser, CASE_LOWER);
     $pictureFilename = $currentLower["picture"] ?? ($currentLower["avatar"] ?? null);
 
-    // Proses upload foto profil jika user memilih file baru
     if (
         !empty($_FILES["picture"]["name"]) &&
         (int) ($_FILES["picture"]["error"] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK
@@ -117,7 +116,6 @@ try {
         exit;
     }
 
-    // Cek kolom yang tersedia di tabel users secara case-insensitive
     $columnsStmt        = $pdo->query("SHOW COLUMNS FROM users");
     $availableCols      = $columnsStmt->fetchAll(PDO::FETCH_COLUMN);
     $availableColsLower = array_map("strtolower", $availableCols);
@@ -126,45 +124,45 @@ try {
     $params   = ["id" => $userId];
 
     if (in_array("name", $availableColsLower, true)) {
-        $setParts[]      = "name = :name";
-        $params["name"]  = $name;
+        $setParts[]     = "name = :name";
+        $params["name"] = $name;
     }
 
     if (in_array("phone_number", $availableColsLower, true)) {
         $setParts[]             = "phone_number = :phone_number";
         $params["phone_number"] = $phoneNumber;
     } elseif (in_array("phone", $availableColsLower, true)) {
-        $setParts[]        = "phone = :phone";
-        $params["phone"]   = $phoneNumber;
+        $setParts[]      = "phone = :phone";
+        $params["phone"] = $phoneNumber;
     }
 
     if (in_array("gender", $availableColsLower, true)) {
-        $setParts[]        = "gender = :gender";
-        $params["gender"]  = $gender !== "" ? $gender : null;
+        $setParts[]       = "gender = :gender";
+        $params["gender"] = $gender !== "" ? $gender : null;
     }
 
     if (in_array("province", $availableColsLower, true)) {
-        $setParts[]          = "province = :province";
-        $params["province"]  = $province;
+        $setParts[]         = "province = :province";
+        $params["province"] = $province;
     }
 
     if (in_array("city", $availableColsLower, true)) {
-        $setParts[]      = "city = :city";
-        $params["city"]  = $city;
+        $setParts[]     = "city = :city";
+        $params["city"] = $city;
     }
 
     if (in_array("address", $availableColsLower, true)) {
-        $setParts[]         = "address = :address";
-        $params["address"]  = $address;
+        $setParts[]        = "address = :address";
+        $params["address"] = $address;
     }
 
     if ($pictureFilename !== null) {
         if (in_array("picture", $availableColsLower, true)) {
-            $setParts[]         = "picture = :picture";
-            $params["picture"]  = $pictureFilename;
+            $setParts[]        = "picture = :picture";
+            $params["picture"] = $pictureFilename;
         } elseif (in_array("avatar", $availableColsLower, true)) {
-            $setParts[]        = "avatar = :avatar";
-            $params["avatar"]  = $pictureFilename;
+            $setParts[]       = "avatar = :avatar";
+            $params["avatar"] = $pictureFilename;
         }
     }
 

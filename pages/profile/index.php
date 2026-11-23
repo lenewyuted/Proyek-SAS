@@ -102,13 +102,11 @@ $hasPhoto      = ($photoFile !== "");
                         <input
                             type="email"
                             id="email"
-                            name="email"
                             value="<?= htmlspecialchars((string) ($user["email"] ?? "")) ?>"
+                            disabled
                             readonly
+                            aria-disabled="true"
                             class="is-readonly">
-                        <?php if (!empty($errors["email"])): ?>
-                            <small class="profile-error-text"><?= htmlspecialchars($errors["email"]) ?></small>
-                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -196,12 +194,12 @@ $hasPhoto      = ($photoFile !== "");
 
                 <div class="profile-actions-row">
                     <button type="submit" name="update" class="btn-save-profile">Save Profile</button>
-                    <button type="reset" id="btnResetProfile" class="btn-reset-profile">
-                        <form action="../../actions/profile-user/reset.php" method="POST" enctype="multipart/form-data">Reset Profile</form>
-                    </button>
+                    <button type="submit" form="resetProfileForm" class="btn-reset-profile" id="btnResetProfile">Reset Profile</button>
                 </div>
             </div>
         </form>
+
+        <form action="../../actions/profile-user/reset.php" method="POST" id="resetProfileForm" hidden></form>
     </main>
 
     <!-- MAIN FOOTER -->
@@ -244,23 +242,15 @@ $hasPhoto      = ($photoFile !== "");
             }
 
             if (btnReset && form) {
-                btnReset.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    form.reset();
+                btnReset.addEventListener("click", function() {
+                    ["phone", "province", "city", "address"].forEach(function(id) {
+                        const el = document.getElementById(id);
+                        if (el) el.value = "";
+                    });
+                    form.querySelectorAll('input[type="radio"][name="gender"]').forEach(function(radio) {
+                        radio.checked = false;
+                    });
                     if (fileInput) fileInput.value = "";
-                    <?php if ($hasPhoto): ?>
-                        if (previewImg) {
-                            previewImg.src = "../../assets/img/avatars/<?= htmlspecialchars($photoFile) ?>";
-                            previewImg.style.display = "block";
-                        }
-                        if (plusIcon) plusIcon.style.display = "none";
-                    <?php else: ?>
-                        if (previewImg) {
-                            previewImg.src = "";
-                            previewImg.style.display = "none";
-                        }
-                        if (plusIcon) plusIcon.style.display = "inline-block";
-                    <?php endif; ?>
                 });
             }
         })();
