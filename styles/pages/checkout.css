@@ -324,7 +324,9 @@ body {
   font-weight: 800;
   font-size: 1.25rem;
   letter-spacing: -0.5px;
-  margin-bottom: 6px;
+  margin-bottom: 2px;
+  margin-top: 4px;
+  margin-left: 8px;
 }
 
 .btp-bank-logo.mandiri {
@@ -389,11 +391,23 @@ body {
   line-height: 1.25;
 }
 
+.btp-bank-sub-js {
+  font-size: 0.8rem;
+  margin-left: 8px;
+  margin-top: 1px;
+}
+
 .btp-bank-desc {
   font-size: 0.82rem;
   font-weight: 700;
   color: #0f172a;
   margin-top: 2px;
+}
+
+.btp-bank-desc-js {
+    font-size: 0.8rem;
+  margin-left: 8px;
+
 }
 
 .btp-dropzone {
@@ -551,7 +565,8 @@ body {
 .complete-pay-placeholder {
   background: #e6effc;
   border-radius: 10px;
-  height: 62px;
+  height: 82px;
+  padding-left: 10px;
 }
 
 .complete-pay-shipping {
@@ -561,18 +576,18 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 62px;
+  min-height: 82px;
 }
 
 .complete-pay-shipping i {
-  font-size: 1.25rem;
+  font-size: 2rem;
   color: #0056d2;
 }
 
 .complete-pay-total {
   border: 1.5px solid #0056d2;
   border-radius: 10px;
-  padding: 10px 18px;
+  padding: 18px 18px;
   text-align: center;
   background: #fff;
 }
@@ -610,6 +625,10 @@ body {
 
 .btp-btn-pay:hover {
   background: #003fa3;
+}
+
+.main-footer .footer-container {
+    max-width: 1600px !important; 
 }
 
 @media (max-width: 900px) {

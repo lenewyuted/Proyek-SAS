@@ -196,7 +196,9 @@ $hasPhoto      = ($photoFile !== "");
 
                 <div class="profile-actions-row">
                     <button type="submit" name="update" class="btn-save-profile">Save Profile</button>
-                    <button type="reset" id="btnResetProfile" class="btn-reset-profile">Reset Profile</button>
+                    <button type="reset" id="btnResetProfile" class="btn-reset-profile">
+                        <form action="../../actions/profile-user/reset.php" method="POST" enctype="multipart/form-data">Reset Profile</form>
+                    </button>
                 </div>
             </div>
         </form>

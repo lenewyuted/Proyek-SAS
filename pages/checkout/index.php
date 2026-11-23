@@ -300,17 +300,17 @@ unset($_SESSION['flash_error']);
                             <h4 class="btp-section-title">Complete Payment</h4>
                         </div>
 
-                        <div class="complete-pay-row">
+                        <div class="complete-pay-row" style="padding: 2px;">
 
                             <div class="complete-pay-shipping">
                                 <i class="fa-regular fa-credit-card"></i>
                                 <div>
-                                    <div style="font-size:0.8rem;font-weight:700;color:#0f172a;">Shipping Method</div>
+                                    <div style="font-size:1.3rem;font-weight:700;color:#0f172a;">Shipping Method</div>
                                     <div class="modal-shipping-text" style="font-size:0.8rem;color:#334155;">Regular Rp35.000</div>
                                 </div>
                             </div>
-                            <div class="complete-pay-total">
-                                <span>Total Payment</span>
+                            <div class="complete-pay-total" style="padding-top: 2px;">
+                                <span style="font-size: 1.5rem;">Total Payment</span>
                                 <strong class="modal-total-text"><?= formatRupiah($totalAmount) ?></strong>
                             </div>
                         </div>
@@ -509,13 +509,13 @@ unset($_SESSION['flash_error']);
                         <div class="complete-pay-row">
                             <div class="complete-pay-placeholder" id="complete-pay-placeholder-ewallet">
                                 <div class="btp-bank-logo-js dana">DANA</div>
-                                <div>0812-3456-7890</div>
-                                <div>Available 24 Hours</div>
+                                <div class="btp-bank-sub-js">0812-3456-7890</div>
+                                <div class="btp-bank-desc-js">Available 24 Hours</div>
                             </div>
                             <div class="complete-pay-shipping">
                                 <i class="fa-regular fa-credit-card"></i>
                                 <div>
-                                    <div style="font-size:0.8rem;font-weight:700;color:#0f172a;">Shipping Method</div>
+                                    <div style="font-size:1.3rem;font-weight:700;color:#0f172a;">Shipping Method</div>
                                     <div class="modal-shipping-text" style="font-size:0.8rem;color:#334155;">Regular Rp35.000</div>
                                 </div>
                             </div>
@@ -625,8 +625,8 @@ unset($_SESSION['flash_error']);
 
                 placeholderEwallet.innerHTML = `
                     <div class="btp-bank-logo-js ${paymentChannel}">${this.querySelector(".btp-bank-logo").innerText}</div>
-                    <div>0812-3456-7890</div>
-                    <div>Available 24 Hours</div>
+                    <div class="btp-bank-sub-js">0812-3456-7890</div>
+                    <div class="btp-bank-desc-js">Available 24 Hours</div>
                 
                 `;
 

@@ -1,5 +1,5 @@
-<?php 
-const BASE_URL = "http://localhost:3000"; 
+<?php
+const BASE_URL = "http://localhost:3000";
 $loggedInUser = $_SESSION["user"] ?? '';
 ?>
 
@@ -14,14 +14,18 @@ $loggedInUser = $_SESSION["user"] ?? '';
   </div>
   <div class="header-actions">
     <a href="<?= BASE_URL ?>/pages/admin/profile/edit.php">
-            <button class="btn-profile">
-                <i class="bi bi-person-circle"></i><?= htmlspecialchars($loggedInUser['name'] ?? '') ?>
-            </button>
-        </a>
-        
-        <!-- Tombol Logout menggunakan BASE_URL mutlak -->
-        <a onclick="return confirm('Yakin logout ? Tidak menyesal')" href="<?= BASE_URL ?>/actions/auth/logout.php" class="btn-logout">
-            <i class="bi bi-box-arrow-right"></i> Log Out
-        </a>
+      <button class="btn-profile">
+        <i class="bi bi-person-circle"></i><?= htmlspecialchars($loggedInUser['name'] ?? '') ?>
+      </button>
+    </a>
+
+    <a class="btn-logout" href="/pages/landing-page/index.php">
+      <i class="fa-solid fa-clock-rotate-left user-dropdown-icon"></i>Landing
+    </a>
+
+    <!-- Tombol Logout menggunakan BASE_URL mutlak -->
+    <a onclick="return confirm('Yakin logout ?')" href="<?= BASE_URL ?>/actions/auth/logout.php" class="btn-logout">
+      <i class="bi bi-box-arrow-right"></i> Log Out
+    </a>
   </div>
 </header>
