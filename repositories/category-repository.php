@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . "/../config/database.php";
 
-function getCategories($search, $categoryId, $currentPage, $perPage) 
+function getCategories($search, $categoryId, $currentPage, $perPage)
 {
     global $pdo;
 
@@ -12,19 +12,19 @@ function getCategories($search, $categoryId, $currentPage, $perPage)
     group by c.id
     limit :limit offset :offset";
 
-    $stmt = $pdo ->prepare($query);
-    $stmt -> execute([
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
         'search' => "%$search%",
         'limit' => $perPage,
-        'offset' => ($currentPage -1) * $perPage,
+        'offset' => ($currentPage - 1) * $perPage,
     ]);
 
-    $categories = $stmt -> fetchAll();
+    $categories = $stmt->fetchAll();
 
     return $categories;
 }
 
-function getCategoriesLandingPage() 
+function getCategoriesLandingPage()
 {
     global $pdo;
     // Fetch Data Kategori (maks 8 sesuai desain)
@@ -34,7 +34,6 @@ function getCategoriesLandingPage()
     $categories = $stmtCat->fetchAll();
 
     return $categories;
-
 }
 
 
@@ -59,42 +58,50 @@ function getCategory($id)
     return $category;
 }
 
-function isCategoryExists($categoryId) 
+function isCategoryExists($categoryId)
 {
-  global $pdo;
+    global $pdo;
 
-  $query = "select count(id) from categories where id = :id"; //count(id) menghitung jumlah data yg ada di tabel book
+    $query = "select count(id) from categories where id = :id"; //count(id) menghitung jumlah data yg ada di tabel book
 
-  $stmt = $pdo -> prepare($query);
-  $stmt -> execute([
-    'id' => $categoryId   // sebelumnya 'category_id', harus sama dengan :id di query
-  ]);
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([
+        'id' => $categoryId   // sebelumnya 'category_id', harus sama dengan :id di query
+    ]);
 
-  $isCategoryExists = $stmt -> fetchColumn() > 0;
+    $isCategoryExists = $stmt->fetchColumn() > 0;
 
-  return $isCategoryExists;
+    return $isCategoryExists;
 }
 
-function countCategories() {
-    global $pdo; 
+function countCategories()
+{
+    global $pdo;
     $stmt = $pdo->query("select count(*) as total from categories");
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['total'] ?? 0;
 }
 
-function countOfCategories($search) 
+function countOfCategories($search)
 {
     global $pdo;
 
     $query = "select count(id) from categories where name like :name";
 
-    $stmt = $pdo -> prepare($query);
+    $stmt = $pdo->prepare($query);
     $stmt->execute([
         'name' => "%$search%",
     ]);
 
-    $totalCategories = $stmt -> fetchColumn();
-    
+    $totalCategories = $stmt->fetchColumn();
+
     return $totalCategories;
 }
-?>
+
+function getAllCategories()
+{
+    global $pdo;
+    $query = "SELECT * FROM categories ORDER BY id ASC";
+    $stmt = $pdo->query($query);
+    return $stmt->fetchAll();
+}
