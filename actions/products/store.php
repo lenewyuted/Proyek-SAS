@@ -2,6 +2,7 @@
 session_start();
 require_once __DIR__ . "/../../config/database.php";
 require_once __DIR__ . "/../../validations/product-validation.php";
+require_once __DIR__ . "/../../repositories/specification-repository.php";
 
 if (isset($_POST['store']) && $_SERVER['REQUEST_METHOD'] === "POST") {
     try {
@@ -13,6 +14,8 @@ if (isset($_POST['store']) && $_SERVER['REQUEST_METHOD'] === "POST") {
         if (count($errors) > 0) {
             $_SESSION['errors'] = $errors; //simpan pesan error ke session (tempat penyimpanan sementara yg berada di server)
             $_SESSION['old'] = $request; //biasa ketika ada validasi error, kebiasaan form akan mereset semua inputannya. Jdi dgn ini bs mempertahankan semua inputannya
+            $_SESSION['old']['spec_name'] = $_POST['spec_name'] ?? [];
+            $_SESSION['old']['spec_value'] = $_POST['spec_value'] ?? [];
 
             header('location: ../../pages/admin/products/create.php');
             exit;
@@ -52,6 +55,13 @@ if (isset($_POST['store']) && $_SERVER['REQUEST_METHOD'] === "POST") {
             'picture' => $picturePath,
             'category_id' => $request['category_id'],
         ]);
+
+        $productId = $pdo->lastInsertId();
+        syncProductSpecifications(
+            $productId,
+            $_POST['spec_name'] ?? [],
+            $_POST['spec_value'] ?? []
+        );
 
         $pdo->commit(); //ketika sudah slesai, kt akan memastikan bahwa data ini udah bnr jdi ini akan dieksekusi dan dikirim ke databasenya
 

@@ -119,6 +119,28 @@ unset($_SESSION['errors'], $_SESSION['old']);
                         </p>
                     <?php endif; ?>
                 </div>
+
+                <!-- Product Specifications Section -->
+                <div class="specs-section">
+                    <div class="specs-header">
+                        <div class="specs-header-title">
+                            <h4>Spesifikasi Produk (Opsional)</h4>
+                            <p>Tambahkan parameter teknis untuk perbandingan produk (contoh: Socket, RAM, TDP, dll).</p>
+                        </div>
+                        <button type="button" class="btn-add-spec" onclick="addSpecificationRow()">
+                            <i class="bi bi-plus-circle"></i> Tambah Baris
+                        </button>
+                    </div>
+
+                    <div id="specifications-container" class="specs-container">
+                        <!-- Baris spesifikasi dinamis akan ditambahkan di sini -->
+                    </div>
+
+                    <p id="specs-empty-notice" class="specs-empty-notice">
+                        Belum ada spesifikasi teknis. Klik tombol <strong>"+ Tambah Baris"</strong> di atas jika ingin menambahkan spesifikasi.
+                    </p>
+                </div>
+
                 <div class="form-actions-center">
                     <button name="store" type="submit" class="btn-submit-add">Add Product</button>
                     <a href="index.php" class="btn-cancel">Cancel</a>
@@ -157,6 +179,47 @@ unset($_SESSION['errors'], $_SESSION['old']);
                 reader.readAsDataURL(file);
             }
         });
+
+        // Logika Dinamis Spesifikasi Produk
+        function addSpecificationRow(specName = '', specValue = '') {
+            const container = document.getElementById('specifications-container');
+            const emptyNotice = document.getElementById('specs-empty-notice');
+
+            const row = document.createElement('div');
+            row.className = 'spec-row';
+            row.innerHTML = `
+                <input type="text" name="spec_name[]" value="${specName}" placeholder="Nama Spesifikasi (cth: Socket)">
+                <input type="text" name="spec_value[]" value="${specValue}" placeholder="Nilai Spesifikasi (cth: AM5)">
+                <button type="button" class="btn-remove-spec" onclick="removeSpecificationRow(this)" title="Hapus spesifikasi">
+                    <i class="bi bi-trash"></i>
+                </button>
+            `;
+
+            container.appendChild(row);
+            if (emptyNotice) {
+                emptyNotice.style.display = 'none';
+            }
+        }
+
+        function removeSpecificationRow(buttonElement) {
+            const row = buttonElement.closest('.spec-row');
+            if (row) {
+                row.remove();
+            }
+
+            const container = document.getElementById('specifications-container');
+            const emptyNotice = document.getElementById('specs-empty-notice');
+            if (container && container.children.length === 0 && emptyNotice) {
+                emptyNotice.style.display = 'block';
+            }
+        }
+
+        // Pulihkan nilai spesifikasi lama jika sempat ada error validasi
+        <?php if (!empty($old['spec_name'])): ?>
+            <?php foreach ($old['spec_name'] as $oldIndex => $oldSpecName): ?>
+                addSpecificationRow(<?= json_encode($oldSpecName) ?>, <?= json_encode($old['spec_value'][$oldIndex] ?? '') ?>);
+            <?php endforeach; ?>
+        <?php endif; ?>
     </script>
 </body>
 
