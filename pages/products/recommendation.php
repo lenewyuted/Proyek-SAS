@@ -60,19 +60,20 @@ $products = array_map(function ($r) use ($imageBase, $cartSession) {
         }
     }
 
-    $p = [
-        'id'       => $id,
-        'name'     => (string) $r['name'],
-        'category' => (string) ($r['category_name'] ?? ''),
-        'price'    => (int) $r['price'],
-        'stock'    => (int) ($r['stock'] ?? 0),
-        'image'    => $img,
-        'rating'   => $rating,
-        'inCart'   => (int) ($cartSession[$id]['quantity'] ?? 0),
+    $description = (string) pick($r, ['description', 'deskripsi'], '');
+
+    return [
+        'id'          => $id,
+        'name'        => (string) $r['name'],
+        'category'    => (string) ($r['category_name'] ?? ''),
+        'description' => $description,
+        'descLower'   => mb_strtolower($description),
+        'price'       => (int) $r['price'],
+        'stock'       => (int) ($r['stock'] ?? 0),
+        'image'       => $img,
+        'rating'      => $rating,
+        'inCart'      => (int) ($cartSession[$id]['quantity'] ?? 0),
     ];
-    $extra = pick($r, ['brand', 'specs', 'specification', 'description', 'deskripsi']);
-    $p['search'] = mb_strtolower($p['name'] . ' ' . $p['category'] . ' ' . $extra);
-    return $p;
 }, $raw);
 
 // ---------- Semua Pertanyaan Bertipe Radio (1 Pilihan Aktif) ----------
@@ -114,6 +115,31 @@ $questions = [
     <link rel="stylesheet" href="../../styles/components/header.css">
     <link rel="stylesheet" href="../../styles/components/footer.css">
     <link rel="stylesheet" href="../../styles/pages/recommendation.css">
+    <style>
+        .rec-see-more-wrap {
+            display: flex;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .rec-see-more-btn {
+            padding: 10px 24px;
+            border: 2px solid #0056c6;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #0056c6;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .rec-see-more-btn:hover {
+            background: #0056c6;
+            color: #ffffff;
+        }
+    </style>
 </head>
 
 <body class="recommendation-page">
@@ -155,12 +181,15 @@ $questions = [
             </div>
         </form>
 
-        <!-- Hasil rekomendasi -->
-        <section class="rec-results" id="results">
+        <!-- Hasil rekomendasi (muncul setelah Submit ditekan) -->
+        <section class="rec-results" id="results" hidden>
             <h2>Your Best Choice</h2>
             <p class="rec-sub">The following options have been adapted to your criteria</p>
             <p class="rec-count" id="count" aria-live="polite"></p>
             <div class="rec-grid" id="grid"></div>
+            <div class="rec-see-more-wrap" id="see-more-wrap" hidden>
+                <button type="button" class="rec-see-more-btn" id="btn-see-more">See More</button>
+            </div>
             <p class="rec-empty" id="empty" hidden></p>
         </section>
     </main>
@@ -171,235 +200,230 @@ $questions = [
 
     <script>
         (function() {
-            var PRODUCTS = <?= json_encode($products, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) ?>;
-            var DB_ERROR = <?= $dbError ? 'true' : 'false' ?>;
-            var LOGGED_IN = <?= $loggedIn ? 'true' : 'false' ?>;
-            var CART_URL = <?= json_encode($cartUrl) ?>;
-            var MAX_RESULTS = 5;
+            const PRODUCTS = <?= json_encode($products, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) ?>;
+            const DB_ERROR = <?= $dbError ? 'true' : 'false' ?>;
+            const LOGGED_IN = <?= $loggedIn ? 'true' : 'false' ?>;
+            const CART_URL = <?= json_encode($cartUrl) ?>;
+            const INITIAL_LIMIT = 12;
 
-            var form = document.getElementById('rec-form');
-            var grid = document.getElementById('grid');
-            var empty = document.getElementById('empty');
-            var count = document.getElementById('count');
-            var toastEl = document.getElementById('toast');
-            var btn = document.getElementById('btn-submit');
-            var toastTimer;
+            const form = document.getElementById('rec-form');
+            const resultsSection = document.getElementById('results');
+            const grid = document.getElementById('grid');
+            const empty = document.getElementById('empty');
+            const count = document.getElementById('count');
+            const toastEl = document.getElementById('toast');
+            const btn = document.getElementById('btn-submit');
+            const seeMoreWrap = document.getElementById('see-more-wrap');
+            const btnSeeMore = document.getElementById('btn-see-more');
 
-            var byId = {};
-            PRODUCTS.forEach(function(p) {
-                byId[p.id] = p;
-            });
+            let toastTimer;
+            let currentMatches = [];
+            let showAll = false;
 
-            function esc(s) {
-                return String(s).replace(/[&<>"']/g, function(c) {
-                    return {
-                        '&': '&amp;',
-                        '<': '&lt;',
-                        '>': '&gt;',
-                        '"': '&quot;',
-                        "'": '&#39;'
-                    } [c];
-                });
-            }
-
-            function rupiah(n) {
-                return 'Rp ' + Number(n).toLocaleString('id-ID');
-            }
-
-            var KW = {
-                heavy: ['rtx', 'gtx', 'radeon', 'geforce', 'gaming', 'victus', 'aorus', 'nitro', 'legion', 'rog', 'tuf', 'ryzen 7', 'ryzen 9', 'i7', 'i9'],
-                design: ['rtx', 'creator', 'oled', 'studio', 'ryzen 7', 'ryzen 9', 'i7', 'i9', '16gb', '32gb', '16 gb', '32 gb'],
-                office: ['ryzen 3', 'ryzen 5', 'i3', 'i5', 'vivobook', 'ideapad', 'aspire', 'thinkpad', 'office', 'slim', '8gb', '8 gb'],
-                light: ['gtx', 'ryzen 5', 'i5', 'aspire', 'vivobook']
+            const PHRASES = {
+                need: {
+                    gaming: 'gaming',
+                    design: 'design & editing',
+                    study: 'study & work'
+                },
+                apps: {
+                    heavy: 'demanding games',
+                    light: 'light games',
+                    office: 'office applications'
+                },
+                usage: {
+                    most: 'most of the day',
+                    few: 'a few hours a day',
+                    rare: 'occasionally'
+                }
             };
 
-            function hits(text, list) {
-                return list.filter(function(k) {
-                    return text.indexOf(k) !== -1;
-                }).length;
+            function esc(text) {
+                return String(text || '').replace(/[&<>"']/g, (ch) => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                } [ch]));
             }
 
-            // ----- Jawaban tunggal (radio) -----
-            function answers() {
-                var fd = new FormData(form);
+            function rupiah(amount) {
+                return 'Rp ' + Number(amount || 0).toLocaleString('id-ID');
+            }
+
+            function checkPrice(price, op, target) {
+                const p = Number(price);
+                const t = Number(target);
+                if (op === '<') return p < t;
+                if (op === '<=') return p <= t;
+                if (op === '=') return p === t;
+                if (op === '>=') return p >= t;
+                if (op === '>') return p > t;
+                return true;
+            }
+
+            function matchBudget(price, budget) {
+                if (budget === 'low') return checkPrice(price, '<', 5000000);
+                if (budget === 'mid') return checkPrice(price, '>=', 5000000) && checkPrice(price, '<=', 10000000);
+                if (budget === 'high') return checkPrice(price, '>', 10000000);
+                return true;
+            }
+
+            function likeDesc(desc, phrase) {
+                if (!desc || !phrase) return false;
+                return desc.includes(phrase.toLowerCase());
+            }
+
+            function getAnswers() {
+                const data = new FormData(form);
                 return {
-                    need: fd.get('need'),
-                    budget: fd.get('budget'),
-                    apps: fd.get('apps'),
-                    usage: fd.get('usage')
+                    need: data.get('need'),
+                    budget: data.get('budget'),
+                    apps: data.get('apps'),
+                    usage: data.get('usage')
                 };
             }
 
-            function validate() {
-                var a = answers();
-                var checks = {
-                    need: !!a.need,
-                    budget: !!a.budget,
-                    apps: !!a.apps,
-                    usage: !!a.usage
-                };
-                var first = null;
-                Object.keys(checks).forEach(function(key) {
-                    var box = form.querySelector('[data-q="' + key + '"]');
-                    var bad = !checks[key];
-                    box.classList.toggle('has-error', bad);
-                    box.querySelector('.q-error').hidden = !bad;
-                    if (bad && !first) first = box;
+            function validateAnswers(ans) {
+                let isValid = true;
+                let firstInvalidBox = null;
+
+                ['need', 'budget', 'apps', 'usage'].forEach((key) => {
+                    const box = form.querySelector(`[data-q="${key}"]`);
+                    const missing = !ans[key];
+                    if (missing) isValid = false;
+
+                    box.classList.toggle('has-error', missing);
+                    box.querySelector('.q-error').hidden = !missing;
+
+                    if (missing && !firstInvalidBox) {
+                        firstInvalidBox = box;
+                    }
                 });
-                if (first) {
-                    first.classList.remove('shake');
-                    void first.offsetWidth;
-                    first.classList.add('shake');
-                    first.scrollIntoView({
+
+                if (firstInvalidBox) {
+                    firstInvalidBox.scrollIntoView({
                         behavior: 'smooth',
                         block: 'center'
                     });
                 }
-                return !first;
+
+                return isValid;
             }
 
-            // Otomatis perbarui hasil saat opsi dipilih + hapus error
-            form.addEventListener('change', function(e) {
-                var box = e.target.closest('.question');
-                if (box) {
-                    box.classList.remove('has-error');
-                    box.querySelector('.q-error').hidden = true;
-                }
-                if (validate()) {
-                    render(recommend(answers()));
-                }
-            });
+            function getRecommendations(ans) {
+                const needPhrase = PHRASES.need[ans.need] || '';
+                const appsPhrase = PHRASES.apps[ans.apps] || '';
+                const usagePhrase = PHRASES.usage[ans.usage] || '';
 
-            // ----- Logika rekomendasi -----
-            function inBudget(price, b) {
-                if (b === 'low') return price < 5000000;
-                if (b === 'mid') return price >= 5000000 && price <= 10000000;
-                if (b === 'high') return price > 10000000;
-                return true;
-            }
+                const validProducts = PRODUCTS.filter((p) => p.stock > 0 && matchBudget(p.price, ans.budget));
 
-            function recommend(a) {
-                return PRODUCTS
-                    .filter(function(p) {
-                        return inBudget(p.price, a.budget) && p.stock > 0;
-                    })
-                    .map(function(p) {
-                        var s = 0,
-                            t = p.search;
-                        if (a.need === 'gaming') s += hits(t, KW.heavy);
-                        if (a.need === 'design') s += hits(t, KW.design);
-                        if (a.need === 'study') s += hits(t, KW.office);
-                        if (a.apps === 'heavy') s += hits(t, KW.heavy);
-                        if (a.apps === 'light') s += hits(t, KW.light);
-                        if (a.apps === 'office') s += hits(t, KW.office);
-                        var ratingWeight = a.usage === 'most' ? 0.6 : 0.3;
+                const scored = validProducts
+                    .map((p) => {
+                        const d = p.descLower || '';
+                        const matchNeed = likeDesc(d, needPhrase);
+                        const matchApps = likeDesc(d, appsPhrase);
+                        const matchUsage = likeDesc(d, usagePhrase);
+                        const matchCount = (matchNeed ? 1 : 0) + (matchApps ? 1 : 0) + (matchUsage ? 1 : 0);
+
                         return {
-                            p: p,
-                            score: s * 2 + (p.rating || 0) * ratingWeight
+                            product: p,
+                            matchCount: matchCount,
+                            rating: Number(p.rating || 0)
                         };
                     })
-                    .sort(function(x, y) {
-                        return y.score - x.score || (y.p.rating || 0) - (x.p.rating || 0) || x.p.price - y.p.price;
-                    })
-                    .slice(0, MAX_RESULTS)
-                    .map(function(x) {
-                        return x.p;
-                    });
-            }
+                    .filter((item) => item.matchCount > 0);
 
-            // ----- Tampilan Kartu Produk Sesuai Referensi -----
-            function cardHtml(p, i) {
-                var link = '../products/show.php?id=' + p.id;
-                var thumb = p.image ?
-                    '<img src="' + esc(p.image) + '" alt="' + esc(p.name) + '" loading="lazy">' :
-                    '<span class="rec-fallback"><i class="fa-solid fa-desktop"></i></span>';
-                var rating = p.rating !== null ?
-                    Number(p.rating).toFixed(1) + ' <span class="rec-star">&#9733;</span>' :
-                    '<span class="rec-muted">No rating</span>';
-                return '<article class="rec-card" style="--i:' + i + '">' +
-                    '<div class="rec-card-top">' +
-                    '<a class="rec-thumb" href="' + link + '">' + thumb + '</a>' +
-                    '<a class="rec-name" href="' + link + '">' + esc(p.name) + '</a>' +
-                    '</div>' +
-                    '<div class="rec-card-footer">' +
-                    '<div class="rec-rating">' + rating + '</div>' +
-                    '<div class="rec-bottom">' +
-                    '<strong class="rec-price">' + rupiah(p.price) + '</strong>' +
-                    '<button type="button" class="rec-cart-btn" data-id="' + p.id + '" aria-label="Add ' + esc(p.name) + ' to cart">' +
-                    '<i class="fa-solid fa-cart-shopping"></i>' +
-                    '</button>' +
-                    '</div>' +
-                    '</div>' +
-                    '</article>';
-            }
-
-            function render(list) {
-                grid.innerHTML = list.map(cardHtml).join('');
-                empty.hidden = list.length > 0;
-                count.textContent = list.length ? list.length + ' recommendation' + (list.length > 1 ? 's' : '') + ' found' : '';
-                if (!list.length) {
-                    empty.textContent = DB_ERROR ?
-                        'Failed to load products from the database.' :
-                        PRODUCTS.length === 0 ?
-                        'There are no products in the database yet.' :
-                        'No products match this budget. Try choosing a different budget.';
-                }
-            }
-
-            function showSkeleton() {
-                var html = '';
-                for (var i = 0; i < MAX_RESULTS; i++) html += '<div class="rec-card rec-skeleton" aria-hidden="true"></div>';
-                grid.innerHTML = html;
-                empty.hidden = true;
-                count.textContent = '';
-            }
-
-            grid.addEventListener('error', function(e) {
-                if (e.target.tagName === 'IMG') {
-                    var span = document.createElement('span');
-                    span.className = 'rec-fallback';
-                    span.innerHTML = '<i class="fa-solid fa-desktop"></i>';
-                    e.target.replaceWith(span);
-                }
-            }, true);
-
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                if (!validate()) return;
-
-                btn.disabled = true;
-                btn.textContent = 'Searching...';
-                showSkeleton();
-                document.getElementById('results').scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
+                scored.sort((a, b) => {
+                    if (b.matchCount !== a.matchCount) return b.matchCount - a.matchCount;
+                    if (b.rating !== a.rating) return b.rating - a.rating;
+                    return a.product.price - b.product.price;
                 });
 
-                setTimeout(function() {
-                    render(recommend(answers()));
-                    btn.disabled = false;
-                    btn.textContent = 'Submit';
-                }, 400);
+                return scored.map((item) => item.product);
+            }
+
+            function renderCard(p, index) {
+                const link = `../products/show.php?id=${p.id}`;
+                const thumb = p.image ?
+                    `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy">` :
+                    `<span class="rec-fallback"><i class="fa-solid fa-desktop"></i></span>`;
+
+                const rating = p.rating !== null ?
+                    `${Number(p.rating).toFixed(1)} <span class="rec-star">&#9733;</span>` :
+                    `<span class="rec-muted">No rating</span>`;
+
+                return `
+                    <article class="rec-card" style="--i:${index}">
+                        <div class="rec-card-top">
+                            <a class="rec-thumb" href="${link}">${thumb}</a>
+                            <a class="rec-name" href="${link}">${esc(p.name)}</a>
+                        </div>
+                        <div class="rec-card-footer">
+                            <div class="rec-rating">${rating}</div>
+                            <div class="rec-bottom">
+                                <strong class="rec-price">${rupiah(p.price)}</strong>
+                                <button type="button" class="rec-cart-btn" data-id="${p.id}" aria-label="Add ${esc(p.name)} to cart">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }
+
+            function renderResults() {
+                resultsSection.hidden = false;
+                const total = currentMatches.length;
+                const visibleList = showAll ? currentMatches : currentMatches.slice(0, INITIAL_LIMIT);
+
+                grid.innerHTML = visibleList.map((p, i) => renderCard(p, i)).join('');
+                empty.hidden = total > 0;
+
+                if (total > 0) {
+                    count.textContent = `Showing ${visibleList.length} of ${total} recommendation${total > 1 ? 's' : ''}`;
+                } else {
+                    count.textContent = '';
+                    if (DB_ERROR) {
+                        empty.textContent = 'Failed to load products from the database.';
+                    } else if (PRODUCTS.length === 0) {
+                        empty.textContent = 'There are no products in the database yet.';
+                    } else {
+                        empty.textContent = 'No products match your selected budget and description criteria.';
+                    }
+                }
+
+                if (total > INITIAL_LIMIT) {
+                    seeMoreWrap.hidden = false;
+                    btnSeeMore.textContent = showAll ? 'Show Less' : `See More (${total - INITIAL_LIMIT} more)`;
+                } else {
+                    seeMoreWrap.hidden = true;
+                }
+            }
+
+            btnSeeMore.addEventListener('click', () => {
+                showAll = !showAll;
+                renderResults();
             });
 
-            function toast(msg, type) {
+            function showToast(msg, type) {
                 clearTimeout(toastTimer);
                 toastEl.textContent = msg;
-                toastEl.className = 'rec-toast' + (type ? ' ' + type : '');
+                toastEl.className = 'rec-toast' + (type ? ` ${type}` : '');
                 toastEl.hidden = false;
-                toastTimer = setTimeout(function() {
+                toastTimer = setTimeout(() => {
                     toastEl.hidden = true;
                 }, 2800);
             }
 
-            function updateBadge() {
+            function updateCartBadge() {
                 if (!LOGGED_IN) return;
-                var link = document.querySelector('.cart-icon-link');
+                const link = document.querySelector('.cart-icon-link');
                 if (!link) return;
-                var total = PRODUCTS.reduce(function(sum, p) {
-                    return sum + p.inCart;
-                }, 0);
-                var badge = link.querySelector('.cart-badge');
+
+                const total = PRODUCTS.reduce((sum, p) => sum + Number(p.inCart || 0), 0);
+                let badge = link.querySelector('.cart-badge');
                 if (!badge) {
                     badge = document.createElement('span');
                     badge.className = 'cart-badge';
@@ -408,43 +432,81 @@ $questions = [
                 badge.textContent = total;
             }
 
-            grid.addEventListener('click', function(e) {
-                var b = e.target.closest('.rec-cart-btn');
-                if (!b || b.disabled) return;
+            form.addEventListener('change', (e) => {
+                const box = e.target.closest('.question');
+                if (box) {
+                    box.classList.remove('has-error');
+                    box.querySelector('.q-error').hidden = true;
+                }
+            });
 
-                var p = byId[b.dataset.id];
-                if (!p) return;
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const ans = getAnswers();
+                if (!validateAnswers(ans)) return;
 
-                if (p.inCart + 1 > p.stock) {
-                    toast('Stock limit reached for ' + p.name + ' (stock: ' + p.stock + ').', 'error');
+                btn.disabled = true;
+                btn.textContent = 'Searching...';
+
+                currentMatches = getRecommendations(ans);
+                showAll = false;
+                renderResults();
+
+                btn.disabled = false;
+                btn.textContent = 'Submit';
+
+                resultsSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+
+            grid.addEventListener('error', (e) => {
+                if (e.target.tagName === 'IMG') {
+                    const span = document.createElement('span');
+                    span.className = 'rec-fallback';
+                    span.innerHTML = '<i class="fa-solid fa-desktop"></i>';
+                    e.target.replaceWith(span);
+                }
+            }, true);
+
+            grid.addEventListener('click', (e) => {
+                const cartBtn = e.target.closest('.rec-cart-btn');
+                if (!cartBtn || cartBtn.disabled) return;
+
+                const productId = Number(cartBtn.dataset.id);
+                const product = PRODUCTS.find((p) => p.id === productId);
+                if (!product) return;
+
+                if (product.inCart + 1 > product.stock) {
+                    showToast(`Stock limit reached for ${product.name} (stock: ${product.stock}).`, 'error');
                     return;
                 }
 
-                b.disabled = true;
+                cartBtn.disabled = true;
+
                 fetch(CART_URL, {
                         method: 'POST',
                         credentials: 'same-origin',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                         },
-                        body: 'product_id=' + encodeURIComponent(p.id) + '&quantity=1'
+                        body: `product_id=${encodeURIComponent(product.id)}&quantity=1`
                     })
-                    .then(function(res) {
+                    .then((res) => {
                         if (!res.ok || !/show\.php/.test(res.url)) throw new Error('failed');
-                        p.inCart += 1;
-                        b.classList.add('added');
-                        updateBadge();
-                        toast(p.name + ' added to cart');
+                        product.inCart += 1;
+                        cartBtn.classList.add('added');
+                        updateCartBadge();
+                        showToast(`${product.name} added to cart`);
                     })
-                    .catch(function() {
-                        toast('Could not add to cart. Please try again.', 'error');
+                    .catch(() => {
+                        showToast('Could not add to cart. Please try again.', 'error');
                     })
-                    .then(function() {
-                        b.disabled = false;
+                    .finally(() => {
+                        cartBtn.disabled = false;
                     });
             });
-
-            render(recommend(answers()));
         })();
     </script>
 </body>

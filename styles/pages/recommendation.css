@@ -229,30 +229,32 @@ body.recommendation-page {
   margin: 10px 0 18px;
 }
 
+/* Grid 6 Produk per Baris */
 .rec-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 18px;
 }
 
-/* Kartu Produk Sesuai Referensi */
+/* Kartu Produk (Landing Page Style) */
 .rec-card {
   background-color: var(--rec-white);
   border: 1.5px solid var(--rec-border);
   border-radius: 12px;
-  padding: 14px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   animation: recFadeIn 0.28s ease backwards;
   animation-delay: calc(var(--i, 0) * 45ms);
 }
 
 .rec-card:hover {
-  box-shadow: 0 8px 20px rgba(0, 86, 198, 0.12);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(0, 86, 198, 0.14);
+  border-color: var(--rec-blue-hover);
 }
 
 .rec-card-top {
@@ -262,14 +264,14 @@ body.recommendation-page {
 
 .rec-thumb {
   width: 100%;
-  height: 155px;
+  aspect-ratio: 1 / 1;
   background-color: var(--rec-bg-soft);
-  border-radius: 8px;
+  border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   text-decoration: none;
 }
 
@@ -283,25 +285,27 @@ body.recommendation-page {
 }
 
 .rec-card:hover .rec-thumb img {
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 
 .rec-fallback {
-  font-size: 36px;
+  font-size: 34px;
   color: var(--rec-blue);
 }
 
 .rec-name {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--rec-text);
   text-decoration: none;
   line-height: 1.35;
+  min-height: 38px;
   margin-bottom: 6px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  transition: color 0.15s ease;
 }
 
 .rec-name:hover {
@@ -311,14 +315,14 @@ body.recommendation-page {
 .rec-card-footer {
   display: flex;
   flex-direction: column;
-  margin-top: 4px;
+  margin-top: auto;
 }
 
 .rec-rating {
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 12.5px;
+  font-weight: 600;
   color: var(--rec-text);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -326,7 +330,8 @@ body.recommendation-page {
 
 .rec-star {
   color: #f59e0b;
-  font-size: 14px;
+  font-size: 13.5px;
+  line-height: 1;
 }
 
 .rec-muted {
@@ -338,36 +343,41 @@ body.recommendation-page {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 6px;
 }
 
 .rec-price {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--rec-text);
+  white-space: nowrap;
 }
 
 /* Tombol Keranjang Bulat Border Biru */
 .rec-cart-btn {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background-color: var(--rec-white);
   border: 1.5px solid var(--rec-border);
   color: var(--rec-blue);
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
 }
 
 .rec-cart-btn:hover:not(:disabled),
 .rec-cart-btn.added {
   background-color: var(--rec-blue);
   color: var(--rec-white);
+}
+
+.rec-cart-btn:active:not(:disabled) {
+  transform: scale(0.94);
 }
 
 /* Empty State & Skeleton */
@@ -383,7 +393,7 @@ body.recommendation-page {
 }
 
 .rec-skeleton {
-  height: 295px;
+  height: 270px;
   background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
   background-size: 200% 100%;
   animation: recShimmer 1.2s infinite;
@@ -440,7 +450,13 @@ body.recommendation-page {
 }
 
 /* ---------- Responsif ---------- */
-@media (max-width: 1280px) {
+@media (max-width: 1400px) {
+  .rec-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1180px) {
   .rec-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
