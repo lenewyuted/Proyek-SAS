@@ -63,7 +63,9 @@ body.recommendation-page {
   color: var(--rec-blue);
   text-decoration: none;
   white-space: nowrap;
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .rec-back:hover {
@@ -148,7 +150,9 @@ body.recommendation-page {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .check:hover .box {
@@ -246,7 +250,10 @@ body.recommendation-page {
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
   animation: recFadeIn 0.28s ease backwards;
   animation-delay: calc(var(--i, 0) * 45ms);
 }
@@ -367,7 +374,10 @@ body.recommendation-page {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease;
 }
 
 .rec-cart-btn:hover:not(:disabled),
@@ -419,6 +429,36 @@ body.recommendation-page {
   background-color: #dc2626;
 }
 
+.rec-see-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.rec-see-more-btn {
+  padding: 10px 24px;
+  border: 2px solid #0056c6;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0056c6;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.rec-see-more-btn:hover {
+  background: #0056c6;
+  color: #ffffff;
+}
+
 .main-footer .footer-container {
   max-width: 1600px !important;
 }
@@ -435,14 +475,25 @@ body.recommendation-page {
 }
 
 @keyframes recShimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 @keyframes recShake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  75% { transform: translateX(6px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
 }
 
 .question.shake {
