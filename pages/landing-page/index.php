@@ -102,9 +102,7 @@ if (!$isSearching && $selectedCategory > 0) {
                                         <i class="fa-solid fa-star"></i>
                                         <small>(<?= $totalReviews ?>)</small>
                                     <?php else: ?>
-                                        <span>0.0</span>
-                                        <i class="fa-regular fa-star"></i>
-                                        <small>(0)</small>
+                                        <span class="rec-muted">No rating</span>
                                     <?php endif; ?>
                                 </div>
                                 <div class="product-footer">
@@ -205,9 +203,7 @@ if (!$isSearching && $selectedCategory > 0) {
                                             <i class="fa-solid fa-star"></i>
                                             <small>(<?= $catTotalReviews ?>)</small>
                                         <?php else: ?>
-                                            <span>0.0</span>
-                                            <i class="fa-regular fa-star"></i>
-                                            <small>(0)</small>
+                                            <span class="rec-muted">No rating</span>
                                         <?php endif; ?>
                                     </div>
                                     <div class="product-footer">
@@ -249,9 +245,7 @@ if (!$isSearching && $selectedCategory > 0) {
                                         <i class="fa-solid fa-star"></i>
                                         <small>(<?= $totalReviews ?>)</small>
                                     <?php else: ?>
-                                        <span>0.0</span>
-                                        <i class="fa-regular fa-star"></i>
-                                        <small>(0)</small>
+                                        <span class="rec-muted">No rating</span>
                                     <?php endif; ?>
                                 </div>
                                 <div class="product-footer">
