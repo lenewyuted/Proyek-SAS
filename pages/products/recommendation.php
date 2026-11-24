@@ -46,7 +46,7 @@ unset($_SESSION['rec_errors']);
 
 $hasSubmitted = is_array($recResult) && !empty($recResult['submitted']);
 $dbError      = $hasSubmitted && !empty($recResult['dbError']);
-$matchedRows  = $hasSubmitted ? ($recResult['products'] ?? []) : [];
+$matchedRows  = ($hasSubmitted && is_array($recResult['products'] ?? null)) ? $recResult['products'] : [];
 $totalMatched = count($matchedRows);
 
 $showAll     = isset($_GET['see_all']) && $_GET['see_all'] === '1';

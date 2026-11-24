@@ -52,10 +52,10 @@ $input = [
 $_SESSION['rec_input'] = $input;
 
 $errors = [];
-if (!isset($needMap[$input['need']]))                           $errors['need']   = 'Please choose an answer.';
-if (!in_array($input['budget'], ['low', 'mid', 'high'], true))  $errors['budget'] = 'Please choose an answer.';
-if (!isset($appsMap[$input['apps']]))                           $errors['apps']   = 'Please choose an answer.';
-if (!isset($usageMap[$input['usage']]))                         $errors['usage']  = 'Please choose an answer.';
+if (!isset($needMap[$input['need']]))                          $errors['need']   = 'Please choose an answer.';
+if (!in_array($input['budget'], ['low', 'mid', 'high'], true)) $errors['budget'] = 'Please choose an answer.';
+if (!isset($appsMap[$input['apps']]))                          $errors['apps']   = 'Please choose an answer.';
+if (!isset($usageMap[$input['usage']]))                        $errors['usage']  = 'Please choose an answer.';
 
 if (!empty($errors)) {
     $_SESSION['rec_errors'] = $errors;
@@ -66,39 +66,18 @@ if (!empty($errors)) {
 
 unset($_SESSION['rec_errors']);
 
-$conditions = [
-    "description LIKE :desc_need",
-    "description LIKE :desc_apps",
-    "description LIKE :desc_usage",
-];
-
-$params = [
-    ':desc_need'  => '%' . $needMap[$input['need']] . '%',
-    ':desc_apps'  => '%' . $appsMap[$input['apps']] . '%',
-    ':desc_usage' => '%' . $usageMap[$input['usage']] . '%',
-];
-
-if ($input['budget'] === 'low') {
-    $conditions[]       = "price < :price_max";
-    $params[':price_max'] = 5000000;
-} elseif ($input['budget'] === 'mid') {
-    $conditions[]       = "price >= :price_min AND price <= :price_max";
-    $params[':price_min'] = 5000000;
-    $params[':price_max'] = 10000000;
-} elseif ($input['budget'] === 'high') {
-    $conditions[]       = "price > :price_min";
-    $params[':price_min'] = 10000000;
-}
-
+$params = [];
 $matchedProducts = [];
 $dbError = false;
+
+$cleanDescExpr = "LOWER(REPLACE(REPLACE(COALESCE(description, ''), '&amp;', '&'), '&amp;', '&'))";
 
 try {
     global $pdo, $conn;
     $db = $pdo ?? $conn ?? null;
 
     if (!($db instanceof PDO)) {
-        foreach (['getConnection', 'getDB', 'getDb', 'db'] as $fn) {
+        foreach (['getConnection', 'getDB', 'getDb', 'db', 'connect'] as $fn) {
             if (function_exists($fn)) {
                 $candidate = $fn();
                 if ($candidate instanceof PDO) {
@@ -109,14 +88,40 @@ try {
         }
     }
 
-    if ($db instanceof PDO) {
-        $sql  = "SELECT * FROM products WHERE " . implode(' AND ', $conditions);
-        $stmt = $db->prepare($sql);
-        $stmt->execute($params);
-        $matchedProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } else {
-        $dbError = true;
+    if (!($db instanceof PDO)) {
+        throw new RuntimeException('PDO instance not found.');
     }
+
+    $sql = "SELECT * FROM products WHERE 1=1";
+
+    $sql .= " AND {$cleanDescExpr} LIKE :desc_need";
+    $params[':desc_need'] = '%' . strtolower($needMap[$input['need']]) . '%';
+
+    $sql .= " AND {$cleanDescExpr} LIKE :desc_apps";
+    $params[':desc_apps'] = '%' . strtolower($appsMap[$input['apps']]) . '%';
+
+    $sql .= " AND {$cleanDescExpr} LIKE :desc_usage";
+    $params[':desc_usage'] = '%' . strtolower($usageMap[$input['usage']]) . '%';
+
+    switch ($input['budget']) {
+        case 'low':
+            $sql .= " AND price < :price_max";
+            $params[':price_max'] = 5000000;
+            break;
+        case 'mid':
+            $sql .= " AND price >= :price_min AND price <= :price_max";
+            $params[':price_min'] = 5000000;
+            $params[':price_max'] = 10000000;
+            break;
+        case 'high':
+            $sql .= " AND price > :price_min";
+            $params[':price_min'] = 10000000;
+            break;
+    }
+
+    $stmt = $db->prepare($sql);
+    $stmt->execute($params);
+    $matchedProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Throwable $ex) {
     $dbError = true;
 }
