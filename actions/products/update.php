@@ -2,6 +2,7 @@
 require_once __DIR__ . "/../../middleware/auth.php";
 require_once __DIR__ . "/../../config/database.php";
 require_once __DIR__ . "/../../validations/product-validation.php";
+require_once __DIR__ . "/../../repositories/specification-repository.php";
 
 if (isset($_POST['update']) && $_SERVER['REQUEST_METHOD'] === "POST") {
     try {
@@ -11,10 +12,12 @@ if (isset($_POST['update']) && $_SERVER['REQUEST_METHOD'] === "POST") {
         $request = getProductRequest($_POST); // berisi inputan dari pengguna
 
         $errors = validateProduct($request, $request['id']); // untuk menampung pesan terkait dengan inputan yang mau kita validasi
-    
+
         if (count($errors) > 0) {
             $_SESSION['errors'] = $errors;
             $_SESSION['old'] = $request;
+            $_SESSION['old']['spec_name'] = $_POST['spec_name'] ?? [];
+            $_SESSION['old']['spec_value'] = $_POST['spec_value'] ?? [];
 
             header('location: ../../pages/admin/products/edit.php?id=' . urlencode($request['id']));
             exit;
@@ -25,7 +28,7 @@ if (isset($_POST['update']) && $_SERVER['REQUEST_METHOD'] === "POST") {
         $stmt = $pdo->prepare($query);
         $stmt->execute([
             'id' => $request['id']
-            ]);
+        ]);
         $picturePath = $stmt->fetchColumn();
 
         // LOGIKA UPLOAD GAMBAR BARU
@@ -62,14 +65,18 @@ if (isset($_POST['update']) && $_SERVER['REQUEST_METHOD'] === "POST") {
             'id' => $request['id'],
         ]);
 
+        syncProductSpecifications(
+            $request['id'],
+            $_POST['spec_name'] ?? [],
+            $_POST['spec_value'] ?? []
+        );
+
         $pdo->commit();
 
         header('location: ../../pages/admin/products/index.php');
         exit;
-
     } catch (PDOException $e) {
         $pdo->rollBack();
         throw $e;
     }
 }
-?>

@@ -2,6 +2,7 @@
 require_once __DIR__ . "/../../../middleware/auth.php";
 require_once __DIR__ . "/../../../repositories/product-repository.php";
 require_once __DIR__ . "/../../../repositories/category-repository.php";
+require_once __DIR__ . "/../../../repositories/specification-repository.php";
 requireRole(["admin"]);
 
 $id = $_GET['id'] ?? null;
@@ -20,6 +21,20 @@ $old = $_SESSION['old'] ?? [];
 unset($_SESSION['errors'], $_SESSION['old']);
 
 $product = array_merge($product, $old);
+
+// Ambil spesifikasi yang sudah ada di database untuk produk ini
+$existingSpecifications = getProductSpecifications($id);
+
+// Jika sebelumnya ada error submit dan user sudah mengetik spesifikasi baru, pakai input user
+if (!empty($old['spec_name'])) {
+    $existingSpecifications = [];
+    foreach ($old['spec_name'] as $oldIndex => $oldName) {
+        $existingSpecifications[] = [
+            'spec_name' => $oldName,
+            'spec_value' => $old['spec_value'][$oldIndex] ?? '',
+        ];
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -139,6 +154,28 @@ $product = array_merge($product, $old);
                         </p>
                     <?php endif; ?>
                 </div>
+
+                <!-- Product Specifications Section -->
+                <div class="specs-section">
+                    <div class="specs-header">
+                        <div class="specs-header-title">
+                            <h4>Spesifikasi Produk (Opsional)</h4>
+                            <p>Tambahkan parameter teknis untuk perbandingan produk (contoh: Socket, RAM, TDP, dll).</p>
+                        </div>
+                        <button type="button" class="btn-add-spec" onclick="addSpecificationRow()">
+                            <i class="bi bi-plus-circle"></i> Tambah Baris
+                        </button>
+                    </div>
+
+                    <div id="specifications-container" class="specs-container">
+                        <!-- Baris spesifikasi dinamis akan dimuat di sini -->
+                    </div>
+
+                    <p id="specs-empty-notice" class="specs-empty-notice">
+                        Belum ada spesifikasi teknis. Klik tombol <strong>"+ Tambah Baris"</strong> di atas jika ingin menambahkan spesifikasi.
+                    </p>
+                </div>
+
                 <div class="form-actions-center">
                     <button name="update" type="submit" class="btn-submit-add">Save Changes</button>
                     <a href="index.php" class="btn-cancel">Cancel</a>
@@ -177,6 +214,47 @@ $product = array_merge($product, $old);
                 reader.readAsDataURL(file);
             }
         });
+
+        // Logika Dinamis Spesifikasi Produk
+        function addSpecificationRow(specName = '', specValue = '') {
+            const container = document.getElementById('specifications-container');
+            const emptyNotice = document.getElementById('specs-empty-notice');
+
+            const row = document.createElement('div');
+            row.className = 'spec-row';
+            row.innerHTML = `
+                <input type="text" name="spec_name[]" value="${specName}" placeholder="Nama Spesifikasi (cth: Socket)">
+                <input type="text" name="spec_value[]" value="${specValue}" placeholder="Nilai Spesifikasi (cth: AM5)">
+                <button type="button" class="btn-remove-spec" onclick="removeSpecificationRow(this)" title="Hapus spesifikasi">
+                    <i class="bi bi-trash"></i>
+                </button>
+            `;
+
+            container.appendChild(row);
+            if (emptyNotice) {
+                emptyNotice.style.display = 'none';
+            }
+        }
+
+        function removeSpecificationRow(buttonElement) {
+            const row = buttonElement.closest('.spec-row');
+            if (row) {
+                row.remove();
+            }
+
+            const container = document.getElementById('specifications-container');
+            const emptyNotice = document.getElementById('specs-empty-notice');
+            if (container && container.children.length === 0 && emptyNotice) {
+                emptyNotice.style.display = 'block';
+            }
+        }
+
+        // Tampilkan spesifikasi yang sudah tersimpan di database
+        <?php if (!empty($existingSpecifications)): ?>
+            <?php foreach ($existingSpecifications as $spec): ?>
+                addSpecificationRow(<?= json_encode($spec['spec_name']) ?>, <?= json_encode($spec['spec_value']) ?>);
+            <?php endforeach; ?>
+        <?php endif; ?>
     </script>
 </body>
 
