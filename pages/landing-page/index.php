@@ -270,8 +270,8 @@ if (!$isSearching && $selectedCategory > 0) {
                     <div class="promo-card">
                         <div class="promo-text">
                             <h3><?= htmlspecialchars($b['name']) ?></h3>
-                            <p><?= htmlspecialchars($b['description']) ?></p>
-                            <a href="#" class="promo-btn">Learn More</a>
+                            <p><?= substr($b['description'], 0, 120) ?>...</p>
+                            <a href="../../../pages/products/show.php?id=<?= $b['id']; ?>" class="promo-btn">Learn More</a>
                         </div>
                         <div class="promo-img">
                             <img src="../../assets/img/<?= htmlspecialchars($b['picture']) ?>"
