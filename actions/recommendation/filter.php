@@ -70,58 +70,38 @@ $params = [];
 $matchedProducts = [];
 $dbError = false;
 
-$cleanDescExpr = "LOWER(REPLACE(REPLACE(COALESCE(description, ''), '&amp;', '&'), '&amp;', '&'))";
-
 try {
-    global $pdo, $conn;
-    $db = $pdo ?? $conn ?? null;
-
-    if (!($db instanceof PDO)) {
-        foreach (['getConnection', 'getDB', 'getDb', 'db', 'connect'] as $fn) {
-            if (function_exists($fn)) {
-                $candidate = $fn();
-                if ($candidate instanceof PDO) {
-                    $db = $candidate;
-                    break;
-                }
-            }
-        }
-    }
-
-    if (!($db instanceof PDO)) {
-        throw new RuntimeException('PDO instance not found.');
-    }
 
     $sql = "SELECT * FROM products WHERE 1=1";
 
-    $sql .= " AND {$cleanDescExpr} LIKE :desc_need";
-    $params[':desc_need'] = '%' . strtolower($needMap[$input['need']]) . '%';
+    $sql .= " AND description LIKE :desc_need";
+    $params['desc_need'] = '%' . strtolower($needMap[$input['need']]) . '%';
 
-    $sql .= " AND {$cleanDescExpr} LIKE :desc_apps";
-    $params[':desc_apps'] = '%' . strtolower($appsMap[$input['apps']]) . '%';
+    $sql .= " AND description LIKE :desc_apps";
+    $params['desc_apps'] = '%' . strtolower($appsMap[$input['apps']]) . '%';
 
-    $sql .= " AND {$cleanDescExpr} LIKE :desc_usage";
-    $params[':desc_usage'] = '%' . strtolower($usageMap[$input['usage']]) . '%';
+    $sql .= " AND description LIKE :desc_usage";
+    $params['desc_usage'] = '%' . strtolower($usageMap[$input['usage']]) . '%';
 
     switch ($input['budget']) {
         case 'low':
             $sql .= " AND price < :price_max";
-            $params[':price_max'] = 5000000;
+            $params['price_max'] = 5000000;
             break;
         case 'mid':
             $sql .= " AND price >= :price_min AND price <= :price_max";
-            $params[':price_min'] = 5000000;
-            $params[':price_max'] = 10000000;
+            $params['price_min'] = 5000000;
+            $params['price_max'] = 10000000;
             break;
         case 'high':
             $sql .= " AND price > :price_min";
-            $params[':price_min'] = 10000000;
+            $params['price_min'] = 10000000;
             break;
     }
 
-    $stmt = $db->prepare($sql);
+    $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
-    $matchedProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $matchedProducts = $stmt->fetchAll();
 } catch (Throwable $ex) {
     $dbError = true;
 }
