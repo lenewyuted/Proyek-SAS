@@ -37,7 +37,7 @@ function syncItemToDbCart($userId, $productId, $quantity)
               VALUES (:user_id, :product_id, :quantity)
               ON DUPLICATE KEY UPDATE quantity = quantity + :add_quantity";
 
-            
+
 
     $stmt = $pdo->prepare($query);
 
@@ -93,7 +93,7 @@ function mergeAndRestoreCart(string $userId, array $guestCartItems)
 {
     global $pdo;
 
-    $userCartFromDb = getUserCartFromDb($userId); 
+    $userCartFromDb = getUserCartFromDb($userId);
 
     // Jika ada barang yang dimasukkan saat belum login (guest), lakukan penggabungan
     if (!empty($guestCartItems)) {
@@ -144,4 +144,21 @@ function mergeAndRestoreCart(string $userId, array $guestCartItems)
     }
 
     return $userCartFromDb;
+}
+
+/**
+ * Memperbarui nilai quantity spesifik untuk produk di database keranjang user.
+ */
+function updateItemQuantityInDbCart($userId, $productId, $newQuantity)
+{
+    global $pdo;
+
+    $query = "UPDATE carts SET quantity = :quantity WHERE user_id = :user_id AND product_id = :product_id";
+    $stmt  = $pdo->prepare($query);
+
+    return $stmt->execute([
+        'quantity'   => $newQuantity,
+        'user_id'    => $userId,
+        'product_id' => $productId,
+    ]);
 }

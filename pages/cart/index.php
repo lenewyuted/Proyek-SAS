@@ -117,12 +117,12 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                             <div class="col-price"><?= formatRupiah($price) ?></div>
                             <div class="col-qty">
                                 <div class="qty-control">
-                                    <button type="button">-</button>
-                                    <span><?= $quantity ?></span>
-                                    <button type="button">+</button>
+                                    <button type="button" onclick="updateCartQuantity(<?= $productId ?>, -1)">-</button>
+                                    <span id="qty-<?= $productId ?>"><?= $quantity ?></span>
+                                    <button type="button" onclick="updateCartQuantity(<?= $productId ?>, 1)">+</button>
                                 </div>
                             </div>
-                            <div class="col-subtotal"><?= formatRupiah($itemSubtotal) ?></div>
+                            <div class="col-subtotal" id="subtotal-<?= $productId ?>"><?= formatRupiah($itemSubtotal) ?></div>
                             <div class="col-action">
                                 <form action="../../actions/cart/remove.php" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini dari keranjang?');">
                                     <input type="hidden" name="product_id" value="<?= $productId ?>">
@@ -154,8 +154,8 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                 <div class="summary-card">
                     <h2>Order Summary</h2>
                     <div class="summary-row">
-                        <span>Subtotal (<?= $totalItems ?> Items)</span>
-                        <strong><?= formatRupiah($subtotal) ?></strong>
+                        <span>Subtotal (<span id="cart-total-items"><?= $totalItems ?></span> Items)</span>
+                        <strong id="cart-subtotal"><?= formatRupiah($subtotal) ?></strong>
                     </div>
                     <div class="summary-row">
                         <span>Shipping</span>
@@ -164,7 +164,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                     <div class="summary-divider"></div>
                     <div class="summary-total">
                         <span>Total</span>
-                        <span class="total-price"><?= formatRupiah($subtotal) ?></span>
+                        <span class="total-price" id="cart-final-total"><?= formatRupiah($subtotal) ?></span>
                     </div>
                     <?php if (!empty($cart)): ?>
                         <a href="../checkout/index.php" class="btn-checkout" style="text-decoration: none;">
@@ -207,6 +207,58 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
         </div>
     </main>
     <?php require_once __DIR__ . "/../../components/landing/footer.php" ?>
+
+    <script>
+        // async function test() {
+        //     console.log(1);
+        //     await tunggu(2000);
+        //     console.log(2);
+        //     console.log(3);
+        // }
+
+        // test();
+
+        // function tunggu(waktu) {
+        //     return new Promise((resolve) => {
+        //         setTimeout(() => {
+        //             resolve();
+        //         }, waktu);
+        //     })
+        // }
+
+        async function updateCartQuantity(productId, change) {
+            const formData = new FormData();
+            formData.append('product_id', productId);
+            formData.append('change', change);
+
+            try {
+                const response = await fetch('../../actions/cart/update.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update angka quantity pada baris produk
+                    document.getElementById('qty-' + productId).textContent = data.item_quantity;
+
+                    // Update subtotal pada baris produk
+                    document.getElementById('subtotal-' + productId).textContent = data.item_subtotal_formatted;
+
+                    // Update ringkasan total di Order Summary
+                    document.getElementById('cart-total-items').textContent = data.total_items;
+                    document.getElementById('cart-subtotal').textContent = data.total_subtotal_formatted;
+                    document.getElementById('cart-final-total').textContent = data.total_subtotal_formatted;
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                alert('Terjadi kesalahan koneksi saat memperbarui keranjang.');
+            }
+        }
+    </script>
 </body>
 
 </html>
