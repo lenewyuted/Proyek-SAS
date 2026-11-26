@@ -60,11 +60,6 @@
 
 
 
-
-  <?php
-  require_once __DIR__ . "/../../components/landing/footer.php";
-
-  ?>
 </body>
 
 </html>
