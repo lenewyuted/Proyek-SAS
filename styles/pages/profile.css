@@ -3,7 +3,7 @@
    ========================================================= */
 
 :root {
-  --profile-blue: #0056c6;
+  --profile-blue: #0056b3;
   --profile-blue-hover: #00439c;
   --profile-bg-soft: #eaf2ff;
   --profile-bg-hover: #dbeafe;
@@ -38,7 +38,7 @@
   line-height: 1.2;
 }
 
-.user-profile-back {
+.back-link {
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -46,6 +46,8 @@
   font-weight: 500;
   color: var(--profile-blue);
   text-decoration: none;
+  white-space: nowrap;
+  margin-top: -12px;
   transition:
     color 0.2s ease,
     transform 0.2s ease;

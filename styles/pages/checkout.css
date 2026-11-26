@@ -48,15 +48,29 @@ body {
   color: var(--text-dark);
 }
 
-.back-link {
-  color: var(--primary-blue);
-  font-weight: 600;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.checkout-header-title p {
   font-size: 16px;
-  height: 38px;
+  font-weight: 400;
+  color: var(--text-gray);
+  margin: 0;
+  line-height: 1.5;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--primary-blue);
+  text-decoration: none;
+  white-space: nowrap;
+  margin-top: 6px;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .back-link:hover {

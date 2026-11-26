@@ -76,6 +76,29 @@ img {
   background: var(--primary-blue);
 }
 
+/* Ubah indikator carousel Bootstrap menjadi lingkaran */
+.hero-banner .carousel-indicators li {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: none;
+  background-color: #cbd5e1;
+  opacity: 0.9;
+  margin: 0 8px;
+  cursor: pointer;
+}
+
+.hero-banner .carousel-indicators .active {
+  background-color: var(--white);
+  opacity: 1;
+}
+
+/* Hilangkan tanda panah kiri & kanan */
+.hero-banner .carousel-control-prev,
+.hero-banner .carousel-control-next {
+  display: none;
+}
+
 /* ---------- PAKSA KEDUANYA SEJAJAR SEMPURNA ---------- */
 .header-container,
 .hero-banner,
@@ -347,6 +370,18 @@ img {
   white-space: nowrap;
 }
 
+.products-grid > a,
+.products-grid > a:hover,
+.products-grid > a:focus,
+.products-grid a.product-link-item,
+.products-grid a.product-link-item:hover,
+.products-grid a.product-link-item:focus,
+.product-card,
+.product-card:hover,
+.product-card * {
+  text-decoration: none !important;
+}
+
 @keyframes recFadeIn {
   from {
     opacity: 0;
@@ -411,7 +446,7 @@ img {
 }
 
 .promo-text h3 {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--text-dark);
   margin-bottom: 4px;
@@ -419,7 +454,7 @@ img {
 }
 
 .promo-text p {
-  font-size: 11px;
+  font-size: 12px;
   color: #555;
   margin-bottom: 12px;
   line-height: 1.4;
@@ -432,12 +467,16 @@ img {
   font-size: 11px;
   font-weight: 600;
   padding: 6px 16px;
+  border: 1px solid var(--primary-blue);
   border-radius: 6px;
   transition: background 0.2s;
 }
 
 .promo-btn:hover {
-  background: var(--blue-dark);
+  background: var(--white);
+  border: 1px solid var(--primary-blue);
+  color: var(--primary-blue);
+  text-decoration: none;
 }
 
 .promo-img {
@@ -449,7 +488,7 @@ img {
 }
 
 .promo-img img {
-  max-height: 95px;
+  max-height: 110px;
   width: auto;
   object-fit: contain;
 }
@@ -485,13 +524,13 @@ img {
 
 .why-item strong {
   display: block;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-dark);
 }
 
 .why-item small {
   display: block;
-  font-size: 10px;
+  font-size: 12px;
   color: #555;
 }
 
@@ -592,6 +631,170 @@ img {
   font-weight: 400;
 }
 
+.category-products-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.category-products-header .section-title {
+  margin-bottom: 0;
+}
+
+.category-close-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-blue, #0056c6);
+}
+
+.category-close-link:hover {
+  text-decoration: underline;
+}
+
+.products-grid.category-products-grid {
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: 18px !important;
+  width: 100% !important;
+  align-items: stretch;
+}
+
+.products-grid.category-products-grid > a,
+.products-grid.category-products-grid .product-link-item {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.product-card.category-product-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  background-color: var(--white);
+  border: 1.5px solid var(--border-blue);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+  animation: recFadeIn 0.28s ease backwards;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+
+.product-card.category-product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(0, 86, 198, 0.14);
+  border-color: #00439c;
+}
+
+.product-card.category-product-card .product-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  background-color: var(--light-blue-bg);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 12px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.product-card.category-product-card .product-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 12px;
+  box-sizing: border-box;
+  transition: transform 0.25s ease;
+}
+
+.product-card.category-product-card:hover .product-img img {
+  transform: scale(1.05);
+}
+
+.product-card.category-product-card .product-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1.35;
+  min-height: 38px;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-card.category-product-card .product-rating {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.product-card.category-product-card .product-rating i {
+  color: #f59e0b;
+  font-size: 13.5px;
+  line-height: 1;
+}
+
+.product-card.category-product-card .product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.product-card.category-product-card .product-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+  white-space: nowrap;
+}
+
+.product-card.category-product-card .btn-add-cart {
+  border: 1.5px solid var(--border-blue);
+  background: var(--white);
+  color: var(--border-blue);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.product-card.category-product-card .btn-add-cart:hover {
+  background: var(--border-blue);
+  color: var(--white);
+}
+
+.rec-muted {
+  color: #64748b;
+  font-weight: 400;
+}
+
 @media (max-width: 1024px) {
   .products-grid.category-products-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
@@ -603,3 +806,15 @@ img {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
+@media (max-width: 1024px) {
+  .products-grid.category-products-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .products-grid.category-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+

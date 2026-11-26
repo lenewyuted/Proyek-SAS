@@ -58,9 +58,7 @@ $hasPhoto      = ($photoFile !== "");
     <main class="user-profile-wrapper">
         <div class="user-profile-topbar">
             <h1>Profile</h1>
-            <a href="../landing-page/index.php" class="user-profile-back">
-                Back <i class="fa-solid fa-arrow-right-long"></i>
-            </a>
+            <a href="../landing-page/index.php" class="back-link">Back <span>&rarr;</span></a>
         </div>
 
         <?php if ($flashSuccess !== ""): ?>

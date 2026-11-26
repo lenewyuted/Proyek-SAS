@@ -50,17 +50,17 @@ $specsMap = getProductSpecsMapByCategoryId($selectedCategoryId);
     <main class="container compare-page mt-3">
         <!-- PAGE TITLE & BACK LINK -->
         <div class="page-header">
-            <h1>Product Comparison</h1>
-            <a href="javascript:history.back()" class="back-link">
-                <span>Back</span>
-                <i class="fa-solid fa-arrow-right-long"></i>
-            </a>
+            <div>
+                <h1>Product Comparison</h1>
+                <p class="com-sub">Compare specifications, features, and prices side by side to pick the best fit.</p>
+            </div>
+            <a href="../landing-page/index.php" class="back-link">Back <span>&rarr;</span></a>
         </div>
 
         <!-- CATEGORY SELECTOR BAR -->
         <div class="compare-category-bar">
             <label for="categoryFilter" class="category-filter-label">
-                <i class="fa-solid fa-layer-group"></i> Compared Category:
+                Compared Category:
             </label>
             <select id="categoryFilter" class="compare-category-select" onchange="changeCategory(this.value)">
                 <?php foreach ($categories as $category): ?>
@@ -229,7 +229,7 @@ $specsMap = getProductSpecsMapByCategoryId($selectedCategoryId);
                                         'formatted_price' => 'Rp. ' . number_format((float) ($product['price'] ?? 0), 0, ',', '.'),
                                         'picture' => $product['picture'] ?? 'default.png'
                                     ];
-                                    
+
                                     ?>
                                     <div
                                         class="picker-product-card"
@@ -251,9 +251,7 @@ $specsMap = getProductSpecsMapByCategoryId($selectedCategoryId);
                                                 <i class="fa-solid fa-star"></i>
                                                 <small>(<?= $totalReviews ?>)</small>
                                             <?php else: ?>
-                                                <span>0.0</span>
-                                                <i class="fa-regular fa-star"></i>
-                                                <small>(0)</small>
+                                                <span class="no-rating-text">No rating</span>
                                             <?php endif; ?>
                                         </div>
 
@@ -298,14 +296,18 @@ $specsMap = getProductSpecsMapByCategoryId($selectedCategoryId);
         // Data spesifikasi produk kategori aktif dari PHP
         const PRODUCT_SPECS = <?= json_encode($specsMap, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
 
-        let activeSlot = 1; 
-        const slotData = { 1: null, 2: null, 3: null };
+        let activeSlot = 1;
+        const slotData = {
+            1: null,
+            2: null,
+            3: null
+        };
 
         function changeCategory(categoryId) {
             window.location.href = 'index.php?category_id=' + categoryId;
         }
 
-        function openProductPicker(targetSlot) { 
+        function openProductPicker(targetSlot) {
             activeSlot = targetSlot;
 
             const modalSlotTextElement = document.getElementById('modalTargetSlotText');
@@ -348,7 +350,7 @@ $specsMap = getProductSpecsMapByCategoryId($selectedCategoryId);
         }
 
         function selectProductForSlot(product) {
-            slotData[activeSlot] = product; 
+            slotData[activeSlot] = product;
 
             // Update tampilan kartu slot
             const card = document.getElementById('slot-card-' + activeSlot);
@@ -409,13 +411,13 @@ $specsMap = getProductSpecsMapByCategoryId($selectedCategoryId);
                 const product = slotData[slot];
                 let specs = {};
 
-                if(product){
+                if (product) {
                     document.getElementById('product_name_' + slot).textContent = product.name;
                     document.getElementById('product_price_' + slot).textContent = product.formatted_price;
 
                     specs = PRODUCT_SPECS[product.id];
                 }
-                
+
                 document.querySelectorAll('.spec-cell[data-slot="' + slot + '"]').forEach(cell => {
                     const specName = cell.getAttribute('data-spec-name');
                     cell.textContent = specs[specName] || '-';
@@ -425,7 +427,9 @@ $specsMap = getProductSpecsMapByCategoryId($selectedCategoryId);
             // Scroll ke tabel perbandingan
             const tableSection = document.querySelector('.table-wrapper');
             if (tableSection) {
-                tableSection.scrollIntoView({ behavior: 'smooth' });
+                tableSection.scrollIntoView({
+                    behavior: 'smooth'
+                });
             }
         }
     </script>

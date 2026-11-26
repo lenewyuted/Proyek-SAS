@@ -92,7 +92,7 @@ function renderStars(float $rating): string
             <div>
                 <h1>Product Description</h1>
             </div>
-            <a href="../landing-page/index.php" class="back-link">Back <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="../landing-page/index.php" class="back-link">Back <span>&rarr;</span></a>
         </div>
 
         <!-- DETAIL PRODUK UTAMA -->

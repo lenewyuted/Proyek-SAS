@@ -80,7 +80,7 @@ unset($_SESSION['flash_error']);
                 <h1>Checkout</h1>
                 <p>Complete your details to finish checkout</p>
             </div>
-            <a href="../cart/index.php" class="back-link">Back <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="../cart/index.php" class="back-link">Back <span>&rarr;</span></a>
         </div>
 
         <?php if ($flashError): ?>

@@ -43,7 +43,7 @@ body.recommendation-page {
   font-size: 32px;
   font-weight: 700;
   color: var(--rec-text);
-  margin: 0 0 6px;
+  margin: -7px 0 6px;
   line-height: 1.2;
 }
 
@@ -51,7 +51,8 @@ body.recommendation-page {
   font-size: 16px;
   font-weight: 400;
   color: var(--rec-muted);
-  margin: 0;
+  margin-top: 16px;
+  margin-bottom: 10px;
 }
 
 .rec-back {

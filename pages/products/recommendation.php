@@ -81,7 +81,7 @@ $visibleRows = $showAll ? $matchedRows : array_slice($matchedRows, 0, $limit);
                 <h1>Recommendation</h1>
                 <p class="rec-sub">We will tailor our recommendations to your needs and the criteria you specify</p>
             </div>
-            <a href="javascript:history.back()" class="rec-back">Back <span>&rarr;</span></a>
+            <a href="../landing-page/index.php" class="rec-back">Back <span>&rarr;</span></a>
         </div>
 
         <!-- Kuesioner -->
