@@ -22,11 +22,13 @@ function getProducts($search, $categoryId, $currentPage, $perPage)
     return $products;
 }
 
-function formatRupiah($angka)
-{
-    // Jika angka null, kosong, atau bukan numerik, set ke 0
-    $angka = is_numeric($angka) ? $angka : 0;
-    return 'Rp ' . number_format($angka, 0, ',', '.');
+if (!function_exists('formatRupiah')) {
+    function formatRupiah($angka)
+    {
+        // Jika angka null, kosong, atau bukan numerik, set ke 0
+        $angka = is_numeric($angka) ? $angka : 0;
+        return 'Rp ' . number_format($angka, 0, ',', '.');
+    }
 }
 
 function getProduct($id)
