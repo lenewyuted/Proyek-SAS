@@ -65,7 +65,7 @@ unset($_SESSION['errors'], $_SESSION['old']);
 
 
             <!-- Form Edit Profile -->
-            <form action="../../../actions/profile/update.php" method="POST" enctype="multipart/form-data" class="product-form-create">
+            <form action="../../../actions/profile-admin/update.php" method="POST" enctype="multipart/form-data" class="product-form-create">
 
                 <div class="profile-form-section" style="background: var(--white); border: 1.5px solid var(--primary-blue); border-radius: 12px; padding: 30px; display: flex; flex-direction: column; gap: 20px;">
 

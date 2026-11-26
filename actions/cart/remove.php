@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../config/database.php';
 
 // Hanya menerima request POST untuk keamanan aksi hapus
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../../pages/cart/index.php');
+    header('Location: ../../pages/user/cart/index.php');
     exit;
 }
 
@@ -61,7 +61,7 @@ try {
         }
 
         $_SESSION['flash_success'] = 'Semua produk berhasil dihapus dari keranjang.';
-        header('Location: ../../pages/cart/index.php');
+        header('Location: ../../pages/user/cart/index.php');
         exit;
     }
 
@@ -96,5 +96,5 @@ try {
     $_SESSION['flash_error'] = 'Gagal menghapus produk dari keranjang.';
 }
 
-header('Location: ../../pages/cart/index.php');
+header('Location: ../../pages/user/cart/index.php');
 exit;

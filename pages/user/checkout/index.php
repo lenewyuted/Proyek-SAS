@@ -1,13 +1,13 @@
 <?php
 session_start();
-require_once __DIR__ . "/../../repositories/product-repository.php";
-require_once __DIR__ . "/../../repositories/user-repository.php";
+require_once __DIR__ . "/../../../repositories/product-repository.php";
+require_once __DIR__ . "/../../../repositories/user-repository.php";
 
 // 1. Wajib Login: jika belum login, simpan redirect dan arahkan ke login
 if (!isset($_SESSION['user']['id'])) {
     $_SESSION['redirect_after_login'] = '../../pages/checkout/index.php';
     $_SESSION['flash_error'] = 'Silakan login terlebih dahulu untuk melanjutkan checkout.';
-    header('Location: ../auth/login.php');
+    header('Location: ../../auth/login.php');
     exit;
 }
 
@@ -61,16 +61,16 @@ unset($_SESSION['flash_error']);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- CSS Kustom -->
-    <link rel="stylesheet" href="../../styles/pages/checkout.css">
-    <link rel="stylesheet" href="../../styles/components/header.css">
-    <link rel="stylesheet" href="../../styles/components/footer.css">
+    <link rel="stylesheet" href="../../../styles/pages/checkout.css">
+    <link rel="stylesheet" href="../../../styles/components/header.css">
+    <link rel="stylesheet" href="../../../styles/components/footer.css">
     <!-- Bootstrap 4.6 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 </head>
 
 <body>
 
-    <?php require_once __DIR__ . "/../../components/landing/header.php"; ?>
+    <?php require_once __DIR__ . "/../../../components/landing/header.php"; ?>
 
     <!-- MAIN CONTENT / CHECKOUT SECTION -->
     <main class="checkout-main-container">
@@ -89,7 +89,7 @@ unset($_SESSION['flash_error']);
             </div>
         <?php endif; ?>
 
-        <form id="checkoutForm" action="../../actions/checkout/process.php" method="POST" enctype="multipart/form-data" class="checkout-layout">
+        <form id="checkoutForm" action="../../../actions/checkout/process.php" method="POST" enctype="multipart/form-data" class="checkout-layout">
 
             <!-- SISI KIRI: SHIPPING ADDRESS -->
             <section class="checkout-card shipping-address-section">
@@ -544,7 +544,7 @@ unset($_SESSION['flash_error']);
         </form>
     </main>
 
-    <?php require_once __DIR__ . "/../../components/landing/footer.php"; ?>
+    <?php require_once __DIR__ . "/../../../components/landing/footer.php"; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>

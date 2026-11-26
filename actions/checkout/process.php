@@ -25,7 +25,7 @@ $cartItems = $_SESSION['cart'] ?? [];
 $cartValidation = validateCartAndStock($cartItems);
 if (!empty($cartValidation['errors'])) {
     $_SESSION['flash_error'] = $cartValidation['errors'][0];
-    header('Location: ../../pages/cart/index.php');
+    header('Location: ../../pages/user/cart/index.php');
     exit;
 }
 
@@ -33,7 +33,7 @@ if (!empty($cartValidation['errors'])) {
 $formValidation = validateCheckoutData($_POST, $_FILES);
 if (!empty($formValidation['errors'])) {
     $_SESSION['flash_error'] = $formValidation['errors'][0];
-    header('Location: ../../pages/checkout/index.php');
+    header('Location: ../../pages/user/checkout/index.php');
     exit;
 }
 
@@ -111,10 +111,10 @@ try {
     ]);
 
     // 9. Redirect ke Halaman Sukses
-    header("Location: ../../pages/checkout/success.php?order=" . urlencode($orderNumber));
+    header("Location: ../../pages/user/checkout/success.php?order=" . urlencode($orderNumber));
     exit;
 } catch (Exception $e) {
     $_SESSION['flash_error'] = 'Terjadi kesalahan sistem saat memproses pesanan: ' . $e->getMessage();
-    header('Location: ../../pages/checkout/index.php');
+    header('Location: ../../pages/user/checkout/index.php');
     exit;
 }

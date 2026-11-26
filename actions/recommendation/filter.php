@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$defaultBackUrl = '../../pages/products/recommendation.php';
+$defaultBackUrl = '../../pages/recommendation/index.php';
 $backUrl = $defaultBackUrl;
 
 if (!empty($_SERVER['HTTP_REFERER'])) {
@@ -11,7 +11,7 @@ if (!empty($_SERVER['HTTP_REFERER'])) {
     if (
         is_string($refPath) &&
         $refPath !== '' &&
-        strpos($refPath, '/pages/products/recommendation.php') !== false
+        strpos($refPath, '/pages/recommendation/index.php') !== false
     ) {
         $backUrl = $refPath;
     }

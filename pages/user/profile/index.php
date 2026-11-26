@@ -3,14 +3,14 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once __DIR__ . "/../../config/database.php";
-require_once __DIR__ . "/../../repositories/user-repository.php";
+require_once __DIR__ . "/../../../config/database.php";
+require_once __DIR__ . "/../../../repositories/user-repository.php";
 
 $sessionUser = $_SESSION["user"] ?? null;
 $userId      = $sessionUser["id"] ?? $_SESSION["user_id"] ?? $_SESSION["id"] ?? null;
 
 if (!$userId) {
-    header("Location: ../auth/login.php");
+    header("Location: ../../auth/login.php");
     exit;
 }
 
@@ -44,21 +44,21 @@ $hasPhoto      = ($photoFile !== "");
     <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link rel="stylesheet" href="../../styles/pages/landing/style.css">
-    <link rel="stylesheet" href="../../styles/components/header.css">
-    <link rel="stylesheet" href="../../styles/components/footer.css">
-    <link rel="stylesheet" href="../../styles/pages/profile.css">
+    <link rel="stylesheet" href="../../../styles/pages/landing/style.css">
+    <link rel="stylesheet" href="../../../styles/components/header.css">
+    <link rel="stylesheet" href="../../../styles/components/footer.css">
+    <link rel="stylesheet" href="../../../styles/pages/profile.css">
 </head>
 
 <body>
 
     <!-- MAIN HEADER -->
-    <?php require_once __DIR__ . "/../../components/landing/header.php"; ?>
+    <?php require_once __DIR__ . "/../../../components/landing/header.php"; ?>
 
     <main class="user-profile-wrapper">
         <div class="user-profile-topbar">
             <h1>Profile</h1>
-            <a href="../landing-page/index.php" class="back-link">Back <span>&rarr;</span></a>
+            <a href="../../landing-page/index.php" class="back-link">Back <span>&rarr;</span></a>
         </div>
 
         <?php if ($flashSuccess !== ""): ?>
@@ -73,7 +73,7 @@ $hasPhoto      = ($photoFile !== "");
             </div>
         <?php endif; ?>
 
-        <form action="../../actions/profile-user/update.php" method="POST" enctype="multipart/form-data" id="userProfileForm" class="user-profile-grid">
+        <form action="../../../actions/profile-user/update.php" method="POST" enctype="multipart/form-data" id="userProfileForm" class="user-profile-grid">
             <input type="file" id="avatarInput" name="picture" accept="image/*" hidden>
             <input type="hidden" name="redirect_source" value="user">
 
@@ -197,11 +197,11 @@ $hasPhoto      = ($photoFile !== "");
             </div>
         </form>
 
-        <form action="../../actions/profile-user/reset.php" method="POST" id="resetProfileForm" hidden></form>
+        <form action="../../../actions/profile-user/reset.php" method="POST" id="resetProfileForm" hidden></form>
     </main>
 
     <!-- MAIN FOOTER -->
-    <?php require_once __DIR__ . "/../../components/landing/footer.php"; ?>
+    <?php require_once __DIR__ . "/../../../components/landing/footer.php"; ?>
 
     <script>
         (function() {

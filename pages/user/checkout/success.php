@@ -1,18 +1,18 @@
 <?php
 session_start();
-require_once __DIR__ . "/../../repositories/order-repository.php";
-require_once __DIR__ . "/../../repositories/product-repository.php";
+require_once __DIR__ . "/../../../repositories/order-repository.php";
+require_once __DIR__ . "/../../../repositories/product-repository.php";
 
 $orderNumber = filter_input(INPUT_GET, 'order', FILTER_SANITIZE_SPECIAL_CHARS);
 
 if (!$orderNumber) {
-    header('Location: ../landing-page/index.php');
+    header('Location: ../../landing-page/index.php');
     exit;
 }
 
 $order = getOrderByNumber($orderNumber);
 if (!$order) {
-    header('Location: ../landing-page/index.php');
+    header('Location: ../../landing-page/index.php');
     exit;
 }
 
@@ -32,9 +32,9 @@ $orderItems = getOrderItemsByOrderId($order['id']);
     <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link rel="stylesheet" href="../../styles/components/header.css">
-    <link rel="stylesheet" href="../../styles/components/footer.css">
-    <link rel="stylesheet" href="../../styles/pages/checkout.css">
+    <link rel="stylesheet" href="../../../styles/components/header.css">
+    <link rel="stylesheet" href="../../../styles/components/footer.css">
+    <link rel="stylesheet" href="../../../styles/pages/checkout.css">
 
     <style>
         .success-box {
@@ -97,7 +97,7 @@ $orderItems = getOrderItemsByOrderId($order['id']);
 </head>
 
 <body>
-    <?php require_once __DIR__ . "/../../components/landing/header.php"; ?>
+    <?php require_once __DIR__ . "/../../../components/landing/header.php"; ?>
 
     <main class="checkout-main-container">
         <div class="success-box">
@@ -193,14 +193,14 @@ $orderItems = getOrderItemsByOrderId($order['id']);
             </table>
 
             <div style="text-align: center; margin-top: 30px;">
-                <a href="../landing-page/index.php" class="btn-checkout-submit" style="display: inline-block; padding: 12px 28px; text-decoration: none; width: auto;">
+                <a href="../../landing-page/index.php" class="btn-checkout-submit" style="display: inline-block; padding: 12px 28px; text-decoration: none; width: auto;">
                     <i class="fa-solid fa-house"></i> Kembali ke Beranda
                 </a>
             </div>
         </div>
     </main>
 
-    <?php require_once __DIR__ . "/../../components/landing/footer.php"; ?>
+    <?php require_once __DIR__ . "/../../../components/landing/footer.php"; ?>
 </body>
 
 </html>

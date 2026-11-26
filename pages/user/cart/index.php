@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . "/../../repositories/product-repository.php";
+require_once __DIR__ . "/../../../repositories/product-repository.php";
 
 // unset($_SESSION['cart']);
 // exit;
@@ -34,14 +34,14 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- CSS kustom -->
-    <link rel="stylesheet" href="../../styles/components/header.css">
-    <link rel="stylesheet" href="../../styles/components/footer.css">
-    <link rel="stylesheet" href="../../styles/pages/cart.css">
+    <link rel="stylesheet" href="../../../styles/components/header.css">
+    <link rel="stylesheet" href="../../../styles/components/footer.css">
+    <link rel="stylesheet" href="../../../styles/pages/cart.css">
 </head>
 
 <body>
 
-    <?php require_once __DIR__ . "/../../components/landing/header.php" ?>
+    <?php require_once __DIR__ . "/../../../components/landing/header.php" ?>
 
     <!-- MAIN CONTENT / CART SECTION -->
     <main class="cart-main-container">
@@ -51,7 +51,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                 <h1>My Cart</h1>
                 <p>Review your items and proceed to checkout</p>
             </div>
-            <a href="../landing-page/index.php" class="back-link">Back <span>&rarr;</span></a>
+            <a href="../../landing-page/index.php" class="back-link">Back <span>&rarr;</span></a>
         </div>
 
         <?php if ($flashSuccess): ?>
@@ -81,7 +81,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                 <?php if (empty($cart)): ?>
                     <div style="padding: 40px 20px; text-align: center; color: var(--text-muted, #666);">
                         <p style="margin-bottom: 12px; font-size: 16px;">Keranjang belanja Anda masih kosong.</p>
-                        <a href="../landing-page/index.php" style="color: var(--primary-blue, #0d6efd); text-decoration: none; font-weight: 600;">
+                        <a href="../../landing-page/index.php" style="color: var(--primary-blue, #0d6efd); text-decoration: none; font-weight: 600;">
                             <i class="fa-solid fa-arrow-left"></i> Mulai Belanja
                         </a>
                     </div>
@@ -110,7 +110,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                             <div class="col-check"><input type="checkbox" checked></div>
                             <div class="col-product">
                                 <div class="product-thumb">
-                                    <img src="../../assets/img/<?= htmlspecialchars($product['picture'] ?? 'default.png') ?>" alt="<?= htmlspecialchars($product['name'] ?? 'Produk') ?>">
+                                    <img src="../../../assets/img/<?= htmlspecialchars($product['picture'] ?? 'default.png') ?>" alt="<?= htmlspecialchars($product['name'] ?? 'Produk') ?>">
                                 </div>
                                 <span class="prod-name"><?= htmlspecialchars($product['name'] ?? 'Produk Tidak Dikenal') ?></span>
                             </div>
@@ -124,7 +124,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                             </div>
                             <div class="col-subtotal" id="subtotal-<?= $productId ?>"><?= formatRupiah($itemSubtotal) ?></div>
                             <div class="col-action">
-                                <form action="../../actions/cart/remove.php" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini dari keranjang?');">
+                                <form action="../../../actions/cart/remove.php" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini dari keranjang?');">
                                     <input type="hidden" name="product_id" value="<?= $productId ?>">
                                     <button class="btn-delete" type="submit" title="Hapus produk">
                                         <i class="fa-regular fa-trash-can"></i>
@@ -138,7 +138,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                 <!-- Footer Tabel / Remove All -->
                 <?php if (!empty($cart)): ?>
                     <div class="cart-footer-actions">
-                        <form action="../../actions/cart/remove.php" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua barang dari keranjang?');">
+                        <form action="../../../actions/cart/remove.php" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua barang dari keranjang?');">
                             <input type="hidden" name="remove_all" value="1">
                             <button class="btn-remove-all" type="submit">
                                 <i class="fa-regular fa-trash-can"></i> Remove all
@@ -206,7 +206,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
             </aside>
         </div>
     </main>
-    <?php require_once __DIR__ . "/../../components/landing/footer.php" ?>
+    <?php require_once __DIR__ . "/../../../components/landing/footer.php" ?>
 
     <script>
         // async function test() {
@@ -232,7 +232,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
             formData.append('change', change);
 
             try {
-                const response = await fetch('../../actions/cart/update.php', {
+                const response = await fetch('../../../actions/cart/update.php', {
                     method: 'POST',
                     body: formData
                 });

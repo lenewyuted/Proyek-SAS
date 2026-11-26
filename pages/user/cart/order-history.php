@@ -1,12 +1,12 @@
 <?php
 session_start();
-require_once __DIR__ . "/../../config/database.php";
-require_once __DIR__ . "/../../repositories/order-repository.php";
-require_once __DIR__ . "/../../validations/order-data-validation.php";
+require_once __DIR__ . "/../../../config/database.php";
+require_once __DIR__ . "/../../../repositories/order-repository.php";
+require_once __DIR__ . "/../../../validations/order-data-validation.php";
 
 if (!isset($_SESSION['user']['id'])) {
     $_SESSION['flash_error'] = 'Silakan login terlebih dahulu untuk melihat riwayat pesanan.';
-    header('Location: ../auth/login.php');
+    header('Location: ../../auth/login.php');
     exit;
 }
 
@@ -42,14 +42,14 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- CSS kustom -->
-    <link rel="stylesheet" href="../../styles/components/header.css">
-    <link rel="stylesheet" href="../../styles/components/footer.css">
-    <link rel="stylesheet" href="../../styles/pages/order-history.css">
+    <link rel="stylesheet" href="../../../styles/components/header.css">
+    <link rel="stylesheet" href="../../../styles/components/footer.css">
+    <link rel="stylesheet" href="../../../styles/pages/order-history.css">
 </head>
 
 <body>
 
-    <?php require_once __DIR__ . "/../../components/landing/header.php" ?>
+    <?php require_once __DIR__ . "/../../../components/landing/header.php" ?>
 
     <main class="history-main-container">
         <!-- Judul Halaman -->
@@ -58,7 +58,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                 <h1>Order History</h1>
                 <p>Track, manage, and review all your past hardware purchases</p>
             </div>
-            <a href="../landing-page/index.php" class="back-link">Back <span>&rarr;</span></a>
+            <a href="../../landing-page/index.php" class="back-link">Back <span>&rarr;</span></a>
         </div>
 
         <?php if ($flashSuccess): ?>
@@ -90,7 +90,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                     <i class="fa-solid fa-box-open"></i>
                     <h3>Belum Ada Riwayat Pesanan</h3>
                     <p>Anda belum memiliki transaksi<?= $statusFilter !== 'all' ? ' dengan status ' . ucfirst($statusFilter) : '' ?>.</p>
-                    <a href="../landing/index.php" class="btn-shop-now">
+                    <a href="../../landing/index.php" class="btn-shop-now">
                         <i class="fa-solid fa-arrow-left"></i> Mulai Belanja
                     </a>
                 </div>
@@ -145,7 +145,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                                     <div class="order-item-row">
                                         <div class="order-item-info">
                                             <div class="product-thumb">
-                                                <img src="../../assets/img/<?= htmlspecialchars($itemPic) ?>" alt="<?= htmlspecialchars($itemName) ?>">
+                                                <img src="../../../assets/img/<?= htmlspecialchars($itemPic) ?>" alt="<?= htmlspecialchars($itemName) ?>">
                                             </div>
                                             <div>
                                                 <div class="prod-name"><?= htmlspecialchars($itemName) ?></div>
@@ -177,7 +177,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                                 </div>
 
                                 <?php if ($statusRaw === 'pending'): ?>
-                                    <form action="../../actions/orders/cancel.php" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pesanan <?= htmlspecialchars($orderNumber) ?>?');">
+                                    <form action="../../../actions/orders/cancel.php" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pesanan <?= htmlspecialchars($orderNumber) ?>?');">
                                         <input type="hidden" name="order_id" value="<?= $orderId ?>">
                                         <button type="submit" class="btn-cancel-order">
                                             <i class="fa-solid fa-xmark"></i> Cancel Order
@@ -196,7 +196,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
         </section>
     </main>
 
-    <?php require_once __DIR__ . "/../../components/landing/footer.php" ?>
+    <?php require_once __DIR__ . "/../../../components/landing/footer.php" ?>
 </body>
 
 </html>

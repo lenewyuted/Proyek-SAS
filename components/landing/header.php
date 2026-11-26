@@ -52,7 +52,7 @@ $searchQuery = trim((string) ($_GET['q'] ?? ''));
 
     <!-- tombol aksi kanan -->
     <div class="nav-icons">
-        <a href="../../pages/products/recommendation.php" class="icon-link" title="Likes">
+        <a href="../../pages/recommendation/index.php" class="icon-link" title="Likes">
             <i class="fa-solid fa-thumbs-up"></i>
         </a>
 
@@ -60,7 +60,7 @@ $searchQuery = trim((string) ($_GET['q'] ?? ''));
             <i class="fa-solid fa-sliders"></i>
         </a>
 
-        <a href="../cart/index.php" class="cart-icon-link">
+        <a href="../user/cart/index.php" class="cart-icon-link">
             <i class="fa-solid fa-cart-shopping"></i>
             <?php if ($cartBadgeCount > 0): ?>
                 <span class="cart-badge"><?= $cartBadgeCount ?></span>
@@ -85,10 +85,10 @@ $searchQuery = trim((string) ($_GET['q'] ?? ''));
                                 <i class="fa-solid fa-compass user-dropdown-icon"></i> Dashboard Admin
                             </a>
                         <?php endif; ?>
-                        <a class="dropdown-item" href="/pages/profile/index.php">
+                        <a class="dropdown-item" href="/pages/user/profile/index.php">
                             <i class="fa-solid fa-user-pen user-dropdown-icon"></i> Edit Profil
                         </a>
-                        <a class="dropdown-item" href="/pages/cart/order-history.php">
+                        <a class="dropdown-item" href="/pages/user/cart/order-history.php">
                             <i class="fa-solid fa-clock-rotate-left user-dropdown-icon"></i> Order History
                         </a>
                         <div class="dropdown-divider"></div>
