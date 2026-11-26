@@ -2,15 +2,7 @@
 session_start();
 require_once __DIR__ . "/../../repositories/user-repository.php";
 
-if (!function_exists('hEsc')) {
-    function hEsc($s): string
-    {
-        return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8');
-    }
-}
-
-// ===== Data panduan (isi modal "See more") =====
-// Setiap langkah: [judul, penjelasan]
+// Isi panduan untuk modal "See more": judul langkah => penjelasan
 $guides = [
     'order' => [
         'question' => 'How to order?',
@@ -18,11 +10,11 @@ $guides = [
         'title'    => 'How to order',
         'intro'    => 'Learn easy steps to place your order:',
         'steps'    => [
-            ['Select Product', 'Find and select the product you wish to purchase.'],
-            ['Add to Cart / Checkout', 'Click the buy button or add the item to your shopping cart.'],
-            ['Fill Shipping Address', 'Complete your personal details and full delivery address.'],
-            ['Make Payment', 'Select your payment method and complete the transaction.'],
-            ['Order Processing', 'Wait for confirmation, and your order will be shipped shortly.'],
+            'Select Product'         => 'Find and select the product you wish to purchase.',
+            'Add to Cart / Checkout' => 'Click the buy button or add the item to your shopping cart.',
+            'Fill Shipping Address'  => 'Complete your personal details and full delivery address.',
+            'Make Payment'           => 'Select your payment method and complete the transaction.',
+            'Order Processing'       => 'Wait for confirmation, and your order will be shipped shortly.',
         ],
     ],
     'profile' => [
@@ -31,10 +23,10 @@ $guides = [
         'title'    => 'How to edit profile',
         'intro'    => 'Learn easy steps to update your personal profile:',
         'steps'    => [
-            ['Log In to Your Account', 'Sign in using your registered email and password.'],
-            ['Go to Profile Settings', 'Click on your avatar/profile picture at the top corner and select "Profile" or "Account Settings".'],
-            ['Edit Information', 'Click the "Edit" button to update your name, phone number, shipping address, or profile picture.'],
-            ['Save Changes', 'Click "Save" or "Update" to apply your new details.'],
+            'Log In to Your Account' => 'Sign in using your registered email and password.',
+            'Go to Profile Settings' => 'Click on your avatar/profile picture at the top corner and select "Profile" or "Account Settings".',
+            'Edit Information'       => 'Click the "Edit" button to update your name, phone number, shipping address, or profile picture.',
+            'Save Changes'           => 'Click "Save" or "Update" to apply your new details.',
         ],
     ],
     'pay' => [
@@ -43,10 +35,10 @@ $guides = [
         'title'    => 'How to pay an order',
         'intro'    => 'Learn easy steps to pay for your order:',
         'steps'    => [
-            ['Open Checkout', 'Review your cart, fill in your shipping address, and choose a shipping method.'],
-            ['Choose Payment Method', 'Select Credit / Debit Card, Bank Transfer (Virtual Account), or E-Wallet.'],
-            ['Complete the Payment', 'Click "Bayar Sekarang", fill in the payment details in the pop-up, then click "Pay Now".'],
-            ['Confirm Payment', 'Wait for the confirmation, or upload your transfer receipt if you pay by bank transfer.'],
+            'Open Checkout'         => 'Review your cart, fill in your shipping address, and choose a shipping method.',
+            'Choose Payment Method' => 'Select Credit / Debit Card, Bank Transfer (Virtual Account), or E-Wallet.',
+            'Complete the Payment'  => 'Click "Bayar Sekarang", fill in the payment details in the pop-up, then click "Pay Now".',
+            'Confirm Payment'       => 'Wait for the confirmation, or upload your transfer receipt if you pay by bank transfer.',
         ],
     ],
     'checkout' => [
@@ -55,11 +47,11 @@ $guides = [
         'title'    => 'How to checkout',
         'intro'    => 'Learn how to complete your order checkout in a few simple steps:',
         'steps'    => [
-            ['Open Shopping Cart', 'Click on the Cart icon at the top right of the page to review your selected items.'],
-            ['Review Your Order', 'Check the quantity, colors, or options of your items.'],
-            ['Apply Vouchers / Coupons', 'Enter any promo codes or select available discount vouchers if you have them.'],
-            ['Proceed to Checkout', 'Click the "Checkout" button to proceed.'],
-            ['Fill Shipping & Payment Details', 'Enter your shipping address, choose your delivery service, select a payment method, and confirm your order.'],
+            'Open Shopping Cart'              => 'Click on the Cart icon at the top right of the page to review your selected items.',
+            'Review Your Order'               => 'Check the quantity, colors, or options of your items.',
+            'Apply Vouchers / Coupons'        => 'Enter any promo codes or select available discount vouchers if you have them.',
+            'Proceed to Checkout'             => 'Click the "Checkout" button to proceed.',
+            'Fill Shipping & Payment Details' => 'Enter your shipping address, choose your delivery service, select a payment method, and confirm your order.',
         ],
     ],
     'compare' => [
@@ -68,55 +60,53 @@ $guides = [
         'title'    => 'Comparing Products?',
         'intro'    => 'Check our quick guide to compare items effectively and choose the best one:',
         'steps'    => [
-            ['Select Products', 'Click the "Compare" button on any product card or listing page to add items to your comparison list.'],
-            ['Open Comparison View', 'Go to the comparison page to view specifications, prices, and features side-by-side.'],
-            ['Analyze Differences', 'Review key factors such as materials, dimensions, or technical specifications highlighted in the comparison table.'],
-            ['Make your best choice', ''],
+            'Select Products'       => 'Click the "Compare" button on any product card or listing page to add items to your comparison list.',
+            'Open Comparison View'  => 'Go to the comparison page to view specifications, prices, and features side-by-side.',
+            'Analyze Differences'   => 'Review key factors such as materials, dimensions, or technical specifications highlighted in the comparison table.',
+            'Make your best choice' => '',
         ],
     ],
 ];
 
-// ===== Autofill nama & email jika user sudah login (sama seperti halaman checkout) =====
-$currentUser = null;
-if (isset($_SESSION['user']['id'])) {
-    $currentUser = getUser($_SESSION['user']['id']);
-}
+// Kalau sudah login, nama & email langsung terisi
+$user = isset($_SESSION['user']['id']) ? getUser($_SESSION['user']['id']) : null;
 
 $old = [
-    'name'    => $currentUser['name'] ?? '',
-    'email'   => $currentUser['email'] ?? '',
+    'name'    => $user['name'] ?? '',
+    'email'   => $user['email'] ?? '',
     'subject' => '',
     'message' => '',
 ];
 $errors = [];
 
-// ===== Proses form kontak =====
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    foreach ($old as $key => $_) {
-        $old[$key] = trim((string)($_POST[$key] ?? ''));
+    foreach ($old as $field => $value) {
+        $old[$field] = trim($_POST[$field] ?? '');
     }
 
     if ($old['name'] === '') {
         $errors['name'] = 'Full name is required.';
     }
+
     if ($old['email'] === '') {
         $errors['email'] = 'Email is required.';
     } elseif (!filter_var($old['email'], FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'Please enter a valid email address.';
     }
+
     if ($old['subject'] === '') {
         $errors['subject'] = 'Subject is required.';
     }
+
     if ($old['message'] === '') {
         $errors['message'] = 'Message is required.';
     } elseif (mb_strlen($old['message']) > 500) {
         $errors['message'] = 'Message may not exceed 500 characters.';
     }
 
-    if (!$errors) {
-        // TODO: simpan ke database (mis. lewat repository) atau kirim email di sini
+    if (empty($errors)) {
+        // TODO: simpan pesan ke database atau kirim lewat email
 
-        // Post/Redirect/Get: mencegah form terkirim ulang saat halaman di-refresh
         $_SESSION['flash_success'] = 'Thank you! Your message has been sent. We will reply as soon as possible.';
         header('Location: index.php#contact');
         exit;
@@ -142,7 +132,7 @@ unset($_SESSION['flash_success']);
     <!-- FontAwesome untuk Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Bootstrap 4.6 CSS (dimuat lebih dulu agar CSS kustom di bawahnya tidak tertimpa) -->
+    <!-- Bootstrap dimuat dulu supaya CSS kustom di bawahnya tidak tertimpa -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
     <!-- CSS Kustom -->
@@ -155,7 +145,6 @@ unset($_SESSION['flash_success']);
 
     <?php require_once __DIR__ . "/../../components/landing/header.php"; ?>
 
-    <!-- MAIN CONTENT / HELP & CONTACT SECTION -->
     <main class="help-main">
         <div class="help-header-title">
             <h1>Help &amp; Contact</h1>
@@ -167,66 +156,62 @@ unset($_SESSION['flash_success']);
                 <h2>Help &amp; Contact</h2>
                 <p>We are ready to help with your PC component needs</p>
             </div>
-            <div class="hero-art" aria-hidden="true">
+            <div class="hero-art">
                 <img src="../../assets/img/hero-laptop.png" alt="">
                 <div class="bubble">?</div>
             </div>
         </section>
 
-        <!-- HELP CENTER -->
+        <!-- Help Center -->
         <section class="panel help-center" id="help-center">
             <h2>Help Center</h2>
             <div class="help-grid">
                 <?php foreach ($guides as $id => $guide): ?>
                     <article class="help-card">
                         <span class="help-icon"><i class="fa-regular fa-circle-question"></i></span>
-                        <h3><?= hEsc($guide['question']) ?></h3>
-                        <p><?= hEsc($guide['short']) ?></p>
-                        <a href="#guide-<?= hEsc($id) ?>" role="button" data-guide="<?= hEsc($id) ?>">See more</a>
+                        <h3><?= htmlspecialchars($guide['question']) ?></h3>
+                        <p><?= htmlspecialchars($guide['short']) ?></p>
+                        <a href="#guide-<?= $id ?>" data-guide="<?= $id ?>">See more</a>
                     </article>
                 <?php endforeach; ?>
             </div>
         </section>
 
-        <!-- CONTACT -->
+        <!-- Contact -->
         <section class="panel contact" id="contact">
             <div class="contact-form">
                 <h2>Contact us</h2>
 
                 <?php if ($flashSuccess): ?>
-                    <div class="alert alert-success" role="status">
-                        <i class="fa-solid fa-circle-check"></i> <?= hEsc($flashSuccess) ?>
+                    <div class="alert alert-success">
+                        <i class="fa-solid fa-circle-check"></i> <?= htmlspecialchars($flashSuccess) ?>
                     </div>
                 <?php endif; ?>
 
                 <form action="index.php#contact" method="POST" id="contactForm" novalidate>
                     <div class="form-group">
                         <label for="name">Full name</label>
-                        <input type="text" id="name" name="name" placeholder="Enter your full name"
-                               value="<?= hEsc($old['name']) ?>" class="<?= isset($errors['name']) ? 'invalid' : '' ?>">
-                        <?php if (isset($errors['name'])): ?><p class="error-text"><?= hEsc($errors['name']) ?></p><?php endif; ?>
+                        <input type="text" id="name" name="name" placeholder="Enter your full name" value="<?= htmlspecialchars($old['name']) ?>" class="<?= isset($errors['name']) ? 'invalid' : '' ?>">
+                        <?php if (isset($errors['name'])): ?><p class="error-text"><?= $errors['name'] ?></p><?php endif; ?>
                     </div>
 
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Enter your email"
-                               value="<?= hEsc($old['email']) ?>" class="<?= isset($errors['email']) ? 'invalid' : '' ?>">
-                        <?php if (isset($errors['email'])): ?><p class="error-text"><?= hEsc($errors['email']) ?></p><?php endif; ?>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" value="<?= htmlspecialchars($old['email']) ?>" class="<?= isset($errors['email']) ? 'invalid' : '' ?>">
+                        <?php if (isset($errors['email'])): ?><p class="error-text"><?= $errors['email'] ?></p><?php endif; ?>
                     </div>
 
                     <div class="form-group">
                         <label for="subject">Subject</label>
-                        <input type="text" id="subject" name="subject" placeholder="Enter message subject"
-                               value="<?= hEsc($old['subject']) ?>" class="<?= isset($errors['subject']) ? 'invalid' : '' ?>">
-                        <?php if (isset($errors['subject'])): ?><p class="error-text"><?= hEsc($errors['subject']) ?></p><?php endif; ?>
+                        <input type="text" id="subject" name="subject" placeholder="Enter message subject" value="<?= htmlspecialchars($old['subject']) ?>" class="<?= isset($errors['subject']) ? 'invalid' : '' ?>">
+                        <?php if (isset($errors['subject'])): ?><p class="error-text"><?= $errors['subject'] ?></p><?php endif; ?>
                     </div>
 
                     <div class="form-group">
                         <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="5" maxlength="500" placeholder="Write your message here.."
-                                  class="<?= isset($errors['message']) ? 'invalid' : '' ?>"><?= hEsc($old['message']) ?></textarea>
+                        <textarea id="message" name="message" rows="5" maxlength="500" placeholder="Write your message here.." class="<?= isset($errors['message']) ? 'invalid' : '' ?>"><?= htmlspecialchars($old['message']) ?></textarea>
                         <div class="char-count"><span id="charNow"><?= mb_strlen($old['message']) ?></span>/500</div>
-                        <?php if (isset($errors['message'])): ?><p class="error-text"><?= hEsc($errors['message']) ?></p><?php endif; ?>
+                        <?php if (isset($errors['message'])): ?><p class="error-text"><?= $errors['message'] ?></p><?php endif; ?>
                     </div>
 
                     <button type="submit" class="btn-submit" id="submitBtn">Submit</button>
@@ -263,19 +248,19 @@ unset($_SESSION['flash_success']);
         </section>
     </main>
 
-    <!-- MODAL PANDUAN (dibuka lewat JavaScript saat "See more" ditekan) -->
-    <div class="btp-backdrop" id="guideModal" aria-hidden="true">
+    <!-- Modal panduan, isinya diisi lewat JavaScript -->
+    <div class="btp-backdrop" id="guideModal">
         <div class="btp-modal" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
             <div class="btp-modal-header">
                 <h3 id="guideTitle"></h3>
-                <button type="button" class="btp-close-btn" data-close-modal="guideModal" aria-label="Close">&times;</button>
+                <button type="button" class="btp-close-btn" data-close-modal aria-label="Close">&times;</button>
             </div>
 
             <p class="btp-modal-intro" id="guideIntro"></p>
             <div id="guideSteps"></div>
 
             <div class="btp-modal-footer">
-                <button type="button" class="btp-btn-pay" data-close-modal="guideModal">Got it</button>
+                <button type="button" class="btp-btn-pay" data-close-modal>Got it</button>
             </div>
         </div>
     </div>
@@ -286,166 +271,122 @@ unset($_SESSION['flash_success']);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 
     <script>
-        // ===== Data panduan dari PHP =====
-        const guides = <?= json_encode($guides, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+        const guides = <?= json_encode($guides, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
 
         const guideModal = document.getElementById('guideModal');
-        const guideTitle = document.getElementById('guideTitle');
-        const guideIntro = document.getElementById('guideIntro');
-        const guideSteps = document.getElementById('guideSteps');
-        let lastTrigger = null;
 
-        // 1. Isi modal dengan data panduan yang dipilih
-        function renderGuide(guide) {
-            guideTitle.textContent = guide.title;
-            guideIntro.textContent = guide.intro;
-            guideSteps.innerHTML = '';
-
-            guide.steps.forEach(function(step, index) {
-                const section = document.createElement('div');
-                section.className = 'btp-section';
-
-                const header = document.createElement('div');
-                header.className = 'btp-section-header';
-
-                const badge = document.createElement('span');
-                badge.className = 'btp-step-badge';
-                badge.textContent = index + 1;
-
-                const title = document.createElement('h4');
-                title.className = 'btp-section-title';
-                title.textContent = step[0];
-
-                header.appendChild(badge);
-                header.appendChild(title);
-                section.appendChild(header);
-
-                if (step[1]) {
-                    const desc = document.createElement('p');
-                    desc.className = 'btp-step-desc';
-                    desc.textContent = step[1];
-                    section.appendChild(desc);
-                }
-                guideSteps.appendChild(section);
-            });
-        }
-
-        // 2. Fungsi Tutup Semua Modal
-        function closeAllModals() {
-            document.querySelectorAll('.btp-backdrop').forEach(function(modal) {
-                modal.classList.remove('show');
-                modal.setAttribute('aria-hidden', 'true');
-            });
-            document.body.classList.remove('btp-lock');
-
-            if (location.hash.indexOf('#guide-') === 0) {
-                history.replaceState(null, '', location.pathname + location.search);
-            }
-            if (lastTrigger) {
-                lastTrigger.focus();
-                lastTrigger = null;
-            }
-        }
-
-        // 3. Buka modal sesuai kartu "See more" yang ditekan
-        function openGuide(id, trigger) {
+        // Modal panduan
+        function openGuide(id) {
             const guide = guides[id];
             if (!guide) return;
-            renderGuide(guide);
-            lastTrigger = trigger || lastTrigger;
+
+            document.getElementById('guideTitle').textContent = guide.title;
+            document.getElementById('guideIntro').textContent = guide.intro;
+
+            let html = '';
+            let no = 1;
+            for (const title in guide.steps) {
+                const desc = guide.steps[title];
+                html += `
+                    <div class="btp-section">
+                        <div class="btp-section-header">
+                            <span class="btp-step-badge">${no++}</span>
+                            <h4 class="btp-section-title">${title}</h4>
+                        </div>
+                        ${desc ? `<p class="btp-step-desc">${desc}</p>` : ''}
+                    </div>`;
+            }
+            document.getElementById('guideSteps').innerHTML = html;
+
             guideModal.classList.add('show');
-            guideModal.setAttribute('aria-hidden', 'false');
             document.body.classList.add('btp-lock');
-            guideModal.querySelector('.btp-close-btn').focus();
         }
 
+        function closeModal() {
+            guideModal.classList.remove('show');
+            document.body.classList.remove('btp-lock');
+            if (location.hash.startsWith('#guide-')) {
+                history.replaceState(null, '', location.pathname + location.search);
+            }
+        }
+
+        // Klik "See more"
         document.querySelectorAll('[data-guide]').forEach(function(link) {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
-                openGuide(link.getAttribute('data-guide'), link);
+                openGuide(this.dataset.guide);
             });
         });
 
-        // 4. Tutup modal jika klik tombol silang / "Got it" atau klik area gelap (backdrop)
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('btp-backdrop') || e.target.closest('.btp-close-btn, [data-close-modal]')) {
-                closeAllModals();
+        // Tutup modal: tombol silang, "Got it", klik area gelap, atau tombol Esc
+        guideModal.addEventListener('click', function(e) {
+            if (e.target === guideModal || e.target.closest('[data-close-modal]')) {
+                closeModal();
             }
         });
-
-        // 5. Tombol Esc menutup modal, Tab tetap berputar di dalam modal
         document.addEventListener('keydown', function(e) {
-            if (!guideModal.classList.contains('show')) return;
-            if (e.key === 'Escape') {
-                closeAllModals();
-                return;
-            }
-            if (e.key === 'Tab') {
-                const items = guideModal.querySelectorAll('.btp-modal button');
-                const first = items[0];
-                const last = items[items.length - 1];
-                if (e.shiftKey && document.activeElement === first) {
-                    e.preventDefault();
-                    last.focus();
-                } else if (!e.shiftKey && document.activeElement === last) {
-                    e.preventDefault();
-                    first.focus();
-                }
-            }
+            if (e.key === 'Escape') closeModal();
         });
 
-        // 6. Link dari footer/halaman lain (index.php#guide-order) langsung membuka modal
+        // Link dari footer (index.php#guide-order) langsung membuka modal
         function openFromHash() {
-            if (location.hash.indexOf('#guide-') === 0) {
-                openGuide(location.hash.slice(7));
+            if (location.hash.startsWith('#guide-')) {
+                openGuide(location.hash.replace('#guide-', ''));
             }
         }
         window.addEventListener('hashchange', openFromHash);
         openFromHash();
 
-        // ===== Form kontak =====
+
+        // Form kontak
         const contactForm = document.getElementById('contactForm');
         const submitBtn = document.getElementById('submitBtn');
         const messageInput = document.getElementById('message');
-        const charNow = document.getElementById('charNow');
 
         messageInput.addEventListener('input', function() {
-            charNow.textContent = messageInput.value.length;
+            document.getElementById('charNow').textContent = this.value.length;
         });
 
-        function setError(input, text) {
+        function showError(input, text) {
             const group = input.closest('.form-group');
-            const old = group.querySelector('.error-text');
-            if (old) old.remove();
-            input.classList.toggle('invalid', !!text);
-            if (text) {
-                const p = document.createElement('p');
-                p.className = 'error-text';
-                p.textContent = text;
-                group.appendChild(p);
+            const oldError = group.querySelector('.error-text');
+            if (oldError) oldError.remove();
+
+            input.classList.toggle('invalid', text !== '');
+
+            if (text !== '') {
+                group.insertAdjacentHTML('beforeend', `<p class="error-text">${text}</p>`);
             }
         }
 
-        contactForm.querySelectorAll('input, textarea').forEach(function(el) {
-            el.addEventListener('input', function() {
-                setError(el, '');
+        contactForm.querySelectorAll('input, textarea').forEach(function(input) {
+            input.addEventListener('input', function() {
+                showError(this, '');
             });
         });
 
-        contactForm.addEventListener('submit', function(e) {
-            const f = contactForm.elements;
-            const rules = [
-                [f.name, !f.name.value.trim(), 'Full name is required.'],
-                [f.email, !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.value.trim()), 'Please enter a valid email address.'],
-                [f.subject, !f.subject.value.trim(), 'Subject is required.'],
-                [f.message, !f.message.value.trim(), 'Message is required.']
-            ];
+        const errorMessages = {
+            name: 'Full name is required.',
+            email: 'Please enter a valid email address.',
+            subject: 'Subject is required.',
+            message: 'Message is required.'
+        };
 
+        contactForm.addEventListener('submit', function(e) {
             let firstInvalid = null;
-            rules.forEach(function(rule) {
-                setError(rule[0], rule[1] ? rule[2] : '');
-                if (rule[1] && !firstInvalid) firstInvalid = rule[0];
-            });
+
+            for (const field in errorMessages) {
+                const input = contactForm.elements[field];
+                const value = input.value.trim();
+
+                let valid = value !== '';
+                if (field === 'email') {
+                    valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+                }
+
+                showError(input, valid ? '' : errorMessages[field]);
+                if (!valid && !firstInvalid) firstInvalid = input;
+            }
 
             if (firstInvalid) {
                 e.preventDefault();
@@ -460,7 +401,7 @@ unset($_SESSION['flash_success']);
             }, 0);
         });
 
-        // ===== Alert sukses hilang sendiri =====
+        // Alert sukses hilang sendiri setelah 5 detik
         const alertBox = document.querySelector('.alert');
         if (alertBox) {
             setTimeout(function() {
