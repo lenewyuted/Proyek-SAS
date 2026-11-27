@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../../../styles/base.css">
 
     <!-- 2. Link ke CSS Khusus Footer -->
-    <link rel="stylesheet" href="../../styles/components/footer.css">
+    <link rel="stylesheet" href="../../styles/components/landing/footer.css">
 </head>
 
 <body>
@@ -88,7 +88,5 @@
     </footer>
 
 </body>
+
 </html>
-
-
-

@@ -62,8 +62,8 @@ unset($_SESSION['flash_error']);
 
     <!-- CSS Kustom -->
     <link rel="stylesheet" href="../../../styles/pages/checkout.css">
-    <link rel="stylesheet" href="../../../styles/components/header.css">
-    <link rel="stylesheet" href="../../../styles/components/footer.css">
+    <link rel="stylesheet" href="../../../styles/components/landing/header.css">
+    <link rel="stylesheet" href="../../../styles/components/landing/footer.css">
     <!-- Bootstrap 4.6 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 </head>

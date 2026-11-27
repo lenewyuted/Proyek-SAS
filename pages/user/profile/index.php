@@ -44,9 +44,9 @@ $hasPhoto      = ($photoFile !== "");
     <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link rel="stylesheet" href="../../../styles/pages/landing/style.css">
-    <link rel="stylesheet" href="../../../styles/components/header.css">
-    <link rel="stylesheet" href="../../../styles/components/footer.css">
+    <link rel="stylesheet" href="../../../styles/pages/landing.css">
+    <link rel="stylesheet" href="../../../styles/components/landing/header.css">
+    <link rel="stylesheet" href="../../../styles/components/landing/footer.css">
     <link rel="stylesheet" href="../../../styles/pages/profile.css">
 </head>
 

@@ -34,8 +34,8 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- CSS kustom -->
-    <link rel="stylesheet" href="../../../styles/components/header.css">
-    <link rel="stylesheet" href="../../../styles/components/footer.css">
+    <link rel="stylesheet" href="../../../styles/components/landing/header.css">
+    <link rel="stylesheet" href="../../../styles/components/landing/footer.css">
     <link rel="stylesheet" href="../../../styles/pages/cart.css">
 </head>
 

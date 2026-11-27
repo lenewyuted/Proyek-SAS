@@ -28,10 +28,10 @@ $totalPages = ceil($totalUsers / $perPage);
 
   <!-- CSS -->
   <link rel="stylesheet" href="../../../styles/base.css">
-  <link rel="stylesheet" href="../../../styles/admin/sidebar.css">
-  <link rel="stylesheet" href="../../../styles/admin/topbar.css">
-  <link rel="stylesheet" href="../../../styles/admin/users.css"> <!-- Memakai style products agar tabelnya seragam -->
+  <link rel="stylesheet" href="../../../styles/components/admin/sidebar.css">
+  <link rel="stylesheet" href="../../../styles/components/admin/topbar.css">
   <link rel="stylesheet" href="../../../styles/admin/pagination.css">
+  <link rel="stylesheet" href="../../../styles/admin/users.css">
 </head>
 
 <body>

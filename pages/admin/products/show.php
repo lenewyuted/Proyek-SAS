@@ -25,20 +25,21 @@ foreach (getCategories("", "", 1, 100) as $category) {
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TechHub Admin - Manage Products</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechHub Admin - Manage Products</title>
 
-  <!-- Font & icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Font & icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="../../../styles/base.css">
-  <link rel="stylesheet" href="../../../styles/admin/sidebar.css">
-  <link rel="stylesheet" href="../../../styles/admin/topbar.css">
-  <link rel="stylesheet" href="../../../styles/admin/products.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../../styles/base.css">
+    <link rel="stylesheet" href="../../../styles/components/admin/sidebar.css">
+    <link rel="stylesheet" href="../../../styles/components/admin/topbar.css">
+    <link rel="stylesheet" href="../../../styles/admin/products.css">
 </head>
 
 <body>
@@ -63,7 +64,7 @@ foreach (getCategories("", "", 1, 100) as $category) {
 
             <!-- Kontainer Tata Letak Utama -->
             <div class="product-show-container">
-                
+
                 <!-- Kolom Kiri: Informasi Produk -->
                 <div class="product-info-section">
                     <div class="form-row">
@@ -112,4 +113,5 @@ foreach (getCategories("", "", 1, 100) as $category) {
         </main>
     </div>
 </body>
+
 </html>

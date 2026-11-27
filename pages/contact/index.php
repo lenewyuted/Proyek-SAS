@@ -137,8 +137,8 @@ unset($_SESSION['flash_success']);
 
     <!-- CSS Kustom -->
     <link rel="stylesheet" href="../../styles/pages/contact.css">
-    <link rel="stylesheet" href="../../styles/components/header.css">
-    <link rel="stylesheet" href="../../styles/components/footer.css">
+    <link rel="stylesheet" href="../../styles/components/landing/header.css">
+    <link rel="stylesheet" href="../../styles/components/landing/footer.css">
 </head>
 
 <body>

@@ -65,7 +65,7 @@ function renderStars(float $rating): string
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- CSS Kustom -->
-    <link rel="stylesheet" href="../../styles/pages/products/show.css">
+    <link rel="stylesheet" href="../../styles/pages/product-show.css">
     <link rel="stylesheet" href="../../styles/components/header.css">
     <link rel="stylesheet" href="../../styles/components/footer.css">
 </head>
@@ -126,12 +126,12 @@ function renderStars(float $rating): string
                 <div class="purchase-action-row">
                     <form action="../../actions/cart/add.php" method="POST" class="cart-form-inline">
                         <div class="quantity-selector">
-                            <button type="button" class="qty-btn">-</button>
-                            <span class="qty-value">1</span>
-                            <button type="button" class="qty-btn">+</button>
+                            <button type="button" class="qty-btn" onclick="updateShowQuantity(<?= (int) ($product['id'] ?? 0) ?>, -1)">-</button>
+                            <span class="qty-value" id="qty-value">1</span>
+                            <button type="button" class="qty-btn" onclick="updateShowQuantity(<?= (int) ($product['id'] ?? 0) ?>, 1)">+</button>
                         </div>
                         <input type="hidden" name="product_id" value="<?= (int) ($product['id'] ?? 0) ?>">
-                        <input type="hidden" name="quantity" value="1">
+                        <input type="hidden" name="quantity" id="qty-input" value="1">
                         <button
                             name="add"
                             type="submit"
@@ -260,6 +260,40 @@ function renderStars(float $rating): string
 
 </body>
 <script>
+    async function updateShowQuantity(productId, change) {
+        // 1. Ambil elemen tampilan qty dan input hidden
+        const qtyDisplay = document.getElementById('qty-value');
+        const qtyInput = document.getElementById('qty-input');
+        const currentQty = parseInt(qtyInput.value, 10) || 1;
+
+        // 2. Siapkan data yang akan dikirim ke server
+        const formData = new FormData();
+        formData.append('product_id', productId);
+        formData.append('quantity', currentQty);
+        formData.append('change', change);
+
+        // 3. Kirim request ke server menggunakan Fetch API
+        try {
+            const response = await fetch('../../actions/cart/check-qty.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            // 4. Perbarui tampilan jika berhasil, atau tampilkan pesan jika gagal
+            if (data.success) {
+                qtyDisplay.textContent = data.quantity;
+                qtyInput.value = data.quantity;
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+            alert('Terjadi kesalahan koneksi saat memperbarui jumlah.');
+        }
+    }
+
     (function() {
         const btn = document.getElementById('btnAddToCart');
         if (!btn) return;

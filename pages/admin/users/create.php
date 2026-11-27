@@ -22,8 +22,8 @@ unset($_SESSION['errors'], $_SESSION['old']);
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../../../styles/base.css">
-    <link rel="stylesheet" href="../../../styles/admin/sidebar.css">
-    <link rel="stylesheet" href="../../../styles/admin/topbar.css">
+    <link rel="stylesheet" href="../../../styles/components/admin/sidebar.css">
+    <link rel="stylesheet" href="../../../styles/components/admin/topbar.css">
     <link rel="stylesheet" href="../../../styles/admin/products.css">
 </head>
 
@@ -92,12 +92,13 @@ unset($_SESSION['errors'], $_SESSION['old']);
                             </p>
                         <?php endif; ?>
                     </div>
-                <div class="form-actions-center" style="margin-top: 25px;">
-                    <button name="store" type="submit" class="btn-submit-add">Add User</button>
-                    <a href="index.php" class="btn-cancel">Cancel</a>
-                </div>
+                    <div class="form-actions-center" style="margin-top: 25px;">
+                        <button name="store" type="submit" class="btn-submit-add">Add User</button>
+                        <a href="index.php" class="btn-cancel">Cancel</a>
+                    </div>
             </form>
         </main>
     </div>
 </body>
+
 </html>

@@ -30,8 +30,8 @@ if (!function_exists('formatRupiah')) {
 
     <!-- CSS -->
     <link rel="stylesheet" href="../../../styles/base.css">
-    <link rel="stylesheet" href="../../../styles/admin/sidebar.css">
-    <link rel="stylesheet" href="../../../styles/admin/topbar.css">
+    <link rel="stylesheet" href="../../../styles/components/admin/sidebar.css">
+    <link rel="stylesheet" href="../../../styles/components/admin/topbar.css">
     <link rel="stylesheet" href="../../../styles/admin/order-data.css">
     <link rel="stylesheet" href="../../../styles/admin/pagination.css">
 </head>

@@ -23,11 +23,12 @@ if ($userId > 0 && !empty($cartItems) && is_array($cartItems)) {
 }
 
 $searchQuery = trim((string) ($_GET['q'] ?? ''));
+$baseUrl = rtrim(BASE_URL, '/');
 ?>
 
 <!-- Bootstrap 4.6 CSS (Dibawa oleh header agar dropdown & carousel berfungsi konsisten) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-<link rel="stylesheet" href="../../styles/components/header.css">
+<link rel="stylesheet" href="<?= $baseUrl ?>/styles/components/landing/header.css">
 
 <!-- bar bagian atas -->
 <div class="top-bar">
@@ -37,13 +38,13 @@ $searchQuery = trim((string) ($_GET['q'] ?? ''));
 <!-- main navbar -->
 <header class="top-header">
     <div class="logo">
-        <a href="/pages/landing-page/index.php">
-            <img src="/assets/img/Logo.png" alt="TechHub Logo" class="brand-logo-img">
+        <a href="<?= $baseUrl ?>/pages/landing-page/index.php">
+            <img src="<?= $baseUrl ?>/assets/img/Logo.png" alt="TechHub Logo" class="brand-logo-img">
         </a>
     </div>
 
     <!-- search bar -->
-    <form action="/pages/landing-page/index.php" method="GET" class="search-form">
+    <form action="<?= $baseUrl ?>/pages/landing-page/index.php" method="GET" class="search-form">
         <input type="text" name="q" value="<?= htmlspecialchars($searchQuery) ?>" placeholder="Search for parts to build your dream PC...">
         <button type="submit" class="search-btn">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -52,15 +53,15 @@ $searchQuery = trim((string) ($_GET['q'] ?? ''));
 
     <!-- tombol aksi kanan -->
     <div class="nav-icons">
-        <a href="../../pages/recommendation/index.php" class="icon-link" title="Likes">
+        <a href="<?= $baseUrl ?>/pages/recommendation/index.php" class="icon-link" title="Likes">
             <i class="fa-solid fa-thumbs-up"></i>
         </a>
 
-        <a href="../../pages/compare/index.php" class="icon-link" title="Compare">
+        <a href="<?= $baseUrl ?>/pages/compare/index.php" class="icon-link" title="Compare">
             <i class="fa-solid fa-sliders"></i>
         </a>
 
-        <a href="../user/cart/index.php" class="cart-icon-link">
+        <a href="<?= $baseUrl ?>/pages/user/cart/index.php" class="cart-icon-link">
             <i class="fa-solid fa-cart-shopping"></i>
             <?php if ($cartBadgeCount > 0): ?>
                 <span class="cart-badge"><?= $cartBadgeCount ?></span>
@@ -81,18 +82,18 @@ $searchQuery = trim((string) ($_GET['q'] ?? ''));
                     </div>
                     <div class="user-dropdown-body">
                         <?php if (($authUser['role'] ?? '') === 'admin'): ?>
-                            <a class="dropdown-item" href="/pages/admin/dashboard/index.php">
+                            <a class="dropdown-item" href="<?= $baseUrl ?>/pages/admin/dashboard/index.php">
                                 <i class="fa-solid fa-compass user-dropdown-icon"></i> Dashboard Admin
                             </a>
                         <?php endif; ?>
-                        <a class="dropdown-item" href="/pages/user/profile/index.php">
+                        <a class="dropdown-item" href="<?= $baseUrl ?>/pages/user/profile/index.php">
                             <i class="fa-solid fa-user-pen user-dropdown-icon"></i> Edit Profil
                         </a>
-                        <a class="dropdown-item" href="/pages/user/cart/order-history.php">
+                        <a class="dropdown-item" href="<?= $baseUrl ?>/pages/user/cart/order-history.php">
                             <i class="fa-solid fa-clock-rotate-left user-dropdown-icon"></i> Order History
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-danger" href="/actions/auth/logout.php">
+                        <a class="dropdown-item text-danger" href="<?= $baseUrl ?>/actions/auth/logout.php">
                             <i class="fa-solid fa-arrow-right-from-bracket user-dropdown-icon"></i> Logout
                         </a>
                     </div>
@@ -102,10 +103,10 @@ $searchQuery = trim((string) ($_GET['q'] ?? ''));
                         <div class="user-dropdown-email">Silakan login ke akun Anda</div>
                     </div>
                     <div class="user-dropdown-body">
-                        <a class="dropdown-item" href="/pages/auth/login.php">
+                        <a class="dropdown-item" href="<?= $baseUrl ?>/pages/auth/login.php">
                             <i class="fa-solid fa-right-to-bracket user-dropdown-icon"></i> Masuk
                         </a>
-                        <a class="dropdown-item" href="/pages/auth/register.php">
+                        <a class="dropdown-item" href="<?= $baseUrl ?>/pages/auth/register.php">
                             <i class="fa-solid fa-user-plus user-dropdown-icon"></i> Daftar
                         </a>
                     </div>

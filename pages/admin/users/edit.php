@@ -40,8 +40,8 @@ $user = array_merge($user, $old);
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../../../styles/base.css">
-    <link rel="stylesheet" href="../../../styles/admin/sidebar.css">
-    <link rel="stylesheet" href="../../../styles/admin/topbar.css">
+    <link rel="stylesheet" href="../../../styles/components/admin/sidebar.css">
+    <link rel="stylesheet" href="../../../styles/components/admin/topbar.css">
     <link rel="stylesheet" href="../../../styles/admin/products.css">
 </head>
 
@@ -111,7 +111,7 @@ $user = array_merge($user, $old);
                             </p>
                         <?php endif; ?>
                     </div>
-                </div> 
+                </div>
                 <div class="form-actions-center" style="margin-top: 25px;">
                     <button name="update" type="submit" class="btn-submit-add">Save Changes</button>
                     <a href="index.php" class="btn-cancel">Cancel</a>
