@@ -51,10 +51,10 @@ if (!$isSearching && $selectedCategory > 0) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Custom Stylesheet -->
-    <link rel="stylesheet" href="../../styles/pages/landing/style.css">
+    <link rel="stylesheet" href="../../styles/pages/landing.css">
     <link rel="stylesheet" href="../../styles/pages/search-result.css">
-    <link rel="stylesheet" href="../../styles/components/header.css">
-    <link rel="stylesheet" href="../../styles/components/footer.css">
+    <link rel="stylesheet" href="../../styles/components/landing/header.css">
+    <link rel="stylesheet" href="../../styles/components/landing/footer.css">
     <link rel="stylesheet" href="../../styles/index.css">
 </head>
 
