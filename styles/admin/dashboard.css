@@ -54,7 +54,7 @@ body {
 }
 
 .menu-item i {
-    -webkit-text-stroke: 0.4px currentColor; /* Sesuaikan ukuran ketebalannya (misal 0.5px - 1px) */
+  -webkit-text-stroke: 0.4px currentColor;
 }
 
 /* Main Content Area */
@@ -129,6 +129,7 @@ body {
   color: var(--text-muted);
 }
 
+/* Middle Section: Welcome Banner & Admin Note */
 .middle-grid {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
@@ -137,12 +138,23 @@ body {
 }
 
 .welcome-banner {
-  background: var(--light-blue-bg);
+  position: relative;
   border-radius: 12px;
   padding: 30px;
+  background-color: var(--light-blue-bg);
+  background-image: url("/assets/img/Banner%20Laptop%20Biru%20Minimalis.png");
+  background-size: cover;
+  background-position: right center;
+  background-repeat: no-repeat;
+  overflow: hidden;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+}
+
+.welcome-banner .banner-text {
+  position: relative;
+  z-index: 2;
+  max-width: 65%;
 }
 
 .banner-text h3 {
@@ -174,11 +186,25 @@ body {
   border: 1.5px solid var(--primary-blue);
   border-radius: 12px;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .admin-note-card h3 {
   font-size: 18px;
-  margin-bottom: 10px;
+  margin: 0;
+}
+
+.note-status {
+  font-size: 12px;
+  color: var(--text-muted);
 }
 
 .admin-note-card textarea {
@@ -188,113 +214,166 @@ body {
   outline: none;
   resize: none;
   font-size: 14px;
+  background: transparent;
+  color: var(--text-dark);
 }
 
+/* Bottom Section: Product List & Calendar */
 .bottom-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 310px;
   gap: 20px;
+  align-items: stretch;
 }
 
-/* Styling untuk Grid Produk Mendatar */
-/* Styling untuk Grid Produk Mendatar */
 .products-list-grid {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .product-item-card {
-    flex: 1;
-    min-width: 200px;
-    background: var(--white);
-    border: 1.5px solid var(--primary-blue, #2563eb);
-    border-radius: 12px;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  width: 100%;
+  height: 320px;
+  background: var(--white);
+  border: 1.5px solid var(--primary-blue);
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.product-item-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(0, 86, 198, 0.14);
+  border-color: #00439c;
 }
 
 .product-img-box {
-    width: 100%;
-    height: 160px; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    margin-bottom: 10px;
-    background-color: #eff6ff;
-    border-radius: 8px;
+  width: 100%;
+  height: 185px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  margin-bottom: 14px;
+  background-color: var(--light-blue-bg);
+  border-radius: 9px;
 }
 
 .product-img-box img {
-    height: 80%; 
-    width: 80%;  
-    object-fit: contain; 
+  height: 80%;
+  width: 80%;
+  object-fit: contain;
+  transition: transform 0.25s ease;
+}
+
+.product-item-card:hover .product-img-box img {
+  transform: scale(1.05);
 }
 
 .product-name {
-    text-align: center;
-    font-size: 14px;
-    font-weight: 600;
-    margin: 0;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1.4;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.15s ease;
 }
 
-/* Calendar Card */
+
+/* Calendar Card (Ukuran Fix) */
 .calendar-card {
-  background: #f4f8ff;
+  width: 310px;
+  height: 320px;
+  background: var(--white);
+  border: 1.5px solid var(--primary-blue);
   border-radius: 12px;
-  padding: 15px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
 }
 
 .calendar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
 }
 
 .cal-month {
   font-weight: 700;
-  font-size: 14px;
-  color: #2563eb;
+  font-size: 15px;
+  color: var(--primary-blue);
+}
+
+.cal-nav-group {
+  display: flex;
+  gap: 6px;
 }
 
 .cal-nav {
-  background: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--light-blue-bg);
   border: none;
-  color: #2563eb;
-  font-size: 16px;
+  color: var(--primary-blue);
+  font-weight: 700;
   cursor: pointer;
 }
 
+.cal-nav:hover {
+  background: var(--primary-blue);
+  color: var(--white);
+}
+
 .calendar-grid {
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-  text-align: center;
+  grid-template-rows: 24px repeat(6, 1fr);
+  gap: 4px;
+  place-items: center;
 }
 
 .day-name {
   font-size: 11px;
-  font-weight: 600;
-  color: #2563eb;
+  font-weight: 700;
+  color: var(--primary-blue);
 }
 
 .day {
-  font-size: 11px;
-  padding: 6px 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
   border-radius: 50%;
-  color: #334155;
-}
-
-.day.muted {
-  color: #94a3b8;
+  color: var(--text-dark);
 }
 
 .day.active {
-  background-color: #bfdbfe;
-  color: #1e40af;
+  background-color: var(--primary-blue);
+  color: var(--white);
   font-weight: 700;
 }
