@@ -105,26 +105,65 @@ body {
   left: 18px;
   color: var(--primary-blue);
   font-size: 19px;
+  z-index: 2;
+  pointer-events: none;
 }
 
-.input-with-icon input {
+.login-form .form-group .input-with-icon input,
+.login-form .form-group .input-with-icon input:focus,
+.login-form .form-group .input-with-icon input:-webkit-autofill,
+.login-form .form-group .input-with-icon input:-webkit-autofill:hover,
+.login-form .form-group .input-with-icon input:-webkit-autofill:focus,
+.login-form .form-group .input-with-icon input:-webkit-autofill:active {
   width: 100%;
-  padding: 16px 20px 16px 52px;
+  height: 54px !important;
+  padding: 14px 20px 14px 52px !important;
   border: 1.5px solid var(--primary-blue);
   border-radius: 12px;
-  font-size: 16px;
-  background: var(--white);
-  color: var(--text-dark);
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  color: var(--text-dark) !important;
+  -webkit-text-fill-color: var(--text-dark) !important;
   outline: none;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease;
 }
 
-.input-with-icon input:focus {
+.login-form .form-group .input-with-icon input {
+  background-color: var(--white);
+}
+
+.login-form .form-group .input-with-icon input:focus {
   background-color: var(--light-blue-bg);
 }
 
-.input-with-icon input::placeholder {
-  color: #94a3b8;
+.login-form .form-group .input-with-icon input:-webkit-autofill,
+.login-form .form-group .input-with-icon input:-webkit-autofill:hover,
+.login-form .form-group .input-with-icon input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--white) inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.login-form .form-group .input-with-icon input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--light-blue-bg) inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Titik sandi password saat diketik/autofill */
+.login-form .form-group .input-with-icon input[type="password"],
+.login-form .form-group .input-with-icon input[type="password"]:focus,
+.login-form .form-group .input-with-icon input[type="password"]:-webkit-autofill {
+  font-size: 20px !important;
+  letter-spacing: 2px !important;
+}
+
+/* Samakan tampilan placeholder email dan password */
+.login-form .form-group .input-with-icon input::placeholder,
+.login-form .form-group .input-with-icon input[type="password"]::placeholder {
+  color: #94a3b8 !important;
+  font-size: 16px !important;
+  letter-spacing: normal !important;
+  font-weight: 400;
+  font-family: 'Inter', sans-serif !important;
 }
 
 .btn-login {
